@@ -13,6 +13,7 @@ class ApplicationTests {
 
     void testDefaultNodeType() {
         def application = new Application(name: "Some Application", description: "Some Description")
-       assert application.nodeType*.name == null
+       assert application.nodeType == null
     }
+
 }
