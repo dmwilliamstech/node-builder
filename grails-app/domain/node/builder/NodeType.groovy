@@ -26,6 +26,7 @@ class NodeType {
     }
     
 	static constraints = {
+        name(unique: true)
     }
 	
 	/*

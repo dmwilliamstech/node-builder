@@ -5,6 +5,7 @@ package node.builder
  * A domain class describes the data object and it's mapping to the database
  */
 class Application {
+    static expose = 'application'
 
 	/* Default (injected) attributes of GORM */
 	Long	id
@@ -26,6 +27,7 @@ class Application {
     
 	static constraints = {
         nodeType(nullable: true)
+        name(unique: true)
     }
 	
 	/*
