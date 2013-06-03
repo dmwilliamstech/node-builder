@@ -54,9 +54,8 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     private void loadNodes(nodes){
         log.info "Found ${nodes.size()} node entry(s)"
         nodes.each { node ->
-            log.error node
             def applications = node.remove("applications")
-            log.error node
+
             def domain = new Node(node)
             if(domain.errors.hasErrors())
                 throw new Exception(domain.errors.toString())
