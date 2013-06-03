@@ -10,7 +10,8 @@ import org.springframework.core.io.Resource
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@Mock(Application)
+
+@Mock([Node,Application])
 class InputFileChangeListenerTests {
 
     void testNewFileWithEmptyApplicationData() {
@@ -34,5 +35,19 @@ class InputFileChangeListenerTests {
 
         assert Application.count == 1
         assert Application.first().name == "Some Application"
+    }
+
+    void testNewFileWithSingleNodeData() {
+        Resource resource = new ClassPathResource("resources/single_node.json")
+        def file = resource.getFile()
+        assert file.exists()
+
+        def inputFileChangeListener = new InputFileChangeListener()
+        inputFileChangeListener.onNew(resource.file)
+
+        assert Node.count == 1
+        assert Node.first().name == "Some Node"
+
+        assert Application.count == 2
     }
 }

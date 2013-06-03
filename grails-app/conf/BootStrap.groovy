@@ -1,14 +1,14 @@
 import node.builder.InputFileChangeListener
-import node.builder.NodeType
+import node.builder.Node
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
     def grailsApplication
 
     def init = { servletContext ->
-        if(NodeType.count.is(0)){
-            log.info "Creating default NodeType"
-            def nodeType = new NodeType(name: "Default", description: "Default Container for nodetype less Applications")
+        if(Node.count.is(0)){
+            log.info "Creating default Node"
+            def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
             nodeType.save()
         }
 

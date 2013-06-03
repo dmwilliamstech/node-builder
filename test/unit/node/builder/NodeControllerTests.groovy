@@ -7,7 +7,7 @@ import grails.test.mixin.*
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@Mock(NodeType)
+@Mock(Node)
 @TestFor(NodeController)
 class NodeControllerTests {
     void testFoo(){

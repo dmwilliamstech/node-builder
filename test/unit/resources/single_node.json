@@ -1,0 +1,18 @@
+{
+    "nodes": [
+        {
+            "name": "Some Node",
+            "description": "great",
+            "applications": [
+                {
+                    "name": "Some Application",
+                    "description": "awesome"
+                },
+                {
+                    "name": "Some Other Application",
+                    "description": "awesomer"
+                }
+            ]
+        }
+    ]
+}
