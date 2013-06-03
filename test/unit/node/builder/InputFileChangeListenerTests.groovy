@@ -49,5 +49,7 @@ class InputFileChangeListenerTests {
         assert Node.first().name == "Some Node"
 
         assert Application.count == 2
+        assert Application.first().name == "Some Super Application"
+        assert Application.last().name == "Some Other Application"
     }
 }
