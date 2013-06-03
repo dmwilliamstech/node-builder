@@ -91,3 +91,4 @@ log4j = {
 }
 
 grails.config.defaults.locations = [KickstartResources]
+script.install.directory = "~/.opendx/node-builder"

@@ -1,0 +1,9 @@
+{
+    "applications" : [
+        {
+            "name": "Some Application",
+            "description": "awesome"
+        }
+    ]
+
+}
