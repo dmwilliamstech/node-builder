@@ -4,17 +4,20 @@ package node.builder
  * Configuration
  * A domain class describes the data object and it's mapping to the database
  */
-class Configuration {
-
+class NodeConfiguration {
+    static expose = 'node-configuration'
 	/* Default (injected) attributes of GORM */
-//	Long	id
+	Long	id
 //	Long	version
-	
+
+    String name
+    String value
+
 	/* Automatic timestamping of GORM */
-//	Date	dateCreated
-//	Date	lastUpdated
+	Date	dateCreated
+	Date	lastUpdated
 	
-//	static belongsTo	= []	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
+	static belongsTo	= [node: Node]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 //	static hasOne		= []	// tells GORM to associate another domain object as an owner in a 1-1 mapping
 //	static hasMany		= []	// tells GORM to associate other domain objects for a 1-n or n-m mapping
 //	static mappedBy		= []	// specifies which property should be used in a mapping 
@@ -23,6 +26,7 @@ class Configuration {
     }
     
 	static constraints = {
+        node(nullable: true)
     }
 	
 	/*
@@ -33,3 +37,5 @@ class Configuration {
 //		return "${name}";
 //	}
 }
+
+

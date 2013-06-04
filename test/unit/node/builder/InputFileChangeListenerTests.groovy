@@ -11,7 +11,7 @@ import org.springframework.core.io.Resource
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 
-@Mock([Node,Application])
+@Mock([Node,NodeConfiguration,Application,ApplicationConfiguration])
 class InputFileChangeListenerTests {
 
     void testNewFileWithEmptyApplicationData() {
@@ -35,6 +35,8 @@ class InputFileChangeListenerTests {
 
         assert Application.count == 1
         assert Application.first().name == "Some Application"
+
+        assert ApplicationConfiguration.count == 1
     }
 
     void testNewFileWithSingleNodeData() {
@@ -51,5 +53,11 @@ class InputFileChangeListenerTests {
         assert Application.count == 2
         assert Application.first().name == "Some Super Application"
         assert Application.last().name == "Some Other Application"
+
+        assert ApplicationConfiguration.count == 2
+        assert NodeConfiguration.count == 1
+
+        assert Node.first().configurations.first().name == "Some Node Config"
+        assert Application.first().configurations.first().name == "Some App Config"
     }
 }

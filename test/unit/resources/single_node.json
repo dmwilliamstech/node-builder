@@ -3,14 +3,32 @@
         {
             "name": "Some Node",
             "description": "great",
+            "configurations": [
+                {
+                    "name" : "Some Node Config",
+                    "value" : "Some Value"
+                }
+            ],
             "applications": [
                 {
                     "name": "Some Super Application",
-                    "description": "awesome"
+                    "description": "awesome",
+                    "configurations": [
+                        {
+                            "name" : "Some App Config",
+                            "value" : "Some Value"
+                        }
+                    ]
                 },
                 {
                     "name": "Some Other Application",
-                    "description": "awesomer"
+                    "description": "awesomer",
+                    "configurations": [
+                        {
+                            "name" : "Some Config",
+                            "value" : "Some Value"
+                        }
+                    ]
                 }
             ]
         }

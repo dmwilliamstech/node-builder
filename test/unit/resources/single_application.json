@@ -2,7 +2,13 @@
     "applications" : [
         {
             "name": "Some Application",
-            "description": "awesome"
+            "description": "awesome",
+            "configurations": [
+                {
+                    "name" : "Some Config",
+                    "value" : "Some Value"
+                }
+            ]
         }
     ]
 

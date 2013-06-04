@@ -39,11 +39,15 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     private void loadApplications(node, applications){
         log.info "Found ${applications.size()} application entry(s)"
         applications.each { application ->
+            def configurations = application.remove("configurations")
 
             def domain = new Application(application)
             if(domain.errors.hasErrors())
                 throw new Exception(domain.errors.toString())
             domain.save()
+
+            if(configurations)
+                loadConfigurations(domain, configurations, ApplicationConfiguration)
 
             if(node)
                 node.addToApplications(domain)
@@ -55,6 +59,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         log.info "Found ${nodes.size()} node entry(s)"
         nodes.each { node ->
             def applications = node.remove("applications")
+            def configurations = node.remove("configurations")
 
             def domain = new Node(node)
             if(domain.errors.hasErrors())
@@ -63,6 +68,25 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
 
             if(applications)
                 loadApplications(domain, applications)
+
+            if(configurations)
+                loadConfigurations(domain, configurations, NodeConfiguration)
         }
+    }
+
+    private def loadConfigurations = {parent, configurations, Class configurationType ->
+        log.error "Found ${configurations.size()} configuration entry(s)"
+        configurations.each { configuration ->
+
+            def domain = configurationType.newInstance()
+            domain.name = configuration.name
+            domain.value = configuration.value
+            if(domain.errors.hasErrors())
+                throw new Exception(domain.errors.toString())
+            domain.save()
+
+            parent.addToConfigurations(domain)
+        }
+
     }
 }

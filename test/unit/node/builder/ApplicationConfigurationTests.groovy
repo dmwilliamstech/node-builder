@@ -8,8 +8,8 @@ import org.junit.*
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Configuration)
-class ConfigurationTests {
+@TestFor(ApplicationConfiguration)
+class ApplicationConfigurationTests {
 
     void testSomething() {
 
