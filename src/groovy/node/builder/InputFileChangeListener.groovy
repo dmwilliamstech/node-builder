@@ -7,6 +7,9 @@ import org.codehaus.groovy.grails.compiler.DirectoryWatcher
  *
  */
 class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
+
+    def persistenceInterceptor
+
     void onChange(File file) {
 
     }
@@ -15,7 +18,6 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         try{
             log.info "File added ${file.absolutePath}"
             def json = (new JsonSlurper()).parseText(file.text)
-            print json
             if(json.applications == null && json.nodes == null)
                 throw new Exception("Input file must contain atleast one application or node object")
 
@@ -42,16 +44,18 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             def configurations = application.remove("configurations")
 
             def domain = new Application(application)
-            if(domain.errors.hasErrors())
-                throw new Exception(domain.errors.toString())
-            domain.save()
-
+            Application.withTransaction{
+                if(domain.errors.hasErrors())
+                    throw new Exception(domain.errors.toString())
+                domain.save()
+            }
             if(configurations)
                 loadConfigurations(domain, configurations, ApplicationConfiguration)
 
-            if(node)
-                node.addToApplications(domain)
-
+            Node.withTransaction {
+                if(node)
+                    node.addToApplications(domain)
+            }
         }
     }
 
@@ -62,10 +66,11 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             def configurations = node.remove("configurations")
 
             def domain = new Node(node)
-            if(domain.errors.hasErrors())
-                throw new Exception(domain.errors.toString())
-            domain.save()
-
+            Node.withTransaction {
+                if(domain.errors.hasErrors())
+                    throw new Exception(domain.errors.toString())
+                domain.save()
+            }
             if(applications)
                 loadApplications(domain, applications)
 
@@ -75,17 +80,20 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     }
 
     private def loadConfigurations = {parent, configurations, Class configurationType ->
-        log.error "Found ${configurations.size()} configuration entry(s)"
+        log.info "Found ${configurations.size()} configuration entry(s)"
         configurations.each { configuration ->
 
             def domain = configurationType.newInstance()
-            domain.name = configuration.name
-            domain.value = configuration.value
-            if(domain.errors.hasErrors())
-                throw new Exception(domain.errors.toString())
-            domain.save()
-
-            parent.addToConfigurations(domain)
+            configurationType.withTransaction{
+                domain.name = configuration.name
+                domain.value = configuration.value
+                if(domain.errors.hasErrors())
+                    throw new Exception(domain.errors.toString())
+                domain.save()
+            }
+            parent.class.withTransaction{
+                parent.addToConfigurations(domain)
+            }
         }
 
     }
