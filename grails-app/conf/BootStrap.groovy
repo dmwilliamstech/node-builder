@@ -6,6 +6,11 @@ class BootStrap {
     def grailsApplication
 
     def init = { servletContext ->
+        if(Node.count.is(0)){
+            log.info "Creating default Node"
+            def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
+            nodeType.save()
+        }
 
         def expandedPath = grailsApplication.config.script.install.directory.replace("~",System.getProperty("user.home"))
         def installDirectory = new File(expandedPath)

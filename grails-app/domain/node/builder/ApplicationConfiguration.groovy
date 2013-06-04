@@ -26,7 +26,7 @@ class ApplicationConfiguration {
     }
 
     static constraints = {
-        application(nullable: true)
+
     }
 
     /*

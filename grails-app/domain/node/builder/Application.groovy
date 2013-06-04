@@ -26,7 +26,6 @@ class Application {
     }
     
 	static constraints = {
-        node(nullable: true)
         name(unique: true)
     }
 	

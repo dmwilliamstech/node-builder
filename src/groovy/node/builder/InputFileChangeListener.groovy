@@ -44,6 +44,11 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             def configurations = application.remove("configurations")
 
             def domain = new Application(application)
+            if(node)
+                domain.node = node
+            else
+                domain.node = Node.first()
+
             Application.withTransaction{
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
@@ -51,11 +56,6 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             }
             if(configurations)
                 loadConfigurations(domain, configurations, ApplicationConfiguration)
-
-            Node.withTransaction {
-                if(node)
-                    node.addToApplications(domain)
-            }
         }
     }
 
@@ -87,12 +87,14 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             configurationType.withTransaction{
                 domain.name = configuration.name
                 domain.value = configuration.value
+                if(parent instanceof Application)
+                    domain.application = parent
+                else
+                    domain.node = parent
+
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
                 domain.save()
-            }
-            parent.class.withTransaction{
-                parent.addToConfigurations(domain)
             }
         }
 

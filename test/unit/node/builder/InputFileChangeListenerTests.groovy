@@ -26,6 +26,9 @@ class InputFileChangeListenerTests {
     }
 
     void testNewFileWithSingleApplicationData() {
+        def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
+        nodeType.save()
+
         Resource resource = new ClassPathResource("resources/single_application.json")
         def file = resource.getFile()
         assert file.exists()

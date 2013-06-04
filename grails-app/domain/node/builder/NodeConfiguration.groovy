@@ -26,7 +26,7 @@ class NodeConfiguration {
     }
     
 	static constraints = {
-        node(nullable: true)
+
     }
 	
 	/*
