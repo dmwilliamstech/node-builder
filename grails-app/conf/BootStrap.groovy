@@ -1,5 +1,6 @@
 import node.builder.InputFileChangeListener
 import node.builder.Node
+import node.builder.Manifest
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
@@ -25,6 +26,7 @@ class BootStrap {
         directoryWatcher.start()
 
         log.info "should be running"
+
     }
 
     def destroy = {
