@@ -88,4 +88,24 @@ class ManifestController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    def configure(){
+        def manifestInstance = Manifest.get(params.id)
+        if (!manifestInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+            redirect(action: "list")
+            return
+        }
+        render(view: "configure", model: [manifest: manifestInstance.manifest])
+    }
+
+    def deploy(){
+        def manifestInstance = Manifest.get(params.id)
+        if (!manifestInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+            redirect(action: "list")
+            return
+        }
+        render(view: "deploy", model: [manifest: manifestInstance.manifest])
+    }
 }

@@ -23,6 +23,16 @@ class UrlMappings {
 			action		= { 'index' }
             view		= { 'index' }
         }
+        "/configure/$id"	{
+            controller	= 'manifest'
+            action		= { 'configure' }
+            view		= { 'configure' }
+        }
+        "/deploy/$id"	{
+            controller	= 'manifest'
+            action		= { 'deploy' }
+            view		= { 'deploy' }
+        }
 		"/$controller/$action?/$id?"{
 			constraints {
 				controller(matches:/^((?!(api|mobile|web)).*)$/)

@@ -34,32 +34,33 @@
     </section>
     <!-- /navbar -->
 </section>
-<h1>Select Node</h1>
+<h1>Configure Node</h1>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
         <th><h2>Node</h2></th>
-        <th><h2>Actions</h2></th>
     </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
-<h1>Select Applications</h1>
+<h1>Configure Applications</h1>
 <table id="applications" class="table table-striped">
     <thead>
     <tr>
         <th><h2>Application</h2></th>
-        <th><h2>Actions</h2></th>
     </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
 
-<a class="btn btn-large btn-info pull-right" onclick="handleConfigure(this)" >Configure</a>
+<a class="btn btn-large btn-info pull-right" onclick="handleDeploy(this)" >Deploy</a>
 
-<script type="text/javascript" src="/node-builder/static/js/index.js" ></script>
 
+<g:javascript>
+    var manifest = ${manifest.manifest as grails.converters.JSON}
+</g:javascript>
+<script type="text/javascript" src="/node-builder/static/js/configure.js" ></script>
 </body>
 </html>
