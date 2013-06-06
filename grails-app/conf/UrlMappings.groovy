@@ -23,6 +23,11 @@ class UrlMappings {
 			action		= { 'index' }
             view		= { 'index' }
         }
+        "/configure/update/$id"	{
+            controller	= 'manifest'
+            action		= { 'update' }
+            view		= { 'configure' }
+        }
         "/configure/$id"	{
             controller	= 'manifest'
             action		= { 'configure' }

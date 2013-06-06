@@ -1,38 +1,24 @@
 $(document).ready(function() {
-console.log(manifest)
-    $.each(manifest.nodes, function(ii, node){
-        addConfigurations(node, "node");
+    console.log(manifest)
+    $.each(manifest.nodes, function(id, node){
+        addConfigurations(id, node, "node");
     });
 
-    $.each(manifest.applications, function(ii, application){
-        addConfigurations(application, "application");
+    $.each(manifest.applications, function(id, application){
+        addConfigurations(id, application, "application");
     });
-//    $.each(node.properties.applications, function(jj, application){
-//        console.log(application)
-//        $('#applications').find('tbody:last').append('<tr>' +
-//            '<td><h3>' + application.name + '</h3></td>' +
-//            '<td>' +
-//            '    <div class="btn-toolbar">' +
-//            '        <a name="application" id="'+application.id+'" class="btn btn-large" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
-//            '        <a class="btn btn-large" title="Info"><i class="icon-info-sign icon-white"></i></a>' +
-//            '    </div>' +
-//            '</td>' +
-//            '</tr>');
-//    });
 });
 
-function addConfigurations(object, type){
-    console.log(object)
-
+function addConfigurations(id, object, type){
     var html =
         '<tr>' +
-            '<td>' + "<h3>" + object.name + "</h3>"
+        '<td>' + "<h3>" + object.name + "</h3>"
     $.each(object.configurations, function(mm, configuration){
-        console.log(configuration)
+
         html += '<div class="control-group">' +
-            '<label class="control-label" for="input01">'+ configuration.name +'</label>' +
+            '<label class="control-label" for="'+ mm +'">'+ configuration.name +'</label>' +
             '<div class="controls">' +
-            '<input type="text" class="input-xlarge" id="'+ configuration.id +'">' +
+            '<input type="text" class="input-xlarge" id="'+ mm +'"  name="'+ id +'" onchange="handleInputChange(this, \''+type+'s\')">' +
             '<p class="help-block"></p>' +
             '</div>' +
             '</div>';
@@ -40,22 +26,24 @@ function addConfigurations(object, type){
 
     html +=
         '</td>' +
-            '</tr>'
+        '</tr>'
     $('#'+type+'s').find('tbody:last').append(
         html
     );
 }
 
+function handleInputChange(input, type){
+    manifest[type][$(input)[0].name].configurations[$(input)[0].id].value = $(input).val()
+}
 
 function handleDeploy(button){
     //post manifest and forward to configure screen
-    $.ajax("manifest/update", {
-        data : JSON.stringify({manifest: manifest}),
+    $.ajax("update/" +manifest.id , {
+        data : JSON.stringify(manifest),
         contentType : 'application/json',
-        type : 'PUT',
+        type : 'POST',
         success: function(data){
-            console.log(data)
-            location = "deploy/" + data.id
+            location = location.pathname.replace("configure","deploy")
         }
     });
 }

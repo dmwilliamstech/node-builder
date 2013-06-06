@@ -21,9 +21,9 @@
                         <a class="brand" href="" title="OpenDX">OpenDX</a>
                         <div class="nav-collapse">
                             <ul class="nav">
-                                <li class="active"><a href="" title="Build a node">Build</a></li>
+                                <li><a href="" title="Build a node">Build</a></li>
                                 <li><a href="" title="Configure your Node">Configure</a></li>
-                                <li><a href="" title="Deploy your node">Deploy</a></li>
+                                <li class="active"><a href="" title="Deploy your node">Deploy</a></li>
                             </ul>
                         </div><!-- /.nav-collapse -->
                     </div>
@@ -34,9 +34,12 @@
     </section>
     <!-- /navbar -->
 </section>
-<h1>POOOOO!</h1>
 
 
+<g:javascript>
+    var json = ${manifest as grails.converters.JSON}
+    manifest = json.manifest
+</g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/deploy.js" ></script>
 </body>
 </html>

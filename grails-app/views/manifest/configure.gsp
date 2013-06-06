@@ -18,12 +18,12 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="" title="OpenDX">OpenDX</a>
+                        <a class="brand" title="OpenDX">OpenDX</a>
                         <div class="nav-collapse">
                             <ul class="nav">
-                                <li class="active"><a href="" title="Build a node">Build</a></li>
-                                <li><a href="" title="Configure your Node">Configure</a></li>
-                                <li><a href="" title="Deploy your node">Deploy</a></li>
+                                <li><a  title="Build a node">Build</a></li>
+                                <li class="active" ><a  title="Configure your Node">Configure</a></li>
+                                <li><a title="Deploy your node">Deploy</a></li>
                             </ul>
                         </div><!-- /.nav-collapse -->
                     </div>
@@ -59,7 +59,8 @@
 
 
 <g:javascript>
-    var manifest = ${manifest.manifest as grails.converters.JSON}
+    var json = ${manifest as grails.converters.JSON}
+    manifest = json.manifest
 </g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/configure.js" ></script>
 </body>

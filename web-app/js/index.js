@@ -77,7 +77,7 @@ function handleIncludeApplication(button){
 function handleConfigure(button){
     //post manifest and forward to configure screen
     $.ajax("manifest/create", {
-        data : JSON.stringify({manifest: manifest}),
+        data : JSON.stringify(manifest),
         contentType : 'application/json',
         type : 'POST',
         success: function(data){

@@ -9,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException
  */
 class ManifestController {
 
-    static allowedMethods = [create: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -27,6 +27,11 @@ class ManifestController {
         def instance = new Manifest()
         instance.manifest = jsonObject
         instance.save()
+        jsonObject.id = instance.id
+
+        instance.manifest = jsonObject
+        instance.save()
+
         render(instance as JSON)
     }
 
@@ -41,10 +46,11 @@ class ManifestController {
     }
 
     def update() {
+        def jsonObject = request.JSON
         def manifestInstance = Manifest.get(params.id)
         if (!manifestInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(action: "list")
+            redirect(controller: 'home', action: "index")
             return
         }
 
@@ -54,20 +60,22 @@ class ManifestController {
                 manifestInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                           [message(code: 'manifest.label', default: 'Manifest')] as Object[],
                           "Another user has updated this Manifest while you were editing")
-                render(view: "edit", model: [manifestInstance: manifestInstance])
+                redirect(controller: 'home', action: "index")
                 return
             }
         }
 
-        manifestInstance.properties = params
+        manifestInstance.manifest = jsonObject
 
         if (!manifestInstance.save(flush: true)) {
-            render(view: "edit", model: [manifestInstance: manifestInstance])
+            manifestInstance.errors.rejectValue("manifest", "Invalid Manifest Document",
+                    [message(code: 'manifest.label', default: 'Manifest')] as Object[],
+                    "")
+            redirect(view: "configure", model: [manifest: manifestInstance.manifest])
             return
         }
 
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'manifest.label', default: 'Manifest'), manifestInstance.id])
-        redirect(action: "show", id: manifestInstance.id)
+        render(manifestInstance as JSON)
     }
 
     def delete() {
@@ -93,10 +101,10 @@ class ManifestController {
         def manifestInstance = Manifest.get(params.id)
         if (!manifestInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(action: "list")
+            redirect(controller: 'home', action: "index")
             return
         }
-        render(view: "configure", model: [manifest: manifestInstance.manifest])
+        render(view: "configure", model: [manifest: manifestInstance])
     }
 
     def deploy(){
@@ -106,6 +114,6 @@ class ManifestController {
             redirect(action: "list")
             return
         }
-        render(view: "deploy", model: [manifest: manifestInstance.manifest])
+        render(view: "deploy", model: [manifest: manifestInstance])
     }
 }
