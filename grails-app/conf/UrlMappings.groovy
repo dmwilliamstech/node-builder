@@ -33,7 +33,7 @@ class UrlMappings {
             action		= { 'configure' }
             view		= { 'configure' }
         }
-        "/deploy/$id/download/$filetype"	{
+        "/deploy/$id/download/$file"	{
             controller	= 'manifest'
             action		= { 'download' }
             view		= { 'deploy' }

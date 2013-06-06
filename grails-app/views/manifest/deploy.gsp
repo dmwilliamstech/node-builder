@@ -40,6 +40,7 @@
 <g:javascript>
     var json = ${manifest as grails.converters.JSON}
     manifest = json.manifest
+    console.log(manifest)
 </g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/deploy.js" ></script>
 </body>

@@ -1,6 +1,7 @@
 package node.builder
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 import org.springframework.dao.DataIntegrityViolationException
 
 /**
@@ -8,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
  */
 class ManifestController {
+
+    def groovyPagesTemplateEngine
 
     static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST"]
 
@@ -125,9 +128,13 @@ class ManifestController {
             return
         }
 
-        response.setHeader("Content-Type", "application/" + params.filetype)
-        response.setHeader("Content-disposition", "attachment;filename=${manifestInstance.manifest.id}.${params.filetype}")
-        response.outputStream << ((manifestInstance as JSON).toString().bytes)
+        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/site.pp.gsp").text
 
+        def output = new StringWriter()
+        groovyPagesTemplateEngine.createTemplate(templateText, 'site.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
+
+        response.setHeader("Content-Type", "text/text")// + params.filetype)
+        response.setHeader("Content-disposition", "attachment;filename=${params.file}")
+        response.outputStream << (output.getBuffer().toString().bytes)
     }
 }

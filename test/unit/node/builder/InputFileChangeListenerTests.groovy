@@ -51,16 +51,16 @@ class InputFileChangeListenerTests {
         inputFileChangeListener.onNew(resource.file)
 
         assert Node.count == 1
-        assert Node.first().name == "Some Node"
+        assert Node.first().name == "class::name"
 
         assert Application.count == 2
-        assert Application.first().name == "Some Super Application"
-        assert Application.last().name == "Some Other Application"
+        assert Application.first().name == "class::app_1"
+        assert Application.last().name == "class::app_2"
 
-        assert ApplicationConfiguration.count == 2
+        assert ApplicationConfiguration.count == 3
         assert NodeConfiguration.count == 1
 
-        assert Node.first().configurations.first().name == "Some Node Config"
-        assert Application.first().configurations.first().name == "Some App Config"
+        assert Node.first().configurations.first().name == "config_name"
+        assert Application.first().configurations.first().name == "app_config_1"
     }
 }
