@@ -9,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException
  */
 class ManifestController {
 
-    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -111,9 +111,23 @@ class ManifestController {
         def manifestInstance = Manifest.get(params.id)
         if (!manifestInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(action: "list")
+            redirect(controller: 'home', action: "index")
             return
         }
         render(view: "deploy", model: [manifest: manifestInstance])
+    }
+
+    def download(){
+        def manifestInstance = Manifest.get(params.id)
+        if (!manifestInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+            redirect(controller: 'home', action: "index")
+            return
+        }
+
+        response.setHeader("Content-Type", "application/" + params.filetype)
+        response.setHeader("Content-disposition", "attachment;filename=${manifestInstance.manifest.id}.${params.filetype}")
+        response.outputStream << ((manifestInstance as JSON).toString().bytes)
+
     }
 }

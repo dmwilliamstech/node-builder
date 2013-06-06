@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    console.log(manifest)
     $.each(manifest.nodes, function(id, node){
         addConfigurations(id, node, "node");
     });

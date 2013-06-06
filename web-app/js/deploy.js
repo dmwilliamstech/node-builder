@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
-    console.log("deploy")
+
 
 });
+
+
+
+function handleDownload(button){
+
+    $.download(manifest.id + "/download/pp", 'fileName=' + '');
+
+}

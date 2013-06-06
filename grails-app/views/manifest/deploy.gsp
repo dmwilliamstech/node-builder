@@ -35,6 +35,7 @@
     <!-- /navbar -->
 </section>
 
+<a class="btn btn-large btn-info pull-right" onclick="handleDownload(this)" >Download</a>
 
 <g:javascript>
     var json = ${manifest as grails.converters.JSON}

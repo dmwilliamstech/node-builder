@@ -5,7 +5,6 @@ var nodes;
 $(document).ready(function() {
     $.getJSON('api/node', function(json) {
         nodes = json
-        console.log(nodes)
         $.each(nodes.data, function(ii, node){
             if(ii != 0){
                 $('#nodes').find('tbody:last').append("<tr>" +
@@ -19,7 +18,6 @@ $(document).ready(function() {
                     "</tr>");
                 configurations.nodes[node.id] = node.properties.configurations
                 $.each(node.properties.applications, function(jj, application){
-                    console.log(application)
                     $('#applications').find('tbody:last').append('<tr>' +
                         '<td><h3>' + application.name + '</h3></td>' +
                         '<td>' +
@@ -58,7 +56,6 @@ function handleAddNode(button){
 
         });
     }
-    console.log(manifest)
 }
 
 function handleIncludeApplication(button){
@@ -71,7 +68,6 @@ function handleIncludeApplication(button){
         manifest.applications[button.id] = {configurations: configurations.applications[button.id], name:button.title }
         $(button).html('<i class="icon-ok icon-white"></i>Included')
     }
-    console.log(manifest)
 }
 
 function handleConfigure(button){
@@ -81,7 +77,6 @@ function handleConfigure(button){
         contentType : 'application/json',
         type : 'POST',
         success: function(data){
-            console.log(data)
             location = "configure/" + data.id
         }
     });
