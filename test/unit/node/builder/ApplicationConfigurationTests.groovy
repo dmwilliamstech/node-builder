@@ -11,7 +11,21 @@ import org.junit.*
 @TestFor(ApplicationConfiguration)
 class ApplicationConfigurationTests {
 
-    void testSomething() {
+    void testWithoutDescriptions() {
+        def params = [name : "Config", value: "Value", application: new Application()]
+        def applicationConfiguration= new ApplicationConfiguration(params)
+        applicationConfiguration.save()
 
+        assert applicationConfiguration.errors.errorCount == 0
+        assert applicationConfiguration.description == null
+    }
+
+    void testDescriptions() {
+        def params = [name : "Config", value: "Value", description: "Description", application: new Application()]
+        def applicationConfiguration= new ApplicationConfiguration(params)
+        applicationConfiguration.save()
+
+        assert applicationConfiguration.errors.errorCount == 0
+        assert applicationConfiguration.description == "Description"
     }
 }

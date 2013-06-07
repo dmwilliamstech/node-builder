@@ -9,7 +9,6 @@ $(document).ready(function() {
         nodes = json
         $.each(nodes.data, function(ii, node){
             if(ii != 0){
-                console.log(node.description)
                 $('#nodes').find('tbody:last').append("<tr>" +
                     "<td><h3>" + node.name + "</h3></td>" +
                     "<td>" +

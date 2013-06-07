@@ -87,6 +87,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             configurationType.withTransaction{
                 domain.name = configuration.name
                 domain.value = configuration.value
+                domain.description = configuration.description
                 if(parent instanceof Application)
                     domain.application = parent
                 else

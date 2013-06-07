@@ -12,6 +12,7 @@ class NodeConfiguration {
 
     String name
     String value
+    String description
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -26,7 +27,7 @@ class NodeConfiguration {
     }
     
 	static constraints = {
-
+        description(nullable: true)
     }
 	
 	/*

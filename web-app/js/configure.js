@@ -17,9 +17,10 @@ function addConfigurations(id, object, type){
         html += '<div class="control-group">' +
             '<label class="control-label" for="'+ mm +'">'+ configuration.name +'</label>' +
             '<div class="controls">' +
-            '<input type="text" class="input-xlarge" id="'+ mm +'"  name="'+ id +'" onchange="handleInputChange(this, \''+type+'s\')">' +
-            '<p class="help-block"></p>' +
-            '</div>' +
+            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ id +'" onchange="handleInputChange(this, \''+type+'s\')">'
+            if(configuration.description)
+                html += '<p class="help-block">' +configuration.description+ '</p>'
+            html += '</div>' +
             '</div>';
     });
 

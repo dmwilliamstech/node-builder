@@ -6,7 +6,8 @@
             "configurations": [
                 {
                     "name" : "Some Config",
-                    "value" : "Some Value"
+                    "value" : "Some Value",
+                    "description" : "Something Witty"
                 }
             ]
         }

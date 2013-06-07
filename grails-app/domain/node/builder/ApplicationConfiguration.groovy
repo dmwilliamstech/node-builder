@@ -12,6 +12,7 @@ class ApplicationConfiguration {
 
     String name
     String value
+    String description
 
     /* Automatic timestamping of GORM */
     Date	dateCreated
@@ -26,7 +27,7 @@ class ApplicationConfiguration {
     }
 
     static constraints = {
-
+        description(nullable: true)
     }
 
     /*
