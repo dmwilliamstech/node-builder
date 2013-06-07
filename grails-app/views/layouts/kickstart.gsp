@@ -46,6 +46,7 @@
 	<!-- Included Javascript files and other resources -->
 	<r:layoutResources />
     <script type="text/javascript" src="/node-builder/static/js/application.js" ></script>
+
 </body>
 
 </html>

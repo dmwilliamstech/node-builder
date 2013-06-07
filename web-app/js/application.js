@@ -31,3 +31,6 @@ jQuery.download = function(url, data, method){
         form.appendTo('body').submit().remove();
     };
 };
+
+
+
