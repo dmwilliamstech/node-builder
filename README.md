@@ -23,7 +23,8 @@ Then point your favorite browser at http://localhost:8080/node-builder/
 Setup
 -
 
-
+Currently the app looks in ~/.opendx/node-builder for json files with node and application definitions.  An example of
+which can be found in test/unit/resources
 
 
 License
