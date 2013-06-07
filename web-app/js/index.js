@@ -17,19 +17,20 @@ $(document).ready(function() {
                     '</td>' +
                     "</tr>");
                 configurations.nodes[node.id] = node.properties.configurations
-                $.each(node.properties.applications, function(jj, application){
-                    $('#applications').find('tbody:last').append('<tr>' +
-                        '<td><h3>' + application.name + '</h3></td>' +
-                        '<td>' +
-                        '    <div class="btn-toolbar">' +
-                        '        <a title="'+ application.name + '" name="application" id="'+application.id+'" class="btn btn-large" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
-                        '        <a class="btn btn-large" title="Info"><i class="icon-info-sign icon-white"></i></a>' +
-                        '    </div>' +
-                        '</td>' +
-                        '</tr>');
-                    configurations.applications[application.id] = application.properties.configurations
-                });
             }
+            $.each(node.properties.applications, function(jj, application){
+                $('#applications').find('tbody:last').append('<tr>' +
+                    '<td><h3>' + application.name + '</h3></td>' +
+                    '<td>' +
+                    '    <div class="btn-toolbar">' +
+                    '        <a title="'+ application.name + '" name="application" id="'+application.id+'" class="btn btn-large" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
+                    '        <a class="btn btn-large" title="Info"><i class="icon-info-sign icon-white"></i></a>' +
+                    '    </div>' +
+                    '</td>' +
+                    '</tr>');
+                configurations.applications[application.id] = application.properties.configurations
+            });
+
         });
     });
 
@@ -46,14 +47,15 @@ function handleAddNode(button){
         $(button).html('<i class="icon-ok icon-white"></i>Added')
 
         $.each(nodes.data, function(index, node){
-            $.each(node.applications, function(blah, applicationId){
-                var appButton = $('a[name=application][id='+applicationId+'][title]')
-                appButton.id = applicationId
-                appButton.title = appButton[0].title
-                if(!appButton.hasClass("btn-success"))
-                    handleIncludeApplication(appButton);
-            })
-
+            if(parseInt(button.id) === parseInt(node.id)){
+                $.each(node.applications, function(blah, applicationId){
+                    var appButton = $('a[name=application][id='+applicationId+'][title]')
+                    appButton.id = applicationId
+                    appButton.title = appButton[0].title
+                    if(!appButton.hasClass("btn-success"))
+                        handleIncludeApplication(appButton);
+                })
+            }
         });
     }
 }
