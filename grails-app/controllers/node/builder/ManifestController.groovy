@@ -12,7 +12,7 @@ class ManifestController {
 
     def groovyPagesTemplateEngine
 
-    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST"]
+    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST", upload: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -136,5 +136,27 @@ class ManifestController {
         response.setHeader("Content-Type", "text/text")// + params.filetype)
         response.setHeader("Content-disposition", "attachment;filename=${params.file}")
         response.outputStream << (output.getBuffer().toString().bytes)
+    }
+
+    def upload(){
+        def manifestInstance = Manifest.get(params.id)
+        def masterInstance = Master.get(params.master)
+        if (!manifestInstance || !masterInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+            redirect(controller: 'home', action: "index")
+            return
+        }
+
+
+        def scpFileCopier = new SCPFileCopier()
+        def key = new File(System.getenv()["HOME"] + "/.opendx/" + masterInstance.name)
+        def output = new StringWriter()
+        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/site.pp.gsp").text
+        groovyPagesTemplateEngine.createTemplate(templateText, 'site.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
+        def site = File.createTempFile(manifestInstance.id + "_site", '.pp')
+        site.write(output.getBuffer().toString())
+        scpFileCopier.copyTo(site, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
+
+        render(masterInstance as JSON)
     }
 }

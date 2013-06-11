@@ -37,4 +37,15 @@ class SCPFileCopier {
 
         scp.execute();
     }
+
+    def createKeyFile(String keyName, String keyContents){
+
+        def fileName = System.getenv()["HOME"] + "/.opendx/" + keyName
+        File file = new File(fileName)
+        if(!file.exists())
+            file.write(keyContents)
+        file.setReadable(true)
+        return file
+
+    }
 }
