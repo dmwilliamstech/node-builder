@@ -45,37 +45,48 @@
         <div class="modal-body">
             <h3>Please Enter Connection Parameters</h3>
             <div class="control-group">
-                <label class="control-label" for="name"><h4>Name</h4></label>
                 <div class="controls">
-                    <input type="text" class="input-xlarge" id="name">
+                    <input type="hidden" class="input-xlarge uneditable-input" id="idEdit">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="hidden" class="input-xlarge uneditable-input" id="isEdit">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="nameEdit"><h4>Name</h4></label>
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="nameEdit">
                     <p class="help-block">Name for this configuration</p>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="hostname"><h4>Hostname</h4></label>
+                <label class="control-label" for="hostnameEdit"><h4>Hostname</h4></label>
                 <div class="controls">
-                    <input type="text" class="input-xlarge" id="hostname">
+                    <input type="text" class="input-xlarge" id="hostnameEdit">
                     <p class="help-block">Name of the remote server</p>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="username"><h4>Username</h4></label>
+                <label class="control-label" for="usernameEdit"><h4>Username</h4></label>
                 <div class="controls">
-                    <input type="text" class="input-xlarge" id="username">
+                    <input type="text" class="input-xlarge" id="usernameEdit">
                     <p class="help-block">Name of the remote user</p>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="privateKey"><h4>Private Key</h4></label>
+                <label class="control-label" for="privateKeyEdit"><h4>Private Key</h4></label>
                 <div class="controls">
-                    <textarea class="input-xlarge" id="privateKey" row-fluids="3"></textarea>
+                    <textarea class="input-xlarge" id="privateKeyEdit" row-fluids="3"></textarea>
                     <p class="help-block">Key for authorizing user</p>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="remotePath"><h4>Remote Path</h4></label>
+                <label class="control-label" for="remotePathEdit"><h4>Remote Path</h4></label>
                 <div class="controls">
-                    <input type="text" class="input-xlarge" id="remotePath">
+                    <input type="text" class="input-xlarge" id="remotePathEdit">
                     <p class="help-block">Location on the remote server to upload to</p>
                 </div>
             </div>
@@ -86,60 +97,64 @@
         </div>
     </div>
 
-    <div class="span2">
-        <div class="dropdown">
-            <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select a Master <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a data-toggle="modal" href="#modal" title=""><i class="icon-plus-sign"></i> Add a Master</a></li>
-            </ul>
+
+    <div class="dropdown">
+        <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select a Master <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a onclick="handleShowModal()" title=""><i class="icon-plus-sign"></i> Add a Master</a></li>
+        </ul>
+    </div>
+
+
+
+</div>
+    <div class="control-group">
+
+        <div class="controls">
+            <input type="hidden" class="input-xlarge uneditable-input" id="id">
         </div>
     </div>
-</div>
-<div class="control-group">
+    <div class="control-group">
+        <label class="control-label" for="name"><h4>Name</h4></label>
+        <div class="controls">
+            <input type="text" class="input-xlarge uneditable-input" id="name">
+            <p class="help-block">Name for this configuration</p>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="hostname"><h4>Hostname</h4></label>
+        <div class="controls">
+            <input type="text" class="input-xlarge uneditable-input" id="hostname">
+            <p class="help-block">Name of the remote server</p>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="username"><h4>Username</h4></label>
+        <div class="controls">
+            <input type="text" class="input-xlarge uneditable-input" id="username">
+            <p class="help-block">Name of the remote user</p>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="privateKey"><h4>Private Key</h4></label>
+        <div class="controls">
+            <textarea class="input-xlarge uneditable-textarea" id="privateKey" row-fluids="3"></textarea>
+            <p class="help-block">Key for authorizing user</p>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="remotePath"><h4>Remote Path</h4></label>
+        <div class="controls">
+            <input type="text" class="input-xlarge uneditable-input" id="remotePath">
+            <p class="help-block">Location on the remote server to upload to</p>
+        </div>
+    </div>
+    <a onclick="handleShowModal(this)" class="btn btn-primary disabled" id="edit" ><i class="icon-pencil icon-white"></i></a>
+    <div class="btn-group pull-right">
+        <a class="btn btn-success disabled" onclick="handleUpload(this)" id="upload" >Upload</a>
+        <a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
+    </div>
 
-    <div class="controls">
-        <input type="hidden" class="input-xlarge uneditable-input" id="id">
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="name"><h4>Name</h4></label>
-    <div class="controls">
-        <input type="text" class="input-xlarge uneditable-input" id="name">
-        <p class="help-block">Name for this configuration</p>
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="hostname"><h4>Hostname</h4></label>
-    <div class="controls">
-        <input type="text" class="input-xlarge uneditable-input" id="hostname">
-        <p class="help-block">Name of the remote server</p>
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="username"><h4>Username</h4></label>
-    <div class="controls">
-        <input type="text" class="input-xlarge uneditable-input" id="username">
-        <p class="help-block">Name of the remote user</p>
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="privateKey"><h4>Private Key</h4></label>
-    <div class="controls">
-        <textarea class="input-xlarge uneditable-textarea" id="privateKey" row-fluids="3"></textarea>
-        <p class="help-block">Key for authorizing user</p>
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="remotePath"><h4>Remote Path</h4></label>
-    <div class="controls">
-        <input type="text" class="input-xlarge uneditable-input" id="remotePath">
-        <p class="help-block">Location on the remote server to upload to</p>
-    </div>
-</div>
-<div class="btn-group pull-right">
-<a class="btn btn-success disabled" onclick="handleUpload(this)" id="upload" >Upload</a>
-<a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
-</div>
 </div>
 
 <g:javascript>

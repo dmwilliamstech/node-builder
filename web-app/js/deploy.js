@@ -17,23 +17,39 @@ $(document).ready(function() {
 function handleSaveMaster(button){
     //post to api/master
     var data = {}
-    data.name = $('#name').val()
-    data.hostname = $('#hostname').val()
-    data.username = $('#username').val()
-    data.privateKey = $('#privateKey').val()
-    data.remotePath = $('#remotePath').val()
+    data.name = $('#nameEdit').val()
+    data.hostname = $('#hostnameEdit').val()
+    data.username = $('#usernameEdit').val()
+    data.privateKey = $('#privateKeyEdit').val()
+    data.remotePath = $('#remotePathEdit').val()
 
+    var path = ""
+    var type = ""
+    if($('#isEdit').val() == "true"){
+        path = location.pathname.replace(/deploy.*/,"api/master/" + $('#idEdit').val())
+        type = "PUT"
+    }else{
+        path = location.pathname.replace(/deploy.*/,"api/master")
+        type = "POST"
+    }
 
-    var path = location.pathname.replace(/deploy.*/,"api/master")
-    $.post(path, data,
-        function(response){
+    $.ajax({
+        type: type,
+        url: path,
+        data: JSON.stringify({data:data}),
+        contentType: 'application/json',
+        dataType: 'json',
+        processData: false,
+        success: function(response) {
             response.data.properties.name
             addMasterToDropdown(response.data)
             populateMaster(response)
             $('#modal').modal('hide')
         },
-        "json"
-    );
+        error: function(response) {
+            console.log(response)
+        }
+    })
 }
 
 function handleMasterSelect(button){
@@ -52,17 +68,44 @@ function populateMaster(master){
     $('#username.uneditable-input').val(master.data.username)
     $('#privateKey.uneditable-textarea').val(master.data.privateKey)
     $('#remotePath.uneditable-input').val(master.data.remotePath)
+
+    $('#idEdit').val(master.data.id)
+    $('#nameEdit').val(master.data.name)
+    $('#hostnameEdit').val(master.data.hostname)
+    $('#usernameEdit').val(master.data.username)
+    $('#privateKeyEdit').val(master.data.privateKey)
+    $('#remotePathEdit').val(master.data.remotePath)
+
+
     $('#upload').removeClass('disabled')
+    $("#edit").removeClass("disabled")
 }
 
 function addMasterToDropdown(master){
-    $('.dropdown-menu').append('<li><a onclick="handleMasterSelect(this)"  id="' + master.id + '" >' + master.properties.name + '</a></li>')
+    if($('.dropdown-menu').find("#" + master.id).length == 0)
+        $('.dropdown-menu').append('<li><a onclick="handleMasterSelect(this)"  id="' + master.id + '" >' + master.properties.name + '</a></li>')
+    else{
+        $('.dropdown-menu').find("#" + master.id)[0].innerHTML = master.properties.name
+    }
 }
 
 function handleDownload(button){
 
     $.download(manifest.id + "/download/site.pp", 'fileName=' + '');
 
+}
+
+function handleShowModal(button) {
+    var isEdit = button != undefined
+    $('#isEdit').val(isEdit)
+    if(!isEdit){
+        $('#nameEdit').val("")
+        $('#hostnameEdit').val("")
+        $('#usernameEdit').val("")
+        $('#privateKeyEdit').val("")
+        $('#remotePathEdit').val("")
+    }
+    $('#modal').modal('show')
 }
 
 function handleUpload(button){
