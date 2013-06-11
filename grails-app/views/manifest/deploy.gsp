@@ -18,12 +18,12 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="" title="OpenDX">OpenDX</a>
+                        <a class="brand"  title="OpenDX">OpenDX</a>
                         <div class="nav-collapse">
                             <ul class="nav">
-                                <li><a href="" title="Build a node">Build</a></li>
-                                <li><a href="" title="Configure your Node">Configure</a></li>
-                                <li class="active"><a href="" title="Deploy your node">Deploy</a></li>
+                                <li><a title="Build a node">Build</a></li>
+                                <li><a title="Configure your Node">Configure</a></li>
+                                <li class="active"><a title="Deploy your node">Deploy</a></li>
                             </ul>
                         </div><!-- /.nav-collapse -->
                     </div>
