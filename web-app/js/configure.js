@@ -7,8 +7,10 @@ $(document).ready(function() {
         addConfigurations(id, application, "application");
     });
 
-    $('#imageName')[0].innerHTML = manifest.imageName
-    $('#instanceName').val(manifest.instanceName)
+    if(manifest.imageName)
+        $('#imageName')[0].innerHTML = manifest.imageName
+    if(manifest.instanceName)
+        $('#instanceName').val(manifest.instanceName)
 
     $('.dropdown-toggle').dropdown()
     var path = location.pathname.replace(/configure.*/,"api/image")
@@ -71,7 +73,6 @@ function validateManifest(){
 }
 
 function handleDeploy(button){
-    //validate required fields
     var alert = validateManifest()
 
 
@@ -86,7 +87,7 @@ function handleDeploy(button){
             }
         });
     } else {
-        $('#alert').innerHTML = ('<div class="alert alert-info">'+alert+'</div>')
+        $('#alert').append( '<div class="alert alert-info">'+alert+'</div>')
     }
 }
 

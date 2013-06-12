@@ -91,7 +91,7 @@ function addMasterToDropdown(master){
 
 function handleDownload(button){
 
-    $.download(manifest.id + "/download/site.pp", 'fileName=' + '');
+    $.download(manifest.id + "/download/"+manifest.instanceName+".pp", 'fileName=' + '');
 
 }
 

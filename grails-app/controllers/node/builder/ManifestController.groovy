@@ -128,10 +128,10 @@ class ManifestController {
             return
         }
 
-        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/site.pp.gsp").text
+        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").text
 
         def output = new StringWriter()
-        groovyPagesTemplateEngine.createTemplate(templateText, 'site.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
+        groovyPagesTemplateEngine.createTemplate(templateText, 'note.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
 
         response.setHeader("Content-Type", "text/text")// + params.filetype)
         response.setHeader("Content-disposition", "attachment;filename=${params.file}")
@@ -151,11 +151,11 @@ class ManifestController {
         def scpFileCopier = new SCPFileCopier()
         def key = new File(System.getenv()["HOME"] + "/.opendx/" + masterInstance.name)
         def output = new StringWriter()
-        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/site.pp.gsp").text
-        groovyPagesTemplateEngine.createTemplate(templateText, 'site.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
-        def site = File.createTempFile(manifestInstance.id + "_site", '.pp')
-        site.write(output.getBuffer().toString())
-        scpFileCopier.copyTo(site, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
+        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").text
+        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
+        def node = File.createTempFile(manifestInstance.manifest.instanceName.toString(), '.pp')
+        node.write(output.getBuffer().toString())
+        scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
 
         render(masterInstance as JSON)
     }
