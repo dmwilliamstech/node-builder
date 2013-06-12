@@ -34,7 +34,10 @@
     </section>
     <!-- /navbar -->
 </section>
-
+<!-- print system messages (infos, warnings, etc) - not validation errors -->
+<g:if test="${flash.message && !layout_noflashmessage}">
+    <div class="alert alert-info">${flash.message}</div>
+</g:if>
 <div class="container">
     <h2>Upload to Master</h2>
     <div id="modal" class="modal hide fade in" style="display: none; ">

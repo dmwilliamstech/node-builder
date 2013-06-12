@@ -6,6 +6,27 @@ $(document).ready(function() {
     $.each(manifest.applications, function(id, application){
         addConfigurations(id, application, "application");
     });
+
+    $('#imageName')[0].innerHTML = manifest.imageName
+    $('#instanceName').val(manifest.instanceName)
+
+    $('.dropdown-toggle').dropdown()
+    var path = location.pathname.replace(/configure.*/,"api/image")
+
+    $.getJSON(path, function(images) {
+        var notFound = '<li><a title="No Images Found">Sorry no images found</a></li>'
+        if(images && images.count > 0){
+
+            $.each(images.data, function(index, image){
+                var html = '<li><a onclick="handleImageSelect(this)"  id="' + image.id + '" >' + image.name + '</a></li>'
+                $('.dropdown-menu').append(html)
+            });
+
+        }else{
+            $('.dropdown-menu').append(notFound)
+        }
+
+    });
 });
 
 function addConfigurations(id, object, type){
@@ -36,14 +57,47 @@ function handleInputChange(input, type){
     manifest[type][$(input)[0].name].configurations[$(input)[0].id].value = $(input).val()
 }
 
+function validateManifest(){
+    var alert = ""
+    if(!manifest.imageName){
+        alert += "Please select an image <br>"
+    }
+
+    if(!manifest.instanceName){
+        alert += "Please enter an instance name <br>"
+    }
+
+    return alert
+}
+
 function handleDeploy(button){
-    //post manifest and forward to configure screen
-    $.ajax("update/" +manifest.id , {
-        data : JSON.stringify(manifest),
-        contentType : 'application/json',
-        type : 'POST',
-        success: function(data){
-            location = location.pathname.replace("configure","deploy")
-        }
-    });
+    //validate required fields
+    var alert = validateManifest()
+
+
+    if(alert.length == 0){
+        //post manifest and forward to configure screen
+        $.ajax("update/" +manifest.id , {
+            data : JSON.stringify(manifest),
+            contentType : 'application/json',
+            type : 'POST',
+            success: function(data){
+                location = location.pathname.replace("configure","deploy")
+            }
+        });
+    } else {
+        $('#alert').innerHTML = ('<div class="alert alert-info">'+alert+'</div>')
+    }
+}
+
+function handleInstanceNameChange(input){
+    manifest.instanceName = $(input).val()
+}
+
+function handleImageSelect(button){
+    $('#imageName')[0].innerHTML = button.innerHTML
+
+    manifest.imageId = $(button)[0].id
+    manifest.imageName = $(button)[0].innerText
+
 }

@@ -34,11 +34,32 @@
     </section>
     <!-- /navbar -->
 </section>
-<h1>Configure Node</h1>
+<!-- print system messages (infos, warnings, etc) - not validation errors -->
+<div id="alert">
+<g:if test="${flash.message && !layout_noflashmessage}">
+    <div class="alert alert-info">${flash.message}</div>
+</g:if>
+</div>
+<h1>Image/Instance</h1>
+<div class="dropdown">
+    <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select an Image <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+    </ul>
+</div>
+<p class="help-block" ><h3><span class="alert alert-success" id="imageName"></span></h3></p>
+<div class="control-group">
+    <label class="control-label" for="instanceName"><h4>Instance Name</h4></label>
+    <div class="controls">
+        <input type="text" class="input-xlarge" onchange="handleInstanceNameChange(this)" id="instanceName">
+        <p class="help-block">Name applied to the image after starting and used for access</p>
+    </div>
+</div>
+
+<h1>Configure Suite</h1>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
-        <th><h2>Node</h2></th>
+        <th><h2>Suite</h2></th>
     </tr>
     </thead>
     <tbody>

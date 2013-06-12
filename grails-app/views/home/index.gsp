@@ -18,12 +18,12 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="" title="OpenDX">OpenDX</a>
+                        <a class="brand" title="OpenDX">OpenDX</a>
                         <div class="nav-collapse">
                             <ul class="nav">
-                                <li class="active"><a href="" title="Build a node">Build</a></li>
-                                <li><a href="" title="Configure your Node">Configure</a></li>
-                                <li><a href="" title="Deploy your node">Deploy</a></li>
+                                <li class="active"><a title="Build a node">Build</a></li>
+                                <li><a title="Configure your Node">Configure</a></li>
+                                <li><a title="Deploy your node">Deploy</a></li>
                             </ul>
                         </div><!-- /.nav-collapse -->
                     </div>
@@ -34,11 +34,15 @@
     </section>
     <!-- /navbar -->
 </section>
-<h1>Select Node</h1>
+<!-- print system messages (infos, warnings, etc) - not validation errors -->
+<g:if test="${flash.message && !layout_noflashmessage}">
+    <div class="alert alert-info">${flash.message}</div>
+</g:if>
+<h1>Select Suite</h1>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
-        <th><h2>Node</h2></th>
+        <th><h2>Suite</h2></th>
         <th><h2>Actions</h2></th>
     </tr>
     </thead>

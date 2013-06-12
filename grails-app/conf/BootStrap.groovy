@@ -1,3 +1,4 @@
+import node.builder.Image
 import node.builder.InputFileChangeListener
 import node.builder.Node
 import node.builder.Manifest
@@ -27,6 +28,12 @@ class BootStrap {
 
         log.info "should be running"
 
+
+        //dummy images
+        (new Image(name: "Sample Image")).save()
+        (new Image(name: "Another Sample Image")).save()
+        (new Image(name: "Even More Sample Image")).save()
+        //end dummy images
     }
 
     def destroy = {
