@@ -45,9 +45,11 @@
 			
 				<g:sortableColumn property="name" title="${message(code: 'instance.name.label', default: 'Name')}" />
 			
-				<g:sortableColumn property="ip" title="${message(code: 'instance.ip.label', default: 'Ip')}" />
+				<g:sortableColumn property="privateIP" title="${message(code: 'instance.privateIp.label', default: 'Private IP')}" />
 			
-				<g:sortableColumn property="address" title="${message(code: 'instance.address.label', default: 'Address')}" />
+				<g:sortableColumn property="flavorId" title="${message(code: 'instance.flavor.label', default: 'Flavor ID')}" />
+
+                <g:sortableColumn property="imageId" title="${message(code: 'instance.image.label', default: 'Image ID')}" />
 			
 				<g:sortableColumn property="dateCreated" title="${message(code: 'instance.dateCreated.label', default: 'Date Created')}" />
 			
@@ -61,9 +63,11 @@
 			
 				<td><g:link action="show" id="${instanceInstance.id}">${fieldValue(bean: instanceInstance, field: "name")}</g:link></td>
 			
-				<td>${fieldValue(bean: instanceInstance, field: "ip")}</td>
+				<td>${fieldValue(bean: instanceInstance, field: "privateIP")}</td>
 			
-				<td>${fieldValue(bean: instanceInstance, field: "address")}</td>
+				<td>${fieldValue(bean: instanceInstance, field: "flavorId")}</td>
+
+                <td>${instanceInstance.image.imageId}</td>
 			
 				<td><g:formatDate date="${instanceInstance.dateCreated}" /></td>
 			

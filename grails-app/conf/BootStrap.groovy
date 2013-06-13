@@ -1,5 +1,7 @@
+import grails.converters.JSON
 import node.builder.Image
 import node.builder.InputFileChangeListener
+import node.builder.Instance
 import node.builder.Node
 import node.builder.Manifest
 import node.builder.OpenStackConnection
@@ -29,23 +31,49 @@ class BootStrap {
 
         log.info "should be running"
 
-        loadImages()
+        try{
+            def connection = new OpenStackConnection("107.2.16.122", "admin", "stack", "2ba2d60c5e8d4d1b86549d988131fe48")
+            loadImages(connection)
+            loadInstances(connection)
+        }catch(Exception e){
+            log.error "Failed to load OpenStack - ${e}"
+        }
     }
 
     def destroy = {
     }
 
-    def loadImages(){
-        def connection = new OpenStackConnection("107.2.16.122", "admin", "stack", "2ba2d60c5e8d4d1b86549d988131fe48")
+    def loadImages(connection){
+
         def images = connection.images()
         images.each { image ->
             def imageData = image.image
             def imageInstance = new Image(name: imageData.name, imageId: imageData.id, progress: imageData.progress, minDisk: imageData.minDisk, minRam: imageData.minRam, status: imageData.minRam)
-            imageInstance.save(failOnError: true)
+            imageInstance.save()
         }
     }
 
-    def loadInstances(){
+    def loadInstances(connection){
+        def instances = connection.instances()
+        instances.each { instance ->
+            def server = instance.server
 
+            def instanceInstance = new Instance(
+                    name: server.name,
+                    status: server.status,
+                    hostId: server.hostId,
+                    privateIP: server.addresses.private[0].addr,
+                    keyName: server.key_name,
+                    flavorId: server.flavor.id,
+                    instanceId: server.id,
+                    userId: server.user_id,
+                    tenantId: server.tenant_id,
+                    progress: server.progress,
+                    configDrive: server.config_drive,
+                    metadata: (server.metadata as JSON).toString(),
+                    image: Image.findByImageId(server.image.id)
+            )
+            instanceInstance.save()
+        }
     }
 }
