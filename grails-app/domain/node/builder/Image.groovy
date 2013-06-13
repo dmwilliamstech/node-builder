@@ -7,11 +7,15 @@ package node.builder
 class Image {
     static expose = 'image'
 	/* Default (injected) attributes of GORM */
-	Long	id
+	Long id
 	Long	version
 
     String name
-    //bunch of attributes
+    String imageId
+    Integer progress
+    Integer minDisk
+    Integer minRam
+    String status
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -37,3 +41,54 @@ class Image {
 		return "${name}";
 	}
 }
+
+
+/*
+image: [
+            status: ACTIVE,
+            updated: 2013-06-12T20: 34: 11Z,
+            links: [
+                [
+                    href: http: //107.2.16.122: 8774/v2/2ba2d60c5e8d4d1b86549d988131fe48/images/3012812c-c178-408b-9b54-b292525834c3,
+                    rel: self
+                ],
+                [
+                    href: http: //107.2.16.122: 8774/2ba2d60c5e8d4d1b86549d988131fe48/images/3012812c-c178-408b-9b54-b292525834c3,
+                    rel: bookmark
+                ],
+                [
+                    href: http: //10.0.1.49: 9292/2ba2d60c5e8d4d1b86549d988131fe48/images/3012812c-c178-408b-9b54-b292525834c3,
+                    type: application/vnd.openstack.image,
+                    rel: alternate
+                ]
+            ],
+            id: 3012812c-c178-408b-9b54-b292525834c3,
+            name: base+avahi,
+            created: 2013-06-12T20: 33: 09Z,
+            minDisk: 0,
+            server: [
+                id: 1842eedf-d197-4120-80fd-64e7560cb8f1,
+                links: [
+                    [
+                        href: http: //107.2.16.122: 8774/v2/2ba2d60c5e8d4d1b86549d988131fe48/servers/1842eedf-d197-4120-80fd-64e7560cb8f1,
+                        rel: self
+                    ],
+                    [
+                        href: http: //107.2.16.122: 8774/2ba2d60c5e8d4d1b86549d988131fe48/servers/1842eedf-d197-4120-80fd-64e7560cb8f1,
+                        rel: bookmark
+                    ]
+                ]
+            ],
+            progress: 100,
+            minRam: 0,
+            metadata: [
+                instance_uuid: 1842eedf-d197-4120-80fd-64e7560cb8f1,
+                image_location: snapshot,
+                image_state: available,
+                user_id: ce51d53b37264954aa3473c72c0bf8b7,
+                image_type: snapshot,
+                base_image_ref: 941b9236-611a-41a0-9e5c-24a2b1a8c0ae,
+                owner_id: 2ba2d60c5e8d4d1b86549d988131fe48
+            ]
+        ]
+*/

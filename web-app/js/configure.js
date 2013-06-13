@@ -20,7 +20,7 @@ $(document).ready(function() {
         if(images && images.count > 0){
 
             $.each(images.data, function(index, image){
-                var html = '<li><a onclick="handleImageSelect(this)"  id="' + image.id + '" >' + image.name + '</a></li>'
+                var html = '<li><a onclick="handleImageSelect(this)"  id="' + image.imageId + '" >' + image.name + '</a></li>'
                 $('.dropdown-menu').append(html)
             });
 

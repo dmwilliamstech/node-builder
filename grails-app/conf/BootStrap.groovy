@@ -2,6 +2,7 @@ import node.builder.Image
 import node.builder.InputFileChangeListener
 import node.builder.Node
 import node.builder.Manifest
+import node.builder.OpenStackConnection
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
@@ -28,14 +29,23 @@ class BootStrap {
 
         log.info "should be running"
 
-
-        //dummy images
-        (new Image(name: "Sample Image")).save()
-        (new Image(name: "Another Sample Image")).save()
-        (new Image(name: "Even More Sample Image")).save()
-        //end dummy images
+        loadImages()
     }
 
     def destroy = {
+    }
+
+    def loadImages(){
+        def connection = new OpenStackConnection("107.2.16.122", "admin", "stack", "2ba2d60c5e8d4d1b86549d988131fe48")
+        def images = connection.images()
+        images.each { image ->
+            def imageData = image.image
+            def imageInstance = new Image(name: imageData.name, imageId: imageData.id, progress: imageData.progress, minDisk: imageData.minDisk, minRam: imageData.minRam, status: imageData.minRam)
+            imageInstance.save(failOnError: true)
+        }
+    }
+
+    def loadInstances(){
+
     }
 }
