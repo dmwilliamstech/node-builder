@@ -31,11 +31,12 @@ grails.project.dependency.resolution = {
         mavenLocal()
         mavenCentral()
 
+
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "http://snapshots.repository.codehaus.org"
+        mavenRepo "http://repository.codehaus.org"
+        mavenRepo "http://download.java.net/maven/2/"
+        mavenRepo "http://repository.jboss.com/maven2/"
     }
 
     dependencies {
@@ -60,6 +61,9 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         runtime ":database-migration:1.2.1"
+        runtime ":rest:0.7"
+
+//        cacheDir()
 
         compile ':cache:1.0.1'
         compile 'org.grails.plugins:json-rest-api:1.0.11'
