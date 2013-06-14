@@ -10,7 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException
  */
 class ManifestController {
 
-    def groovyPagesTemplateEngine
+    def manifestService
 
     static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST", upload: "POST"]
 
@@ -130,14 +130,9 @@ class ManifestController {
             return
         }
 
-        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").text
-
-        def output = new StringWriter()
-        groovyPagesTemplateEngine.createTemplate(templateText, 'note.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
-
         response.setHeader("Content-Type", "text/text")// + params.filetype)
         response.setHeader("Content-disposition", "attachment;filename=${params.file}")
-        response.outputStream << (output.getBuffer().toString().bytes)
+        response.outputStream << (manifestService.processTemplate(manifestInstance, "${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").bytes)
     }
 
     def upload(){
@@ -149,15 +144,7 @@ class ManifestController {
             return
         }
 
-
-        def scpFileCopier = new SCPFileCopier()
-        def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
-        def output = new StringWriter()
-        def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").text
-        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
-        def node = new File(manifestInstance.manifest.instanceName.toString() + '.pp')
-        node.write(output.getBuffer().toString())
-        scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
+        manifestService.deployTo(manifestInstance, masterInstance)
 
         render(masterInstance as JSON)
     }
