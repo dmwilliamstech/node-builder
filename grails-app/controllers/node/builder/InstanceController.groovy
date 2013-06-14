@@ -1,5 +1,6 @@
 package node.builder
 
+import grails.converters.JSON
 import org.springframework.dao.DataIntegrityViolationException
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException
  */
 class InstanceController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", launch: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -102,6 +103,18 @@ class InstanceController {
         catch (DataIntegrityViolationException e) {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'instance.label', default: 'Instance'), params.id])
             redirect(action: "show", id: params.id)
+        }
+    }
+
+    def launch() {
+        def jsonObject = request.JSON
+
+        try{
+            def connection = new OpenStackConnection("107.2.16.122", "admin", "stack", "2ba2d60c5e8d4d1b86549d988131fe48")
+            def response = connection.launch("1", jsonObject.imageId, "opendx_demo", jsonObject.instanceName)
+            render (response as JSON)
+        }catch(Exception e){
+            log.error "Failed to launch instance ${jsonObject.instanceName} on OpenStack - ${e}"
         }
     }
 }

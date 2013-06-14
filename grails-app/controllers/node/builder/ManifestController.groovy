@@ -107,6 +107,7 @@ class ManifestController {
             redirect(controller: 'home', action: "index")
             return
         }
+
         render(view: "configure", model: [manifest: manifestInstance])
     }
 
@@ -117,7 +118,8 @@ class ManifestController {
             redirect(controller: 'home', action: "index")
             return
         }
-        render(view: "deploy", model: [manifest: manifestInstance])
+        def masterInstance = Master.first()
+        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance])
     }
 
     def download(){
@@ -149,11 +151,11 @@ class ManifestController {
 
 
         def scpFileCopier = new SCPFileCopier()
-        def key = new File(System.getenv()["HOME"] + "/.opendx/" + masterInstance.name)
+        def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
         def output = new StringWriter()
         def templateText = new File("${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp").text
         groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
-        def node = File.createTempFile(manifestInstance.manifest.instanceName.toString(), '.pp')
+        def node = new File(manifestInstance.manifest.instanceName.toString() + '.pp')
         node.write(output.getBuffer().toString())
         scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
 

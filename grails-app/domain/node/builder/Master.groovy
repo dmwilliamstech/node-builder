@@ -36,11 +36,6 @@ class Master {
         name(unique: true)
     }
 
-    def beforeValidate() {
-        (new SCPFileCopier()).createKeyFile(name, privateKey)
-        privateKey = "●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
-    }
-
 	/*
 	 * Methods of the Domain Class
 	 */

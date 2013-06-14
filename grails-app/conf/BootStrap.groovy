@@ -2,6 +2,7 @@ import grails.converters.JSON
 import node.builder.Image
 import node.builder.InputFileChangeListener
 import node.builder.Instance
+import node.builder.Master
 import node.builder.Node
 import node.builder.Manifest
 import node.builder.OpenStackConnection
@@ -11,6 +12,9 @@ class BootStrap {
     def grailsApplication
 
     def init = { servletContext ->
+
+        loadConfig()
+
         if(Node.count.is(0)){
             log.info "Creating default Node"
             def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
@@ -32,15 +36,34 @@ class BootStrap {
         log.info "should be running"
 
         try{
-            def connection = new OpenStackConnection("107.2.16.122", "admin", "stack", "2ba2d60c5e8d4d1b86549d988131fe48")
-            loadImages(connection)
-            loadInstances(connection)
+            loadImages(OpenStackConnection.getConnection())
+            loadInstances(OpenStackConnection.getConnection())
         }catch(Exception e){
             log.error "Failed to load OpenStack - ${e}"
         }
     }
 
     def destroy = {
+    }
+
+    def loadConfig() {
+        ConfigObject config = new ConfigSlurper().parse(new URL("file://${System.getenv("HOME")}/.opendx/config")).flatten()
+        def master = new Master()
+        master.name = config.get("master.name")
+        master.hostname = config.get("master.hostname")
+        master.username = config.get("master.username")
+        master.privateKey = config.get("master.privateKey")
+        master.remotePath = config.get("master.remote.path")
+
+        master.save(failOnError: true)
+
+        OpenStackConnection.createConnection(
+            config.get("openstack.hostname"),
+            config.get("openstack.username"),
+            config.get("openstack.password"),
+            config.get("openstack.tenant.id"),
+            config.get("openstack.key.id")
+        )
     }
 
     def loadImages(connection){

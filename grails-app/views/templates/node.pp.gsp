@@ -3,7 +3,7 @@ group { "puppet": ensure => "present", }
 Exec { path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", }
 
 
-node '${manifest.instanceName}' {
+node '${manifest.instanceName}.novalocal' {
     <g:each in="${manifest.nodes}" var="node">
         <g:each in="${node.getValue().configurations}" var="configuration">
     $${configuration.name} = "${configuration.value}"

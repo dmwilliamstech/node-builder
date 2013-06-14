@@ -1,8 +1,9 @@
 package node.builder
 
-import grails.converters.JSON
+
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
+
 
 class OpenStackConnection {
 
@@ -10,15 +11,32 @@ class OpenStackConnection {
     def username
     def password
     def tenantId
+    def keyId
     def compute
     def token
     String adminUrl
 
-    def OpenStackConnection(hostname, username, password, tenantId){
+    private static OpenStackConnection connection
+
+
+    static def createConnection(hostname, username, password, tenantId, keyId){
+        if(connection == null)
+            connection = new OpenStackConnection(hostname, username, password, tenantId, keyId)
+        assert connection != null
+        return connection
+    }
+
+    static def getConnection(){
+        assert connection != null
+        return connection
+    }
+
+    private def OpenStackConnection(hostname, username, password, tenantId, keyId){
         this.hostname = hostname
         this.username = username
         this.password = password
         this.tenantId = tenantId
+        this.keyId = keyId
     }
 
 
@@ -48,10 +66,13 @@ class OpenStackConnection {
         return objects("servers")
     }
 
-    def launch(flavor, image, keyName, instanceName){
+    def launch(flavor, image, instanceName){
+        if(this.compute == null)
+            this.connect()
+
         def resp = compute.post( path : 'servers',
                              contentType : 'application/json',
-                             body :  [server: [flavorRef: flavor, imageRef: image, key_name: keyName, name: instanceName]] as JSON,
+                             body :  [server: [flavorRef: flavor, imageRef: image, key_name: this.keyId, name: instanceName]] ,
                              headers : ['X-Auth-Token' : token])
         return resp.data
     }
