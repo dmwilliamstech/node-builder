@@ -21,6 +21,8 @@ class Manifest {
     String manifestAsJSON //updated and synched with map
 
 
+    static hasMany		= [instances: Instance]	// tells GORM to associate other domain objects for a 1-n or n-m mapping
+
     public Manifest(String json){
         manifestAsJSON = json
         manifest = JSON.parse(json)

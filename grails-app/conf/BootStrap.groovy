@@ -39,7 +39,7 @@ class BootStrap {
             loadImages(OpenStackConnection.getConnection())
             loadInstances(OpenStackConnection.getConnection())
         }catch(Exception e){
-            log.error "Failed to load OpenStack - ${e}"
+            log.error "Failed to load OpenStack data - ${e}"
         }
     }
 
@@ -86,7 +86,7 @@ class BootStrap {
                     status: server.status,
                     hostId: server.hostId,
                     privateIP: server.addresses.private[0].addr,
-                    keyName: server.key_name,
+                    keyName: server.key_name.toString(),
                     flavorId: server.flavor.id,
                     instanceId: server.id,
                     userId: server.user_id,
@@ -96,7 +96,7 @@ class BootStrap {
                     metadata: (server.metadata as JSON).toString(),
                     image: Image.findByImageId(server.image.id)
             )
-            instanceInstance.save()
+            instanceInstance.save(failOnError: true)
         }
     }
 }

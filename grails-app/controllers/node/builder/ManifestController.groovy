@@ -20,7 +20,7 @@ class ManifestController {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        render([manifests:Manifest.list(params), manifestInstanceTotal: Manifest.count()] as JSON)
+        render(view: "list", model: [manifests:Manifest.list(params), manifestInstanceTotal: Manifest.count()])
     }
 
 
