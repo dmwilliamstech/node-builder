@@ -87,7 +87,7 @@ function handleDeploy(button){
             }
         });
     } else {
-        $('#alert').append( '<div class="alert alert-info">'+alert+'</div>')
+        $('#alert').html( '<div class="alert alert-info">'+alert+'</div>')
     }
 }
 

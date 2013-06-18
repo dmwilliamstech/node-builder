@@ -35,9 +35,11 @@
     <!-- /navbar -->
 </section>
 <!-- print system messages (infos, warnings, etc) - not validation errors -->
+<div id="alert">
 <g:if test="${flash.message && !layout_noflashmessage}">
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
+</div>
 <div class="container">
     <h2>Deploy <i>${manifest.name}</i> to <i>${manifest.manifest.instanceName}</i> from ${master.hostname} (${master.name})</h2>
 
