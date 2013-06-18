@@ -1,3 +1,4 @@
+/*.pp
 out/
 .DS_Store
 node-builder-grailsPlugins.iml
