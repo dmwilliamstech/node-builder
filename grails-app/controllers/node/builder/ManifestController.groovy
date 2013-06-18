@@ -28,6 +28,7 @@ class ManifestController {
         def jsonObject = request.JSON
 
         def instance = new Manifest()
+        instance.name = jsonObject.name
         instance.manifest = jsonObject
         instance.save()
         jsonObject.id = instance.id
@@ -145,6 +146,7 @@ class ManifestController {
         }
 
         manifestService.deployTo(manifestInstance, masterInstance)
+        manifestService.provision(manifestInstance)
 
         render(masterInstance as JSON)
     }

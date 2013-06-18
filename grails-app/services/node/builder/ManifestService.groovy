@@ -1,5 +1,6 @@
 package node.builder
 
+import grails.converters.JSON
 import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 
 /**
@@ -27,5 +28,27 @@ class ManifestService {
         def templateText = new File(template).text
         groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
         return output.getBuffer().toString()
+    }
+
+    def provision(Manifest manifest) {
+        def instanceData =  OpenStackConnection.connection.launch("1", manifest.manifest.imageId, manifest.manifest.instanceName)
+        def server = instanceData.server
+        def instance = new Instance(
+                name: server.name,
+                status: server.status,
+                hostId: server.hostId,
+                privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
+                keyName: server.key_name.toString(),
+                flavorId: server.flavor.id,
+                instanceId: server.id,
+                userId: server.user_id,
+                tenantId: server.tenant_id,
+                progress: server.progress,
+                configDrive: server.config_drive ?: "not set",
+                metadata: (server.metadata as JSON).toString(),
+                image: Image.findByImageId(server.image.id)
+        )
+        instance.save(failOnError: true)
+        manifest.addToInstances(instance)
     }
 }

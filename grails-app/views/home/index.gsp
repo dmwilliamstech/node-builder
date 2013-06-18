@@ -35,9 +35,18 @@
     <!-- /navbar -->
 </section>
 <!-- print system messages (infos, warnings, etc) - not validation errors -->
+<div id="alert">
 <g:if test="${flash.message && !layout_noflashmessage}">
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
+</div>
+<h1>Name</h1>
+<div class="control-group">
+    <div class="controls">
+        <input type="text" class="input-xlarge" id="manifestName">
+    </div>
+</div>
+
 <h1>Select Suite</h1>
 <table id="nodes" class="table table-striped">
     <thead>

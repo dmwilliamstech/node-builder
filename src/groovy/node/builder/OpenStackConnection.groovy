@@ -74,7 +74,11 @@ class OpenStackConnection {
                              contentType : 'application/json',
                              body :  [server: [flavorRef: flavor, imageRef: image, key_name: this.keyId, name: instanceName]] ,
                              headers : ['X-Auth-Token' : token])
-        return resp.data
+
+        HttpResponseDecorator details = compute.get ( path : "servers/" + resp.data.server.id,
+                headers : [ 'X-Auth-Token' : token] )
+
+        return details.data
     }
 
     private def objects(type){

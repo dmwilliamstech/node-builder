@@ -39,7 +39,7 @@
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
 <div class="container">
-    <h2>Upload to ${master.hostname} (${master.name})</h2>
+    <h2>Deploy <i>${manifest.name}</i> to <i>${manifest.manifest.instanceName}</i> from ${master.hostname} (${master.name})</h2>
 
 </div>
     <div class="control-group">
@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="btn-group">
-        <a class="btn btn-success" onclick="handleUpload(this)" id="upload" >Upload</a>
+        <a class="btn btn-success" onclick="handleUpload(this)" id="upload" >Provision</a>
         <a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
     </div>
 

@@ -40,7 +40,8 @@
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
 </div>
-<h1>Image/Instance</h1>
+<h1>Configure Manifest <i>${manifest.name}</i></h1>
+<h2>Image/Instance</h2>
 <div class="dropdown">
     <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select an Image <b class="caret"></b></a>
     <ul class="dropdown-menu">

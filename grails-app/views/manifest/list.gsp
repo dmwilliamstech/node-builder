@@ -37,24 +37,37 @@
     </section>
     <!-- /navbar -->
 </section>
-<section id="list-instance" class="first">
+<section id="list-manifest" class="first">
 
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<g:sortableColumn property="name" title="${message(code: 'instance.name.label', default: 'Manifest')}" />
+                <g:sortableColumn property="name" title="${message(code: 'manifest.name.label', default: 'Name')}" />
 
-				<g:sortableColumn property="dateCreated" title="${message(code: 'instance.dateCreated.label', default: 'Date Created')}" />
+				<g:sortableColumn property="manifest" title="${message(code: 'manifest.manifest.label', default: 'Manifest')}" />
+
+                <g:sortableColumn property="instances" title="${message(code: 'manifest.instances.label', default: 'Instances')}" />
+
+				<g:sortableColumn property="dateCreated" title="${message(code: 'manifest.dateCreated.label', default: 'Date Created')}" />
 			
-				<g:sortableColumn property="lastUpdated" title="${message(code: 'instance.lastUpdated.label', default: 'Last Updated')}" />
+				<g:sortableColumn property="lastUpdated" title="${message(code: 'manifest.lastUpdated.label', default: 'Last Updated')}" />
 			
 			</tr>
 		</thead>
 		<tbody>
 		<g:each in="${manifests}" status="i" var="manifest">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			
+                <td><h4>${manifest.name}</h4></td>
+
 				<td><pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
+
+                <td>
+                    <ul>
+                    <g:each in="${manifest.instances}" var="instance">
+                        <li>${instance.name} (${instance.instanceId})</li>
+                    </g:each>
+                    </ul>
+                </td>
 
 				<td><g:formatDate date="${manifest.dateCreated}" /></td>
 			

@@ -17,6 +17,7 @@ class Manifest {
 	Date	dateCreated
 	Date	lastUpdated
 
+    String name
     JSONObject manifest //not persisted
     String manifestAsJSON //updated and synched with map
 

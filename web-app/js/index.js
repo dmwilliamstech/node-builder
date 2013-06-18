@@ -80,6 +80,13 @@ function handleIncludeApplication(button){
 
 function handleConfigure(button){
     //post manifest and forward to configure screen
+    var name = $("#manifestName").val()
+    if(name == null || name == ""){
+        $("#alert").append('<div class="alert alert-error">Please provide a Name for the manifest</div>')
+        return
+    }
+    manifest.name = name
+
     $.ajax("manifest/create", {
         data : JSON.stringify(manifest),
         contentType : 'application/json',
