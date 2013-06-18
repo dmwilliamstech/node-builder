@@ -46,7 +46,7 @@ function handleDeploy(button){
 
     if(alert.length == 0){
         //post manifest and forward to configure screen
-        $.ajax("update/" +manifest.id , {
+        $.ajax(location.pathname.replace(/configure.*/,"manifest/update/") +manifest.id, {
             data : JSON.stringify(manifest),
             contentType : 'application/json',
             type : 'POST',

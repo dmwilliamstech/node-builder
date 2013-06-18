@@ -40,8 +40,8 @@
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
 </div>
-
-<h1>Configure Suite</h1>
+<div class="hero-unit">
+<h2>Configure Suite</h2>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
@@ -51,7 +51,9 @@
     <tbody>
     </tbody>
 </table>
-<h1>Configure Applications</h1>
+</div>
+<div class="hero-unit">
+<h2>Configure Applications</h2>
 <table id="applications" class="table table-striped">
     <thead>
     <tr>
@@ -61,7 +63,7 @@
     <tbody>
     </tbody>
 </table>
-
+</div>
 <a class="btn btn-large btn-info pull-right" onclick="handleDeploy(this)" >Deploy</a>
 
 

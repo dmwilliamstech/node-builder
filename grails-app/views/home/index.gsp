@@ -44,10 +44,13 @@
 <div class="control-group">
     <div class="controls">
         <input type="text" class="input-xlarge" id="manifestName">
+        <p class="help-block">Save manifest as</p>
     </div>
 </div>
 
-<h1>Select Suite</h1>
+<div class="hero-unit">
+<h2>Select Suite</h2>
+<p class="help-block">List of application suites for adding to the manifest</p>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
@@ -58,7 +61,10 @@
     <tbody>
     </tbody>
 </table>
-<h1>Select Applications</h1>
+</div>
+<div class="hero-unit">
+<h2>Select Applications</h2>
+<p class="help-block">List of individual applications for adding to the manifest</p>
 <table id="applications" class="table table-striped">
     <thead>
     <tr>
@@ -69,7 +75,7 @@
     <tbody>
     </tbody>
 </table>
-
+</div>
 <a class="btn btn-large btn-info pull-right" onclick="handleConfigure(this)" >Configure</a>
 
 <script type="text/javascript" src="/node-builder/static/js/index.js" ></script>
