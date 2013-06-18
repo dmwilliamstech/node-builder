@@ -7,28 +7,7 @@ $(document).ready(function() {
         addConfigurations(id, application, "application");
     });
 
-    if(manifest.imageName)
-        $('#imageName')[0].innerHTML = manifest.imageName
-    if(manifest.instanceName)
-        $('#instanceName').val(manifest.instanceName)
 
-    $('.dropdown-toggle').dropdown()
-    var path = location.pathname.replace(/configure.*/,"api/image")
-
-    $.getJSON(path, function(images) {
-        var notFound = '<li><a title="No Images Found">Sorry no images found</a></li>'
-        if(images && images.count > 0){
-
-            $.each(images.data, function(index, image){
-                var html = '<li><a onclick="handleImageSelect(this)"  id="' + image.imageId + '" >' + image.name + '</a></li>'
-                $('.dropdown-menu').append(html)
-            });
-
-        }else{
-            $('.dropdown-menu').append(notFound)
-        }
-
-    });
 });
 
 function addConfigurations(id, object, type){
@@ -59,21 +38,10 @@ function handleInputChange(input, type){
     manifest[type][$(input)[0].name].configurations[$(input)[0].id].value = $(input).val()
 }
 
-function validateManifest(){
-    var alert = ""
-    if(!manifest.imageName){
-        alert += "Please select an image <br>"
-    }
 
-    if(!manifest.instanceName){
-        alert += "Please enter an instance name <br>"
-    }
-
-    return alert
-}
 
 function handleDeploy(button){
-    var alert = validateManifest()
+
 
 
     if(alert.length == 0){
@@ -91,14 +59,5 @@ function handleDeploy(button){
     }
 }
 
-function handleInstanceNameChange(input){
-    manifest.instanceName = $(input).val()
-}
 
-function handleImageSelect(button){
-    $('#imageName')[0].innerHTML = button.innerHTML
 
-    manifest.imageId = $(button)[0].id
-    manifest.imageName = $(button)[0].innerText
-
-}

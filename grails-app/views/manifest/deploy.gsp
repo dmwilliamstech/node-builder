@@ -41,9 +41,23 @@
 </g:if>
 </div>
 <div class="container">
-    <h2>Deploy <i>${manifest.name}</i> to <i>${manifest.manifest.instanceName}</i> from ${master.hostname} (${master.name})</h2>
+    <h2>Deploy <i>${manifest.name}</i> from ${master.hostname} (${master.name})</h2>
 
 </div>
+    <h2>Image/Instance</h2>
+    <div class="dropdown">
+        <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select an Image <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+        </ul>
+    </div>
+    <p class="help-block" ><h3><span class="alert alert-success" id="imageName"></span></h3></p>
+    <div class="control-group">
+        <label class="control-label" for="instanceName"><h4>Instance Name</h4></label>
+        <div class="controls">
+            <input type="text" class="input-xlarge" onkeyup="handleInstanceNameChange(this)" onchange="handleInstanceNameChange(this)" id="instanceName">
+            <p class="help-block">Name applied to the image after starting and used for access</p>
+        </div>
+    </div>
     <div class="control-group">
 
         <div class="controls">
@@ -60,6 +74,7 @@
 <g:javascript>
     var json = ${manifest as grails.converters.JSON}
     manifest = json.manifest
+    var instances = ${instances as grails.converters.JSON}
 </g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/deploy.js" ></script>
 </body>

@@ -120,7 +120,7 @@ class ManifestController {
             return
         }
         def masterInstance = Master.first()
-        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance])
+        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance, instances: Instance.all])
     }
 
     def download(){
