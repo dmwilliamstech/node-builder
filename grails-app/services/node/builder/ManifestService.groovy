@@ -27,7 +27,7 @@ class ManifestService {
         def output = new StringWriter()
         def templateText = new File(template).text
         groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: manifestInstance.manifest, items: ['Grails','Groovy']]).writeTo(output)
-        return output.getBuffer().toString()
+        return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
     }
 
     def provision(Manifest manifest) {

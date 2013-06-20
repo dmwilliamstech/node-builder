@@ -47,6 +47,7 @@ class Instance {
         metadata(nullable: true)
         manifest(nullable: true)
         keyName(nullable: true)
+        progress(nullable: true)
     }
 	
 	/*
