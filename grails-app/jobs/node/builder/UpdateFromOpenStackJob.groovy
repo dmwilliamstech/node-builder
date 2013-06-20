@@ -10,6 +10,7 @@ class UpdateFromOpenStackJob {
     ImageService imageService
     InstanceService instanceService
     def quartzScheduler
+    def sessionFactory
 
     static triggers = {
         simple repeatInterval: 10000l // execute job once in 5 seconds
@@ -17,19 +18,12 @@ class UpdateFromOpenStackJob {
 
     def execute() {
         log.debug "updating openstack data"
-        try{
-            if(OpenStackConnection.getConnection()){
-                imageService.loadImages(OpenStackConnection.getConnection())
-                instanceService.loadInstances(OpenStackConnection.getConnection())
-            }
-        } catch (org.h2.message.DbException e){}
-          catch (JdbcSQLException e){}
-          catch (Exception e){}
-          finally {
-              def jobKeys = quartzScheduler.getJobKeys()
-              jobKeys.each { jobKey ->
-                  quartzScheduler.deleteJob(jobKey)
-              }
-          }
+
+
+        if(OpenStackConnection.getConnection() && sessionFactory.currentSession.isConnected()){
+            imageService.loadImages(OpenStackConnection.getConnection())
+            instanceService.loadInstances(OpenStackConnection.getConnection())
+        }
+
     }
 }
