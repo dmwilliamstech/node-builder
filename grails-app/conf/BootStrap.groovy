@@ -1,7 +1,9 @@
 import grails.converters.JSON
 import node.builder.Image
+import node.builder.ImageService
 import node.builder.InputFileChangeListener
 import node.builder.Instance
+import node.builder.InstanceService
 import node.builder.Master
 import node.builder.Node
 import node.builder.Manifest
@@ -10,6 +12,8 @@ import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
     def grailsApplication
+    InstanceService instanceService
+    ImageService imageService
 
     def init = { servletContext ->
 
@@ -36,8 +40,8 @@ class BootStrap {
         log.info "should be running"
 
         try{
-            loadImages(OpenStackConnection.getConnection())
-            loadInstances(OpenStackConnection.getConnection())
+            imageService.loadImages(OpenStackConnection.getConnection())
+            instanceService.loadInstances(OpenStackConnection.getConnection())
         }catch(Exception e){
             log.error "Failed to load OpenStack data - ${e}"
         }
@@ -66,37 +70,4 @@ class BootStrap {
         )
     }
 
-    def loadImages(connection){
-
-        def images = connection.images()
-        images.each { image ->
-            def imageData = image.image
-            def imageInstance = new Image(name: imageData.name, imageId: imageData.id, progress: imageData.progress, minDisk: imageData.minDisk, minRam: imageData.minRam, status: imageData.minRam)
-            imageInstance.save()
-        }
-    }
-
-    def loadInstances(connection){
-        def instances = connection.instances()
-        instances.each { instance ->
-            def server = instance.server
-
-            def instanceInstance = new Instance(
-                    name: server.name,
-                    status: server.status,
-                    hostId: server.hostId,
-                    privateIP: server.addresses.private[0].addr,
-                    keyName: server.key_name.toString(),
-                    flavorId: server.flavor.id,
-                    instanceId: server.id,
-                    userId: server.user_id,
-                    tenantId: server.tenant_id,
-                    progress: server.progress,
-                    configDrive: server.config_drive,
-                    metadata: (server.metadata as JSON).toString(),
-                    image: Image.findByImageId(server.image.id)
-            )
-            instanceInstance.save(failOnError: true)
-        }
-    }
 }

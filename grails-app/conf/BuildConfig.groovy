@@ -67,6 +67,6 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.1'
         compile 'org.grails.plugins:json-rest-api:1.0.11'
-        compile ':quartz:1.0-RC8'
+        compile ":quartz:1.0-RC9"
     }
 }

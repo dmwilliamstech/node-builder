@@ -1,6 +1,6 @@
 package node.builder
 
-
+import groovy.transform.Synchronized
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 
@@ -27,7 +27,6 @@ class OpenStackConnection {
     }
 
     static def getConnection(){
-        assert connection != null
         return connection
     }
 
@@ -37,6 +36,7 @@ class OpenStackConnection {
         this.password = password
         this.tenantId = tenantId
         this.keyId = keyId
+
     }
 
 
@@ -66,6 +66,7 @@ class OpenStackConnection {
         return objects("servers")
     }
 
+    @Synchronized
     def launch(flavor, image, instanceName){
         if(this.compute == null)
             this.connect()
@@ -81,6 +82,7 @@ class OpenStackConnection {
         return details.data
     }
 
+    @Synchronized
     private def objects(type){
         if(this.compute == null)
             this.connect()

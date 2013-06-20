@@ -43,6 +43,7 @@ class Instance {
     
 	static constraints = {
         name(unique: true)
+        instanceId(unique: true)
         privateIP(nullable: true)
         metadata(nullable: true)
         manifest(nullable: true)
