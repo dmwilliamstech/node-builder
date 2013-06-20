@@ -14,6 +14,7 @@ class ManifestTests {
 
     void testStringifying() {
         def manifest = new Manifest('{"name":"bob"}')
+        manifest.name = "Test"
         manifest.save()
 
         assert Manifest.first().manifest.name == "bob"
@@ -24,6 +25,7 @@ class ManifestTests {
 
         def manifest = new Manifest()
         manifest.setManifest(json)
+        manifest.name = "Test2"
         manifest.save()
 
         assert Manifest.count == 1

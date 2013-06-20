@@ -80,6 +80,7 @@ class InstanceTests {
 
         def manifest = new Manifest()
         manifest.manifest = [manifest: [fun: "oh yeah!"]]
+        manifest.name = "Test"
         manifest.save()
         assert !manifest.hasErrors()
 

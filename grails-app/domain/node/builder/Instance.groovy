@@ -27,13 +27,13 @@ class Instance {
     String configDrive
     String metadata
     Manifest manifest
-
+    Image image
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated
 
-	static belongsTo	= [image: Image]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
+//	static belongsTo	= [image: Image]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 //	static hasOne		= [manifest: Manifest]	// tells GORM to associate another domain object as an owner in a 1-1 mapping
 //	static hasMany		= []	// tells GORM to associate other domain objects for a 1-n or n-m mapping
 //	static mappedBy		= []	// specifies which property should be used in a mapping 
@@ -47,8 +47,10 @@ class Instance {
         privateIP(nullable: true)
         metadata(nullable: true)
         manifest(nullable: true)
+        image(nullable: true)
         keyName(nullable: true)
         progress(nullable: true)
+        configDrive(nullable: true)
     }
 	
 	/*
