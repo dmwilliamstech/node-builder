@@ -113,7 +113,7 @@ function handleConfigure(button){
 }
 
 function handleSaveNewInstance(button){
-    console.log("save")
+
     $('.modal-body').animate({ scrollTop:0}, 'fast')
     var name = $("#newInstanceName").val()
     if(name == null || name == ""){
@@ -126,7 +126,7 @@ function handleSaveNewInstance(button){
         resetSaveNewInstance();
         loadTabsFromManifest(name);
         $('#newModal').modal('hide');
-        console.log(manifest)
+
     }
 }
 
@@ -192,10 +192,6 @@ function loadTabsFromManifest(active){
 }
 
 function handleApplicationEdit(instanceIndex, applicationIndex){
-    console.log(manifest.instances[instanceIndex].applications[applicationIndex])
-
-    console.log(instanceIndex)
-    console.log(applicationIndex)
     addConfigurations(instanceIndex, applicationIndex, manifest.instances[instanceIndex].applications[applicationIndex], 'application')
 }
 
@@ -224,14 +220,10 @@ function addConfigurations(instanceIndex, applicationIndex, object, type){
 function handleInputChange(input, type){
     var instanceId = $(input)[0].name.split("_")[0]
     var inputId = $(input)[0].name.split("_")[1]
-    console.log(manifest)
-    console.log(instanceId)
-    console.log(inputId)
     manifest.instances[instanceId][type][inputId].configurations[$(input)[0].id].value = $(input).val()
 }
 
 function handleCloseNewInstance(button){
-    console.log("close")
     $('.modal-body').animate({ scrollTop:0}, 'fast')
     resetSaveNewInstance()
     $('#newModal').modal('hide');
