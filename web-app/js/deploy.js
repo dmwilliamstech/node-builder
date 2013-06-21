@@ -37,10 +37,6 @@ function validateManifest(){
         alert += "Please select an image <br>"
     }
 
-    if(!manifest.instanceName){
-        alert += "Please enter an instance name <br>"
-    }
-
     return alert
 }
 

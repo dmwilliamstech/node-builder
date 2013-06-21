@@ -20,10 +20,10 @@ class UpdateFromOpenStackJob {
         log.debug "updating openstack data"
 
 
-        if(OpenStackConnection.getConnection() && sessionFactory.currentSession.isConnected()){
-            imageService.loadImages(OpenStackConnection.getConnection())
-            instanceService.loadInstances(OpenStackConnection.getConnection())
-        }
+//        if(OpenStackConnection.getConnection() && sessionFactory.currentSession.isConnected()){
+//            imageService.loadImages(OpenStackConnection.getConnection())
+//            instanceService.loadInstances(OpenStackConnection.getConnection())
+//        }
 
     }
 }

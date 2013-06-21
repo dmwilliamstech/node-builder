@@ -1,5 +1,5 @@
 
-node '${manifest.instanceName}.novalocal' {
+node '${manifest.name}.novalocal' {
     <g:each in="${manifest.nodes.sort()}" var="node">
         <g:each in="${node.getValue().configurations}" var="configuration">
     $${configuration.name} = "${configuration.value}"

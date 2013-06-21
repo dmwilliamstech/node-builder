@@ -16,7 +16,6 @@
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li class="${request.getServletPath() == '/index.gsp' ? 'active' : '' }"><a title="Build a node">Build</a></li>
-                                    <li class="${request.getServletPath().contains('configure') ? 'active' : '' }"><a  title="Configure your Node">Configure</a></li>
                                     <li class="${request.getServletPath().contains('deploy') ? 'active' : '' }"><a title="Deploy your node">Deploy</a></li>
                                     <li class="divider-vertical"></li>
                                 </ul>

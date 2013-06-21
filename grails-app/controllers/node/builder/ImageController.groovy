@@ -7,10 +7,12 @@ import org.springframework.dao.DataIntegrityViolationException
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
  */
 class ImageController {
-
+    ImageService imageService
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
+        imageService.loadImages(OpenStackConnection.getConnection())
+
         redirect(action: "list", params: params)
     }
 

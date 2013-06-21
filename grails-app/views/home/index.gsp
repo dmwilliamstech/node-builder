@@ -13,43 +13,76 @@
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
 </div>
-<h1>Name</h1>
+<h3>Manifest Name</h3>
 <div class="control-group">
     <div class="controls">
         <input type="text" class="input-xlarge" id="manifestName">
         <p class="help-block">Save manifest as</p>
     </div>
 </div>
+<div class="tabtable">
+    <ul class="nav nav-tabs">
+        <li >
+            <a href="#newModal" data-toggle="modal" title="Add an Instance"><strong><i class="icon-plus-sign"></i>New Instance</strong></a>
+        </li>
+    </ul>
+    <div class="tab-content">
+    </div>
+</div>
+<a class="btn btn-info pull-right" onclick="handleConfigure(this)" >Deploy</a>
 
-<div class="hero-unit">
-<h2>Select Suite</h2>
-<p class="help-block">List of application suites for adding to the manifest</p>
-<table id="nodes" class="table table-striped">
-    <thead>
-    <tr>
-        <th><h2>Suite</h2></th>
-        <th><h2>Actions</h2></th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div id="newModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="newModalLabel">New Instance</h3>
+    </div>
+    <div class="modal-body">
+        <div id="newModalAlert"></div>
+
+            <h3>Instance Name</h3>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="newInstanceName">
+                    <p class="help-block">Save instance as</p>
+                </div>
+            </div>
+
+            <div class="hero-unit">
+                <h4>Select Suite</h4>
+                <p class="help-block">List of application suites for adding to the manifest</p>
+                <table id="newNodes" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><h4>Suite</h4></th>
+                        <th><h4>Actions</h4></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="hero-unit">
+                <h4>Select Applications</h4>
+                <p class="help-block">List of individual applications for adding to the manifest</p>
+                <table id="newApplications" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><h4>Application</h4></th>
+                        <th><h4>Actions</h4></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" onclick="handleCloseNewInstance(this)" >Close</button>
+        <button class="btn btn-primary" onclick="handleSaveNewInstance(this)" >Save</button>
+    </div>
 </div>
-<div class="hero-unit">
-<h2>Select Applications</h2>
-<p class="help-block">List of individual applications for adding to the manifest</p>
-<table id="applications" class="table table-striped">
-    <thead>
-    <tr>
-        <th><h2>Application</h2></th>
-        <th><h2>Actions</h2></th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-</div>
-<a class="btn btn-large btn-info pull-right" onclick="handleConfigure(this)" >Configure</a>
+
 
 <script type="text/javascript" src="/node-builder/static/js/index.js" ></script>
 

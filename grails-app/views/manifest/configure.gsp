@@ -14,11 +14,11 @@
 </g:if>
 </div>
 <div class="hero-unit">
-<h2>Configure Suite</h2>
+<h3>Configure Suite</h3>
 <table id="nodes" class="table table-striped">
     <thead>
     <tr>
-        <th><h2>Suite</h2></th>
+        <th><h3>Suite</h3></th>
     </tr>
     </thead>
     <tbody>
@@ -26,11 +26,11 @@
 </table>
 </div>
 <div class="hero-unit">
-<h2>Configure Applications</h2>
+<h3>Configure Applications</h3>
 <table id="applications" class="table table-striped">
     <thead>
     <tr>
-        <th><h2>Application</h2></th>
+        <th><h3>Application</h3></th>
     </tr>
     </thead>
     <tbody>

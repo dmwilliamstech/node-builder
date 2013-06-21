@@ -1,25 +1,28 @@
 $(document).ready(function() {
-    $.each(manifest.nodes, function(id, node){
-        addConfigurations(id, node, "node");
+    $.each(manifest.instances, function(instanceId, instance){
+        $.each(instance.nodes, function(id, node){
+            addConfigurations(instanceId, id, node, "node");
+        });
+
+        $.each(instance.applications, function(id, application){
+            addConfigurations(instanceId, id, application, "application");
+        });
     });
 
-    $.each(manifest.applications, function(id, application){
-        addConfigurations(id, application, "application");
-    });
 
 
 });
 
-function addConfigurations(id, object, type){
+function addConfigurations(instanceId, id, object, type){
     var html =
-        '<tr>' +
-        '<td>' + "<h3>" + object.name + "</h3>"
+        '<tr id="'+instanceId +id + type+'">' +
+        '<td>' + "<h4>" + object.name + "</h4>"
     $.each(object.configurations, function(mm, configuration){
 
         html += '<div class="control-group">' +
             '<label class="control-label" for="'+ mm +'">'+ configuration.name +'</label>' +
             '<div class="controls">' +
-            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ id +'" onchange="handleInputChange(this, \''+type+'s\')">'
+            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ instanceId + '_'+ id +'" onchange="handleInputChange(this, \''+type+'s\')">'
             if(configuration.description)
                 html += '<p class="help-block">' +configuration.description+ '</p>'
             html += '</div>' +
@@ -35,16 +38,19 @@ function addConfigurations(id, object, type){
 }
 
 function handleInputChange(input, type){
-    manifest[type][$(input)[0].name].configurations[$(input)[0].id].value = $(input).val()
+    var instanceId = $(input)[0].name.split("_")[0]
+    var inputId = $(input)[0].name.split("_")[1]
+    console.log(manifest)
+    console.log(instanceId)
+    console.log(inputId)
+    manifest.instances[instanceId][type][inputId].configurations[$(input)[0].id].value = $(input).val()
 }
 
 
 
 function handleDeploy(button){
-
-
-
     if(alert.length == 0){
+        console.log(manifest)
         //post manifest and forward to configure screen
         $.ajax(location.pathname.replace(/configure.*/,"manifest/update/") +manifest.id, {
             data : JSON.stringify(manifest),

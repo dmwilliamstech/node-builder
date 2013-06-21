@@ -27,14 +27,6 @@
     </div>
     <p class="help-block" ><h3><span class="alert alert-success" id="imageName">Select an Image</span></h3></p>
     <div class="control-group">
-        <label class="control-label" for="instanceName"><h4>Instance Name</h4></label>
-        <div class="controls">
-            <input type="text" class="input-xlarge" onkeyup="handleInstanceNameChange(this)" onchange="handleInstanceNameChange(this)" id="instanceName">
-            <p class="help-block">Name applied to the image after starting and used for access</p>
-        </div>
-    </div>
-    <div class="control-group">
-
         <div class="controls">
             <input type="hidden" class="input-xlarge uneditable-input" id="id" value="${master.id}">
         </div>
@@ -51,6 +43,7 @@
     var json = ${manifest as grails.converters.JSON}
     manifest = json.manifest
     var instances = ${instances as grails.converters.JSON}
+    console.log(manifest)
 </g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/deploy.js" ></script>
 </body>
