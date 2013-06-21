@@ -133,7 +133,7 @@ function handleSaveNewInstance(button){
 function loadTabsFromManifest(active){
     $("ul.nav-tabs").html(
      '<li >' +
-        '<a href="#newModal" data-toggle="modal" title="Add an Instance"><strong>+ New Instance</strong></a>' +
+        '<a href="#newModal" data-toggle="modal" title="Add an Instance"><strong><i class="icon-plus-sign"></i> New Instance</strong></a>' +
     '</li>');
     $("div.tab-content").html('');
     $.each(manifest.instances, function(index, instance){
@@ -147,12 +147,16 @@ function loadTabsFromManifest(active){
                             '<th>' +
                                 'Name' +
                             '</th>' +
+            '<th style="width: 20%">' +
+            'Actions' +
+            '</th>' +
                         '</tr>' +
                     '</thead>' +
                     '<tbody>'
         $.each(instance.nodes, function(jndex, node){
-            tabHtml += '<tr><td>' + node.name
-                '<td></tr>'
+            tabHtml += '<tr><td id="'+ index +'_'+ jndex +'nodes">' + node.name +
+                '</td><td><a href="#" onclick="handleNodeEdit('+index+','+jndex+')"><i class="icon-pencil"></i></a></td></tr>'
+
         });
 
 
@@ -169,14 +173,14 @@ function loadTabsFromManifest(active){
             '<th>' +
             'Name' +
             '</th>' +
-                '<th>' +
+                '<th style="width: 20%">' +
                 'Actions' +
                 '</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>'
         $.each(instance.applications, function(jndex, application){
-            tabHtml += '<tr><td id="'+ index +'_'+ jndex +'">' + application.name +
+            tabHtml += '<tr><td id="'+ index +'_'+ jndex +'applications">' + application.name +
             '</td><td><a href="#" onclick="handleApplicationEdit('+index+','+jndex+')"><i class="icon-pencil"></i></a></td></tr>'
         });
 
@@ -191,28 +195,32 @@ function loadTabsFromManifest(active){
     });
 }
 
+function handleNodeEdit(instanceIndex, nodeIndex){
+    addConfigurations(instanceIndex, nodeIndex, manifest.instances[instanceIndex].nodes[nodeIndex], 'node')
+}
+
 function handleApplicationEdit(instanceIndex, applicationIndex){
     addConfigurations(instanceIndex, applicationIndex, manifest.instances[instanceIndex].applications[applicationIndex], 'application')
 }
 
-function addConfigurations(instanceIndex, applicationIndex, object, type){
-    if($('#'+instanceIndex + applicationIndex + type).length > 0)
+function addConfigurations(instanceIndex, index, object, type){
+    if($('#'+instanceIndex + index + type).length > 0)
         return
-    var html = '<hr id="'+instanceIndex + applicationIndex + type+'">'
+    var html = '<hr id="'+instanceIndex + index + type+'s">'
 
     $.each(object.configurations, function(mm, configuration){
 
         html += '<div class="control-group">' +
             '<label class="control-label" for="'+ mm +'">'+ configuration.name +'</label>' +
             '<div class="controls">' +
-            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ instanceIndex + '_'+ applicationIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
+            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ instanceIndex + '_'+ index +'" onchange="handleInputChange(this, \''+type+'s\')">'
         if(configuration.description)
             html += '<p class="help-block">' +configuration.description+ '</p>'
         html += '</div>' +
             '</div>';
     });
 
-    $('#' + instanceIndex + '_' + applicationIndex).append(
+    $('#' + instanceIndex + '_' + index + type + 's').append(
         html
     );
 }

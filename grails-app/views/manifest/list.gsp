@@ -12,6 +12,9 @@
 <body>
 
 </section>
+<p>
+<a href="${request.contextPath}" title="Add a Manifest"><strong><i class="icon-plus-sign"></i> New Manifest</strong></a>
+</p>
 <section id="list-manifest" class="first">
 
 	<table class="table table-bordered">
