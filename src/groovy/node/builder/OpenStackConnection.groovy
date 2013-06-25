@@ -1,5 +1,6 @@
 package node.builder
 
+import grails.converters.JSON
 import groovy.transform.Synchronized
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
@@ -12,16 +13,17 @@ class OpenStackConnection {
     def password
     def tenantId
     def keyId
-    def compute
+    RESTClient compute
     def token
+    def defaultFlavorId
     String adminUrl
 
     private static OpenStackConnection connection
 
 
-    static def createConnection(hostname, username, password, tenantId, keyId){
+    static def createConnection(hostname, username, password, tenantId, keyId, defaultFlavorId){
         if(connection == null)
-            connection = new OpenStackConnection(hostname, username, password, tenantId, keyId)
+            connection = new OpenStackConnection(hostname, username, password, tenantId, keyId, defaultFlavorId)
         assert connection != null
         return connection
     }
@@ -30,12 +32,13 @@ class OpenStackConnection {
         return connection
     }
 
-    private def OpenStackConnection(hostname, username, password, tenantId, keyId){
+    private def OpenStackConnection(hostname, username, password, tenantId, keyId, defaultFlavorId){
         this.hostname = hostname
         this.username = username
         this.password = password
         this.tenantId = tenantId
         this.keyId = keyId
+        this.defaultFlavorId = defaultFlavorId
 
     }
 
@@ -73,7 +76,7 @@ class OpenStackConnection {
 
         def resp = compute.post( path : 'servers',
                              contentType : 'application/json',
-                             body :  [server: [flavorRef: flavor, imageRef: image, key_name: this.keyId, name: instanceName]] ,
+                             body :  [server: [flavorRef: (flavor ?: defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
                              headers : ['X-Auth-Token' : token])
 
         HttpResponseDecorator details = compute.get ( path : "servers/" + resp.data.server.id,
@@ -83,20 +86,21 @@ class OpenStackConnection {
     }
 
     @Synchronized
+    def flavors(){
+        return objects("flavors")
+    }
+
+    @Synchronized
     private def objects(type){
         if(this.compute == null)
             this.connect()
 
         def objects = []
-        def resp = compute.get( path : type,
-                headers : ['X-Auth-Token' : token] )
-        for (object in resp.data.get(type)) {
 
-            HttpResponseDecorator details = compute.get ( path : "${type}/" + object.id,
-                    headers : [ 'X-Auth-Token' : token] )
-            objects.add(details.getData())
-        }
-        return objects
+        def resp = compute.get( path : type + "/detail" ,
+                headers : ['X-Auth-Token' : token] )
+
+        return resp.data.get(type)
     }
 
 }

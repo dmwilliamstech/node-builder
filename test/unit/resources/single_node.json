@@ -9,6 +9,7 @@
                     "value" : "Some Value"
                 }
             ],
+            "flavorId": "2",
             "applications": [
                 {
                     "name": "class::app_1",
@@ -22,7 +23,8 @@
                             "name" : "app_config_2",
                             "value" : "Some Value"
                         }
-                    ]
+                    ],
+                    "flavorId" : 3
                 },
                 {
                     "name": "class::app_2",
@@ -32,7 +34,8 @@
                             "name" : "app_config_3",
                             "value" : "Some Value"
                         }
-                    ]
+                    ],
+                    "flavorId": "1"
                 }
             ]
         }

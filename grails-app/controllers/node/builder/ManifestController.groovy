@@ -40,13 +40,18 @@ class ManifestController {
     }
 
     def show() {
-        def manifestInstance = Manifest.get(params.id)
-        if (!manifestInstance) {
-            response.sendError(404)
-            return
-        }
+        if(params.id == "new"){
+            [manifestInstance: null, flavors: Flavor.all]
+        }else{
+            def manifestInstance = Manifest.get(params.id)
+            if (!manifestInstance && params.id != "new") {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+                redirect(action: "list")
+                return
+            }
 
-        render(manifestInstance as JSON)
+            [manifestInstance: manifestInstance, flavors: Flavor.all]
+        }
     }
 
     def update() {

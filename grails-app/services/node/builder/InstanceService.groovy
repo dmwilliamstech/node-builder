@@ -13,8 +13,8 @@ class InstanceService {
     def loadInstances(connection){
         def instances = connection.instances()
         def savedInstances = Instance.all
-        instances.each { instance ->
-            def server = instance.server
+        instances.each { server ->
+
 
             savedInstances = savedInstances.findAll({ i ->
                 i.instanceId != server.id

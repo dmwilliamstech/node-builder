@@ -52,10 +52,13 @@ class InputFileChangeListenerTests {
 
         assert Node.count == 1
         assert Node.first().name == "class::name"
+        assert Node.first().flavorId == "2"
 
         assert Application.count == 2
         assert Application.first().name == "class::app_1"
+        assert Application.first().flavorId == "3"
         assert Application.last().name == "class::app_2"
+        assert Application.last().flavorId == "1"
 
         assert ApplicationConfiguration.count == 3
         assert NodeConfiguration.count == 1

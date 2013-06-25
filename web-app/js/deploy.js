@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('#instanceName').val(manifest.instanceName)
 
     $('.dropdown-toggle').dropdown()
-    var path = location.pathname.replace(/deploy.*/,"api/image")
+    var path = location.pathname.replace(/manifest.*/,"api/image")
 
     $.getJSON(path, function(images) {
         var notFound = '<li><a title="No Images Found">Sorry no images found</a></li>'
@@ -44,7 +44,7 @@ function validateManifest(){
 function handleUpload(button){
     var alert = validateManifest()
     if(alert.length == 0){
-        $.ajax(location.pathname.replace(/deploy.*/,"manifest/update/") +manifest.id , {
+        $.ajax(location.pathname.replace(/deploy.*/,"update/") +manifest.id , {
             data : JSON.stringify(manifest),
             contentType : 'application/json',
             type : 'POST',

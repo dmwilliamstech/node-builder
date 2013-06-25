@@ -1,10 +1,10 @@
 var newInstance = {nodes:{},applications:{}};
-var manifest = {instances: []};
+
 var configurations = {nodes: {},applications:{}};
 var nodes;
 
 $(document).ready(function() {
-    $.getJSON('api/node', function(json) {
+    $.getJSON(location.pathname.replace(/manifest.*/,'api/node'), function(json) {
         nodes = json
         $.each(nodes.data, function(ii, node){
             if(ii != 0){
@@ -13,7 +13,7 @@ $(document).ready(function() {
                     "<td>" +
                     '<div class="btn-toolbar">' +
                     '<a title="'+ node.name + '" name="node" id="'+node.id+'" class="btn" onclick="handleAddNode(this)" title="Node added to manifest" >Add</a>' +
-                    '<a href="#" id="infoNode'+node.id+'" class="btn" rel="popover" data-content="'+node.description+'" data-original-title="'+node.name+'" ><i class="icon-info-sign icon-white"></i></a>' +
+                    '<a href="#" id="infoNode'+node.id+'" class="btn" rel="popover" data-flavor="'+node.flavorId+'" data-content="'+node.description+'" data-original-title="'+node.name+'" ><i class="icon-info-sign icon-white"></i></a>' +
                     '</div>' +
                     '</td>' +
                     "</tr>");
@@ -26,7 +26,7 @@ $(document).ready(function() {
                     '<td>' +
                     '    <div class="btn-toolbar">' +
                     '        <a title="'+ application.name + '" name="application" id="'+application.id+'" class="btn" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
-                    '        <a href="#" id="infoApp'+application.id+'" class="btn" rel="popover" data-content="'+application.description+'" data-original-title="'+application.name+'"  ><i class="icon-info-sign icon-white"></i></a>' +
+                    '        <a href="#" id="infoApp'+application.id+'" data-flavor="'+application.flavorId+'" class="btn" rel="popover" data-content="'+application.description+'" data-original-title="'+application.name+'"  ><i class="icon-info-sign icon-white"></i></a>' +
                     '    </div>' +
                     '</td>' +
                     '</tr>');
@@ -39,6 +39,10 @@ $(document).ready(function() {
 
     });
 
+    if(manifest.id){
+        loadTabsFromManifest(manifest.instances[0].name)
+        $("#manifestName").val(manifest.name)
+    }
 });
 
 function handleAddNode(button){
@@ -48,7 +52,7 @@ function handleAddNode(button){
         $(button).html('Add')
     }else{
         $(button).addClass("btn-success")
-        newInstance.nodes[button.id] = {configurations: configurations.nodes[button.id], name:button.title }
+        newInstance.nodes[button.id] = {configurations: configurations.nodes[button.id], name:button.title, flavorId: $('#infoNode' + button.id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Added')
 
         $.each(nodes.data, function(index, node){
@@ -72,7 +76,7 @@ function handleIncludeApplication(button){
         $(button).html("Include")
     }else{
         $(button).addClass("btn-success")
-        newInstance.applications[button.id] = {configurations: configurations.applications[button.id], name:button.title }
+        newInstance.applications[button.id] = {configurations: configurations.applications[button.id], name:button.title, flavorId: $('#infoApp' + button.id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Included')
     }
 }
@@ -102,12 +106,13 @@ function handleConfigure(button){
 
     manifest.name = name
 
-    $.ajax("manifest/create", {
+    var path = location.pathname.replace(/show.*/, (manifest.id ? "update/"+manifest.id : "create"))
+    $.ajax(path, {
         data : JSON.stringify(manifest),
         contentType : 'application/json',
         type : 'POST',
         success: function(data){
-            location = "deploy/" + data.id
+            location = location.pathname.replace(/show.*/,"deploy/") + data.id
         }
     });
 }
@@ -122,12 +127,39 @@ function handleSaveNewInstance(button){
         return
     }else{
         newInstance.name = name
+        newInstance.flavorId = getFlavorIdForInstance(newInstance)
+
         manifest.instances.push(newInstance)
+
         resetSaveNewInstance();
         loadTabsFromManifest(name);
         $('#newModal').modal('hide');
 
     }
+}
+
+function getFlavorIdForInstance(instance){
+    var flavorId = 1
+    $.each(instance.nodes, function(ii, node){
+        if(node.flavorId > flavorId)
+            flavorId = node.flavorId
+    })
+
+    $.each(instance.applications, function(ii, application){
+        if(application.flavorId > flavorId)
+            flavorId = application.flavorId
+    })
+
+    return flavorId
+}
+
+function getFlavorName(flavorId){
+    var name = "Unknown Flavor"
+    $.each(flavors, function(ii, flavor){
+        if(flavorId == flavor.flavorId)
+            name = flavor.name
+    })
+    return name
 }
 
 function loadTabsFromManifest(active){
@@ -137,8 +169,9 @@ function loadTabsFromManifest(active){
     '</li>');
     $("div.tab-content").html('');
     $.each(manifest.instances, function(index, instance){
+        var flavorName = getFlavorName(instance.flavorId)
         $("ul.nav-tabs").prepend('<li class="'+(active == instance.name ? "active": "")+'"><a href="#'+instance.name.replace(/\s/g,"")+'" data-toggle="tab" title="">'+instance.name+'</a></li>');
-        var tabHtml = '<h3>'+instance.name+'</h3>' +
+        var tabHtml = '<h3>'+instance.name+' ('+flavorName+')</h3>' +
             '<div class="">' +
                 '<h3>Suites</h3>' +
                 '<table class="table table-bordered">' +

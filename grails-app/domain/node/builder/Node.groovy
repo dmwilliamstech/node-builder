@@ -12,6 +12,7 @@ class Node {
 	Long	version
 	String  name
     String  description
+    String  flavorId
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -27,6 +28,7 @@ class Node {
     
 	static constraints = {
         name(unique: true)
+        flavorId(nullable: true)
     }
 	
 	/*

@@ -13,7 +13,7 @@
 
 </section>
 <p>
-<a href="${request.contextPath}" title="Add a Manifest"><strong><i class="icon-plus-sign"></i> New Manifest</strong></a>
+<a href="show/new" title="Add a Manifest"><strong><i class="icon-plus-sign"></i> New Manifest</strong></a>
 </p>
 <section id="list-manifest" class="first">
 
@@ -35,7 +35,7 @@
 		<tbody>
 		<g:each in="${manifests}" status="i" var="manifest">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                <td><h4>${manifest.name}</h4></td>
+                <td><h4>${manifest.name}</h4><a href="show/${manifest.id}"><i class="icon-pencil"></i></a></td>
 
 				<td><pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
 

@@ -1,4 +1,5 @@
 import grails.converters.JSON
+import node.builder.FlavorService
 import node.builder.Image
 import node.builder.ImageService
 import node.builder.InputFileChangeListener
@@ -14,6 +15,7 @@ class BootStrap {
     def grailsApplication
     InstanceService instanceService
     ImageService imageService
+    FlavorService flavorService
 
     def init = { servletContext ->
 
@@ -42,6 +44,7 @@ class BootStrap {
         try{
             imageService.loadImages(OpenStackConnection.getConnection())
             instanceService.loadInstances(OpenStackConnection.getConnection())
+            flavorService.loadFlavors(OpenStackConnection.getConnection())
         }catch(Exception e){
             log.error "Failed to load OpenStack data - ${e}"
         }
@@ -66,7 +69,8 @@ class BootStrap {
             config.get("openstack.username"),
             config.get("openstack.password"),
             config.get("openstack.tenant.id"),
-            config.get("openstack.key.id")
+            config.get("openstack.key.id"),
+            config.get("openstack.flavor.id")
         )
     }
 

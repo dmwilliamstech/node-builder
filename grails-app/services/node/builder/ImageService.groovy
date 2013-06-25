@@ -13,8 +13,8 @@ class ImageService {
 
         def images = connection.images()
         def savedImages = Image.all
-        images.each { image ->
-            def imageData = image.image
+        images.each { imageData ->
+
             def imageInstance = Image.findByImageId(imageData.id)
 
             savedImages = savedImages.findAll({ i ->

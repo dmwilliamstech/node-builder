@@ -19,10 +19,15 @@ class UrlMappings {
 		 * WARN: No domain/controller should be named "api" or "mobile" or "web"!
 		 */
         "/"	{
-			controller	= 'home'
+			controller	= 'manifest'
 			action		= { 'index' }
             view		= { 'index' }
         }
+//        "/manifest/manifest"	{
+//            controller	= 'manifest'
+//            action		= { 'manifest' }
+//            view		= { 'new' }
+//        }
         "/deploy/update/$id"	{
             controller	= 'manifest'
             action		= { 'update' }
@@ -33,7 +38,7 @@ class UrlMappings {
             action		= { 'configure' }
             view		= { 'configure' }
         }
-        "/deploy/$id/upload/$master"	{
+        "/manifest/deploy/$id/upload/$master"	{
             controller	= 'manifest'
             action		= { 'upload' }
             view		= { 'deploy' }

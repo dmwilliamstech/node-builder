@@ -33,7 +33,7 @@ class ManifestService {
 
     def provision(Manifest manifest) {
         for(instance in manifest.manifest.instances){
-            def instanceData =  OpenStackConnection.connection.launch("1", manifest.manifest.imageId, instance.name)
+            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instance.name)
             def server = instanceData.server
             def instanceDomain = new Instance(
                     name: server.name,
