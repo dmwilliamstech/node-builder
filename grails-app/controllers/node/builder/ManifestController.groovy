@@ -121,7 +121,7 @@ class ManifestController {
         def manifestInstance = Manifest.get(params.id)
         if (!manifestInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(controller: 'home', action: "index")
+            redirect(action: "list")
             return
         }
         def masterInstance = Master.first()
@@ -132,7 +132,7 @@ class ManifestController {
         def manifestInstance = Manifest.get(params.id)
         if (!manifestInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(controller: 'home', action: "index")
+            redirect(action: "list")
             return
         }
 
@@ -146,7 +146,7 @@ class ManifestController {
         def masterInstance = Master.get(params.master)
         if (!manifestInstance || !masterInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
-            redirect(controller: 'home', action: "index")
+            redirect(action: "list")
             return
         }
 

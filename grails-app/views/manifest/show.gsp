@@ -29,7 +29,11 @@
     <div class="tab-content">
     </div>
 </div>
-<a class="btn btn-info pull-right" onclick="handleConfigure(this)" >Deploy</a>
+
+<div class="btn-group pull-right">
+    <a class="btn btn-info " onclick="handleConfigure(this, false)" >Save</a>
+    <a class="btn btn-info " onclick="handleConfigure(this, true)" >Deploy</a>
+</div>
 
 <div id="newModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
     <div class="modal-header">

@@ -10,7 +10,11 @@
 </head>
 
 <body>
-
+<div id="alert">
+    <g:if test="${flash.message && !layout_noflashmessage}">
+        <div class="alert alert-error">${flash.message}</div>
+    </g:if>
+</div>
 </section>
 <p>
 <a href="show/new" title="Add a Manifest"><strong><i class="icon-plus-sign"></i> New Manifest</strong></a>

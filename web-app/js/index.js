@@ -12,7 +12,7 @@ $(document).ready(function() {
                     "<td><h4>" + node.name + "</h4></td>" +
                     "<td>" +
                     '<div class="btn-toolbar">' +
-                    '<a title="'+ node.name + '" name="node" id="'+node.id+'" class="btn" onclick="handleAddNode(this)" title="Node added to manifest" >Add</a>' +
+                    '<a title="'+ node.name + '" name="node" id="node'+node.id+'" class="btn" onclick="handleAddNode(this)" title="Node added to manifest" >Add</a>' +
                     '<a href="#" id="infoNode'+node.id+'" class="btn" rel="popover" data-flavor="'+node.flavorId+'" data-content="'+node.description+'" data-original-title="'+node.name+'" ><i class="icon-info-sign icon-white"></i></a>' +
                     '</div>' +
                     '</td>' +
@@ -25,7 +25,7 @@ $(document).ready(function() {
                     '<td><h4>' + application.name + '</h4></td>' +
                     '<td>' +
                     '    <div class="btn-toolbar">' +
-                    '        <a title="'+ application.name + '" name="application" id="'+application.id+'" class="btn" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
+                    '        <a title="'+ application.name + '" name="application" id="app'+application.id+'" class="btn" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
                     '        <a href="#" id="infoApp'+application.id+'" data-flavor="'+application.flavorId+'" class="btn" rel="popover" data-content="'+application.description+'" data-original-title="'+application.name+'"  ><i class="icon-info-sign icon-white"></i></a>' +
                     '    </div>' +
                     '</td>' +
@@ -46,20 +46,24 @@ $(document).ready(function() {
 });
 
 function handleAddNode(button){
+    var id = button.id.replace(/node/, '')
+
+
     if($(button).hasClass("btn-success")){
-        delete newInstance.nodes[button.id]
+        delete newInstance.nodes[id]
         $(button).removeClass("btn-success")
         $(button).html('Add')
     }else{
         $(button).addClass("btn-success")
-        newInstance.nodes[button.id] = {configurations: configurations.nodes[button.id], name:button.title, flavorId: $('#infoNode' + button.id).data("flavor") }
+
+        newInstance.nodes[id] = {id: id, configurations: configurations.nodes[id], name:button.title, flavorId: $('#infoNode' + id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Added')
 
         $.each(nodes.data, function(index, node){
-            if(parseInt(button.id) === parseInt(node.id)){
+            if(parseInt(id) === parseInt(node.id)){
                 $.each(node.applications, function(blah, applicationId){
-                    var appButton = $('a[name=application][id='+applicationId+'][title]')
-                    appButton.id = applicationId
+                    var appButton = $('#app' + applicationId)
+                    appButton.id = 'app' + applicationId
                     appButton.title = appButton[0].title
                     if(!appButton.hasClass("btn-success"))
                         handleIncludeApplication(appButton);
@@ -70,13 +74,15 @@ function handleAddNode(button){
 }
 
 function handleIncludeApplication(button){
+    var id = button.id.replace(/app/, '')
+
     if($(button).hasClass("btn-success")){
-        delete newInstance.applications[button.id]
+        delete newInstance.applications[id]
         $(button).removeClass("btn-success")
         $(button).html("Include")
     }else{
         $(button).addClass("btn-success")
-        newInstance.applications[button.id] = {configurations: configurations.applications[button.id], name:button.title, flavorId: $('#infoApp' + button.id).data("flavor") }
+        newInstance.applications[id] = {id: id, configurations: configurations.applications[id], name:button.title, flavorId: $('#infoApp' + id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Included')
     }
 }
@@ -94,7 +100,7 @@ function validateManifest(name){
     return alert
 }
 
-function handleConfigure(button){
+function handleConfigure(button, deploy){
     //post manifest and forward to configure screen
     var name = $("#manifestName").val()
     var alert = validateManifest(name)
@@ -112,7 +118,10 @@ function handleConfigure(button){
         contentType : 'application/json',
         type : 'POST',
         success: function(data){
-            location = location.pathname.replace(/show.*/,"deploy/") + data.id
+            if(deploy)
+                location = location.pathname.replace(/show.*/,"deploy/") + data.id
+            else
+                $("#alert").html('<div class="alert alert-success">'+"Successfully saved manifest " + name + '</div>')
         }
     });
 }
@@ -128,13 +137,15 @@ function handleSaveNewInstance(button){
     }else{
         newInstance.name = name
         newInstance.flavorId = getFlavorIdForInstance(newInstance)
-
-        manifest.instances.push(newInstance)
-
+        if(newInstance.id > 0){
+            manifest.instances[newInstance.id - 1] = newInstance
+        }else{
+            manifest.instances.push(newInstance)
+            newInstance.id = manifest.instances.length
+        }
         resetSaveNewInstance();
         loadTabsFromManifest(name);
         $('#newModal').modal('hide');
-
     }
 }
 
@@ -171,7 +182,7 @@ function loadTabsFromManifest(active){
     $.each(manifest.instances, function(index, instance){
         var flavorName = getFlavorName(instance.flavorId)
         $("ul.nav-tabs").prepend('<li class="'+(active == instance.name ? "active": "")+'"><a href="#'+instance.name.replace(/\s/g,"")+'" data-toggle="tab" title="">'+instance.name+'</a></li>');
-        var tabHtml = '<h3>'+instance.name+' ('+flavorName+')</h3>' +
+        var tabHtml = '<a class="pull-right" href="#" onclick="handleInstanceEdit('+index+')"><i class="icon-pencil"></i></a>' + '<h3>'+instance.name+' ('+flavorName+')</h3>' +
             '<div class="">' +
                 '<h3>Suites</h3>' +
                 '<table class="table table-bordered">' +
@@ -228,6 +239,22 @@ function loadTabsFromManifest(active){
     });
 }
 
+function handleInstanceEdit(instanceIndex){
+    var instance = manifest.instances[instanceIndex]
+    $.each(instance.nodes, function(ii, node){
+        $('#node' + node.id).addClass("btn-success")
+        $('#node' + node.id).html('<i class="icon-ok icon-white"></i>Added')
+    })
+
+    $.each(instance.applications, function(ii, application){
+        $('#app' + application.id).addClass("btn-success")
+        $('#app' + application.id).html('<i class="icon-ok icon-white"></i>Included')
+    })
+    $('#newInstanceName').val(instance.name)
+    newInstance = instance
+    $('#newModal').modal('show');
+}
+
 function handleNodeEdit(instanceIndex, nodeIndex){
     addConfigurations(instanceIndex, nodeIndex, manifest.instances[instanceIndex].nodes[nodeIndex], 'node')
 }
@@ -279,4 +306,3 @@ function resetSaveNewInstance(){
     $("#newInstanceName").val("")
     newInstance = {nodes:{},applications:{}};
 }
-
