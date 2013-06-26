@@ -13,7 +13,7 @@
     <div class="alert alert-info">${flash.message}</div>
 </g:if>
 </div>
-<h3>Manifest Name</h3>
+<h4>Manifest Name</h4>
 <div class="control-group">
     <div class="controls">
         <input type="text" class="input-xlarge" id="manifestName">
@@ -43,7 +43,7 @@
     <div class="modal-body">
         <div id="newModalAlert"></div>
 
-            <h3>Instance Name</h3>
+            <h4>Instance Name</h4>
             <div class="control-group">
                 <div class="controls">
                     <input type="text" class="input-xlarge" id="newInstanceName">

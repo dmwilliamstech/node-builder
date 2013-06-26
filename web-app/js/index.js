@@ -260,11 +260,13 @@ function handleNodeEdit(instanceIndex, nodeIndex){
 }
 
 function handleApplicationEdit(instanceIndex, applicationIndex){
+    console.log(instanceIndex + " " + applicationIndex)
     addConfigurations(instanceIndex, applicationIndex, manifest.instances[instanceIndex].applications[applicationIndex], 'application')
 }
 
 function addConfigurations(instanceIndex, index, object, type){
-    if($('#'+instanceIndex + index + type).length > 0)
+    console.log($('#'+instanceIndex + index + type + 's'))
+    if($('#'+instanceIndex + index + type +'s').length > 0)
         return
     var html = '<hr id="'+instanceIndex + index + type+'s">'
 
@@ -298,7 +300,7 @@ function handleCloseNewInstance(button){
 }
 
 function resetSaveNewInstance(){
-    $("li").removeClass("active")
+    $("ul.nav-tabs li").removeClass("active")
     $("#newModalAlert").html('')
     $(".btn").removeClass("btn-success")
     $("a[name='node']").html("Add")

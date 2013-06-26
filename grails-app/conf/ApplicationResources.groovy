@@ -11,4 +11,7 @@ modules = {
     deploy {
         resource url: 'js/deploy.js'
     }
+    manifest {
+        resource url: 'js/manifest.js'
+    }
 }

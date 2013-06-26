@@ -39,7 +39,7 @@
 		<tbody>
 		<g:each in="${manifests}" status="i" var="manifest">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                <td><h4>${manifest.name}</h4><a href="show/${manifest.id}"><i class="icon-pencil"></i></a></td>
+                <td><h4>${manifest.name}</h4><a href="show/${manifest.id}"><i class="icon-pencil"></i></a><a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a></td>
 
 				<td><pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
 
@@ -64,6 +64,21 @@
 	</div>
 </section>
 
+<div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="deleteModalLabel">Delete Manifest</h3>
+    </div>
+    <div class="modal-body">
+        <div id="deleteManifestConfirm">Are you sure you want to delete?</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" data-target="#deleteModal" >Cancel</button>
+        <button class="btn btn-primary" onclick="handleDeleteManifest(this)" >Delete</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="/node-builder/static/js/manifest.js" ></script>
 </body>
 
 </html>

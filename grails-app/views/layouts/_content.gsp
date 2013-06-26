@@ -15,11 +15,6 @@
                             <a class="brand" href="${request.contextPath}" title="OpenDX">OpenDX</a>
                             <div class="nav-collapse">
                                 <ul class="nav">
-                                    <li class="${request.getServletPath() == '/index.gsp' ? 'active' : '' }"><a title="Build a node">Build</a></li>
-                                    <li class="${request.getServletPath().contains('deploy') ? 'active' : '' }"><a title="Deploy your node">Deploy</a></li>
-                                    <li class="divider-vertical"></li>
-                                </ul>
-                                <ul class="nav pull-right">
                                     <li class="${request.getServletPath().contains('manifest') ? 'active' : '' }"><a href="${request.contextPath}/manifest" >Manifests</a></li>
                                     <li class="${request.getServletPath().contains('image') ? 'active' : '' }"><a href="${request.contextPath}/image">Images</a></li>
                                     <li class="${request.getServletPath().contains('instance') ? 'active' : '' }"><a href="${request.contextPath}/instance">Instances</a></li>
