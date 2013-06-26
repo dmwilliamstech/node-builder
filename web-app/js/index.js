@@ -122,8 +122,20 @@ function handleConfigure(button, deploy){
                 location = location.pathname.replace(/show.*/,"deploy/") + data.id
             else
                 $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + name + '</i></div>')
+
+            toggleDirty(false)
         }
     });
+}
+
+function toggleDirty(dirty){
+    if(dirty){
+        $('#saveManifestButton').removeClass('btn-info')
+        $('#saveManifestButton').addClass('btn-warning')
+    }else{
+        $('#saveManifestButton').removeClass('btn-warning')
+        $('#saveManifestButton').addClass('btn-info')
+    }
 }
 
 function handleSaveNewInstance(button){
@@ -147,6 +159,7 @@ function handleSaveNewInstance(button){
         loadTabsFromManifest(name);
         $('#newModal').modal('hide');
     }
+    toggleDirty(true)
 }
 
 function getFlavorIdForInstance(instance){
@@ -243,6 +256,7 @@ function loadTabsFromManifest(active){
 function handleInstanceDelete(instanceIndex){
     manifest.instances.splice(instanceIndex, 1);
     var name = manifest.instances.length > 0 ? manifest.instances[0].name : ""
+    toggleDirty(true)
     loadTabsFromManifest(name)
 }
 

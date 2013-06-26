@@ -16,7 +16,7 @@
 <h4>Manifest Name</h4>
 <div class="control-group">
     <div class="controls">
-        <input type="text" class="input-xlarge" id="manifestName">
+        <input type="text" class="input-xlarge" onchange="toggleDirty(true)" id="manifestName">
         <p class="help-block">Save manifest as</p>
     </div>
 </div>
@@ -31,7 +31,7 @@
 </div>
 
 <div class="btn-group pull-right">
-    <a class="btn btn-info " onclick="handleConfigure(this, false)" >Save</a>
+    <a id="saveManifestButton"  class="btn btn-info " onclick="handleConfigure(this, false)" >Save</a>
     <a class="btn btn-info " onclick="handleConfigure(this, true)" >Deploy</a>
 </div>
 
@@ -83,7 +83,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn" onclick="handleCloseNewInstance(this)" >Close</button>
-        <button class="btn btn-primary" onclick="handleSaveNewInstance(this)" >Save</button>
+        <button class="btn btn-primary" onclick="handleSaveNewInstance(this)" >Ok</button>
     </div>
 </div>
 

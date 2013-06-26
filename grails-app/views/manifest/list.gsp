@@ -39,7 +39,12 @@
 		<tbody>
 		<g:each in="${manifests}" status="i" var="manifest">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                <td><h4>${manifest.name}</h4><a href="show/${manifest.id}"><i class="icon-pencil"></i></a><a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a></td>
+                <td>
+                    <h4>${manifest.name}</h4>
+                    <a href="show/${manifest.id}"><i class="icon-pencil"></i></a>
+                    <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
+                    <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
+                </td>
 
 				<td><pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
 
