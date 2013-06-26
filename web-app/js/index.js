@@ -121,7 +121,7 @@ function handleConfigure(button, deploy){
             if(deploy)
                 location = location.pathname.replace(/show.*/,"deploy/") + data.id
             else
-                $("#alert").html('<div class="alert alert-success">'+"Successfully saved manifest " + name + '</div>')
+                $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + name + '</i></div>')
         }
     });
 }
@@ -174,6 +174,7 @@ function getFlavorName(flavorId){
 }
 
 function loadTabsFromManifest(active){
+    $("ul.nav-tabs li").removeClass("active")
     $("ul.nav-tabs").html(
      '<li >' +
         '<a href="#newModal" data-toggle="modal" title="Add an Instance"><strong><i class="icon-plus-sign"></i> New Instance</strong></a>' +
@@ -182,7 +183,7 @@ function loadTabsFromManifest(active){
     $.each(manifest.instances, function(index, instance){
         var flavorName = getFlavorName(instance.flavorId)
         $("ul.nav-tabs").prepend('<li class="'+(active == instance.name ? "active": "")+'"><a href="#'+instance.name.replace(/\s/g,"")+'" data-toggle="tab" title="">'+instance.name+'</a></li>');
-        var tabHtml = '<a class="pull-right" href="#" onclick="handleInstanceEdit('+index+')"><i class="icon-pencil"></i></a>' + '<h3>'+instance.name+' ('+flavorName+')</h3>' +
+        var tabHtml = '<div class=""><h3>'+instance.name+' ('+flavorName+')</h3>' + '<a class="" href="#" onclick="handleInstanceEdit('+index+')"><i class="icon-pencil"></i></a> <a class="" href="#" onclick="handleInstanceDelete('+index+')"><i class="icon-remove-sign"></i></a></div><hr>' +
             '<div class="">' +
                 '<h3>Suites</h3>' +
                 '<table class="table table-bordered">' +
@@ -239,6 +240,12 @@ function loadTabsFromManifest(active){
     });
 }
 
+function handleInstanceDelete(instanceIndex){
+    manifest.instances.splice(instanceIndex, 1);
+    var name = manifest.instances.length > 0 ? manifest.instances[0].name : ""
+    loadTabsFromManifest(name)
+}
+
 function handleInstanceEdit(instanceIndex){
     var instance = manifest.instances[instanceIndex]
     $.each(instance.nodes, function(ii, node){
@@ -251,7 +258,7 @@ function handleInstanceEdit(instanceIndex){
         $('#app' + application.id).html('<i class="icon-ok icon-white"></i>Included')
     })
     $('#newInstanceName').val(instance.name)
-    newInstance = instance
+    newInstance = $.extend(true, {}, instance)
     $('#newModal').modal('show');
 }
 
@@ -260,12 +267,10 @@ function handleNodeEdit(instanceIndex, nodeIndex){
 }
 
 function handleApplicationEdit(instanceIndex, applicationIndex){
-    console.log(instanceIndex + " " + applicationIndex)
     addConfigurations(instanceIndex, applicationIndex, manifest.instances[instanceIndex].applications[applicationIndex], 'application')
 }
 
 function addConfigurations(instanceIndex, index, object, type){
-    console.log($('#'+instanceIndex + index + type + 's'))
     if($('#'+instanceIndex + index + type +'s').length > 0)
         return
     var html = '<hr id="'+instanceIndex + index + type+'s">'
@@ -300,7 +305,6 @@ function handleCloseNewInstance(button){
 }
 
 function resetSaveNewInstance(){
-    $("ul.nav-tabs li").removeClass("active")
     $("#newModalAlert").html('')
     $(".btn").removeClass("btn-success")
     $("a[name='node']").html("Add")
