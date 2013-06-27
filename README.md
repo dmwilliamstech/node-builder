@@ -1,7 +1,7 @@
 Node Builder
 =========
 
-Web based Application that reads in script definitions from files in a drop folder. Users can then Mix and match 
+Web based Application that reads in application definitions from files in a drop folder. Users can then Mix and match 
 applications and configuration data to define a node.  The node definition can then be downloaded or uploaded to 
 a remote server and applied to a VM image or image set.
 
