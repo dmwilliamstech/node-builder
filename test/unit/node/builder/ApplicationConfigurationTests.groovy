@@ -3,12 +3,14 @@ package node.builder
 
 
 import grails.test.mixin.*
+import grails.test.mixin.web.ControllerUnitTestMixin
 import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(ApplicationConfiguration)
+@TestMixin(ControllerUnitTestMixin)
 class ApplicationConfigurationTests {
 
     void testWithoutDescriptions() {
