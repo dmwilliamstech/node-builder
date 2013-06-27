@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class ManifestController {
 
     def manifestService
+    def instanceService
 
     static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST", upload: "POST"]
 
@@ -151,6 +152,7 @@ class ManifestController {
         }
 
         manifestService.deployTo(manifestInstance, masterInstance)
+        instanceService.loadInstances(OpenStackConnection.connection)
         manifestService.provision(manifestInstance)
 
         render(masterInstance as JSON)

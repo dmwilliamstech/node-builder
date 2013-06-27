@@ -17,9 +17,9 @@ grails.project.dependency.resolution = {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
-    legacyResolve false // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
+    legacyResolve true // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
@@ -46,6 +46,7 @@ grails.project.dependency.resolution = {
 
         compile 'org.apache.ant:ant-jsch:1.8.4'
         compile 'com.jcraft:jsch:0.1.46'
+        compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
     }
 
     plugins {
@@ -65,8 +66,15 @@ grails.project.dependency.resolution = {
 
 //        cacheDir()
 
+        compile ":maven-publisher:0.8.1"
         compile ':cache:1.0.1'
         compile 'org.grails.plugins:json-rest-api:1.0.11'
         compile ":quartz:1.0-RC9"
     }
+}
+
+grails.project.dependency.distribution = {
+    localRepository = "~/.m2"
+    remoteRepository(id:"codiceSnapshots", url:"https://artifacts.codice.org/content/repositories/snapshots/")
+    remoteRepository(id:"codiceReleases", url:"https://artifacts.codice.org/content/repositories/releases/")
 }

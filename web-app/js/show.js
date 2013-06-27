@@ -327,7 +327,7 @@ function handleAddArrayConfiguration(button){
 }
 
 function addStringConfiguration(config, configIndex, instanceIndex, type, typeIndex){
-    var html = '<input type="text" data-data-type="String" value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
+    var html = '<input style="width:80%" type="text" data-data-type="String" value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
     return html
 }
 
@@ -336,12 +336,12 @@ function addArrayConfiguration(config, configIndex, instanceIndex, type, typeInd
     var html = ""
     $.each(config.value.json, function(valueIndex, value){
         html += '<div id="'+ valueIndex + '_' +configIndex + '_' + typeIndex +'">'+
-            '<input type="text" data-data-type="Array" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ value + '" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'+
+            '<input style="width:80%" type="text" data-data-type="Array" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ value + '" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'+
             '<a href="#'+configIndex + '_' + typeIndex +'" id="'+ valueIndex + '_' +configIndex + '_' + typeIndex + '_a" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" onclick="handleRemoveArrayConfiguration(this)"> <i class="icon-remove-sign"></i></a><br></div>'
     })
 
     if(html.length == 0){
-        html = '<input type="text" value="" data-data-type="Array" data-value-id="0" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')"><br>'
+        html = '<input style="width:80%" type="text" value="" data-data-type="Array" data-value-id="0" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')"><br>'
 
     }
 
