@@ -54,24 +54,28 @@ class BootStrap {
     }
 
     def loadConfig() {
-        ConfigObject config = new ConfigSlurper().parse(new URL("file://${System.getenv("HOME")}/.opendx/config")).flatten()
-        def master = new Master()
-        master.name = config.get("master.name")
-        master.hostname = config.get("master.hostname")
-        master.username = config.get("master.username")
-        master.privateKey = config.get("master.privateKey")
-        master.remotePath = config.get("master.remote.path")
+        try{
+            ConfigObject config = new ConfigSlurper().parse(new URL("file://${System.getenv("HOME")}/.opendx/config")).flatten()
+            def master = new Master()
+            master.name = config.get("master.name")
+            master.hostname = config.get("master.hostname")
+            master.username = config.get("master.username")
+            master.privateKey = config.get("master.privateKey")
+            master.remotePath = config.get("master.remote.path")
 
-        master.save(failOnError: true)
+            master.save(failOnError: true)
 
-        OpenStackConnection.createConnection(
-            config.get("openstack.hostname"),
-            config.get("openstack.username"),
-            config.get("openstack.password"),
-            config.get("openstack.tenant.id"),
-            config.get("openstack.key.id"),
-            config.get("openstack.flavor.id")
-        )
+            OpenStackConnection.createConnection(
+                config.get("openstack.hostname"),
+                config.get("openstack.username"),
+                config.get("openstack.password"),
+                config.get("openstack.tenant.id"),
+                config.get("openstack.key.id"),
+                config.get("openstack.flavor.id")
+            )
+        }catch (e){
+            log.warn("Failed to load config file - " + e.getMessage())
+        }
     }
 
 }
