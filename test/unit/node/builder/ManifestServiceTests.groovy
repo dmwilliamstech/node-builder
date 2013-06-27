@@ -11,7 +11,11 @@ import org.junit.*
 @TestFor(ManifestService)
 class ManifestServiceTests {
 
-    void testSomething() {
-
+    void testFormating() {
+        def service = new ManifestService()
+        def test = service.processConfigurationValue("hello")
+        assert test.toString() == "\"hello\""
+        test = service.processConfigurationValue(["hello", "goodbye"])
+        assert test.equals("[ \"hello\", \"goodbye\" ]")
     }
 }
