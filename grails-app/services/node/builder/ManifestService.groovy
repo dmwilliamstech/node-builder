@@ -27,8 +27,22 @@ class ManifestService {
     def processTemplate(instance, template){
         def output = new StringWriter()
         def templateText = new File(template).text
-        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: instance, items: ['Grails','Groovy']]).writeTo(output)
+        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: instance, service: this]).writeTo(output)
         return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
+    }
+
+    def processConfigurationValue(value){
+        if(value.class == java.lang.String){
+            return "\"${value}\""
+        }else{
+            String string = "[ "
+            for(config in value){
+                string += "\"" + config + "\", "
+            }
+            string = string.replaceAll(/\,\s$/, "")
+            string += " ]"
+            return string
+        }
     }
 
     def provision(Manifest manifest) {
