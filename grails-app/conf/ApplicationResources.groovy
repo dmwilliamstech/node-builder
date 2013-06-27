@@ -2,8 +2,8 @@ modules = {
     application {
         resource url:'js/application.js'
     }
-    index {
-        resource url: 'js/index.js'
+    show {
+        resource url: 'js/show.js'
     }
     configure {
         resource url: 'js/configure.js'

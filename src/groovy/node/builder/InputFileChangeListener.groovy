@@ -84,6 +84,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         configurations.each { configuration ->
 
             def domain = configurationType.newInstance()
+            try{
             configurationType.withTransaction{
                 domain.name = configuration.name
                 domain.value = configuration.value
@@ -93,9 +94,14 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
                 else
                     domain.node = parent
 
+                domain.save()
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
-                domain.save()
+
+            }
+            }catch(e){
+                log.error "Error loading ${configuration.name}"
+                e.printStackTrace()
             }
         }
 

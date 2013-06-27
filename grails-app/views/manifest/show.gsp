@@ -98,7 +98,7 @@
     </g:javascript>
 </g:javascript>
 
-<script type="text/javascript" src="/node-builder/static/js/index.js" ></script>
+<script type="text/javascript" src="/node-builder/static/js/show.js" ></script>
 
 </body>
 </html>

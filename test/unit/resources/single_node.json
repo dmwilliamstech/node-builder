@@ -7,6 +7,10 @@
                 {
                     "name" : "config_name",
                     "value" : "Some Value"
+                },
+                {
+                    "name" : "config_name",
+                    "value" : ["Some Values","Some More Values"]
                 }
             ],
             "flavorId": "2",
@@ -15,14 +19,6 @@
                     "name": "class::app_1",
                     "description": "awesome",
                     "configurations": [
-                        {
-                            "name" : "app_config_1",
-                            "value" : "Some Value"
-                        },
-                        {
-                            "name" : "app_config_2",
-                            "value" : "Some Value"
-                        }
                     ],
                     "flavorId" : 3
                 },
@@ -33,6 +29,10 @@
                         {
                             "name" : "app_config_3",
                             "value" : "Some Value"
+                        },
+                        {
+                            "name" : "config_name",
+                            "value" : ["Some Values","Some More Values"]
                         }
                     ],
                     "flavorId": "1"

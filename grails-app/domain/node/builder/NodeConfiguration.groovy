@@ -1,5 +1,9 @@
 package node.builder
 
+import grails.converters.JSON
+import org.codehaus.groovy.grails.web.json.JSONArray
+import org.codehaus.groovy.grails.web.json.JSONObject
+
 /**
  * Configuration
  * A domain class describes the data object and it's mapping to the database
@@ -11,13 +15,24 @@ class NodeConfiguration {
 //	Long	version
 
     String name
-    String value
+    Object value
+    String valueAsJson
     String description
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated
-	
+
+    def afterLoad() {
+        value=JSON.parse(valueAsJson)
+    }
+
+    def beforeValidate() {
+        valueAsJson= (new JSONObject([json:value])) as JSON
+    }
+
+    static transients = ['value']
+
 	static belongsTo	= [node: Node]	// tells GORM to cascade commands: e.g., delete this object if the "parent" is deleted.
 //	static hasOne		= []	// tells GORM to associate another domain object as an owner in a 1-1 mapping
 //	static hasMany		= []	// tells GORM to associate other domain objects for a 1-n or n-m mapping

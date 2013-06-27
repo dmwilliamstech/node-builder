@@ -284,17 +284,89 @@ function handleApplicationEdit(instanceIndex, applicationIndex){
     addConfigurations(instanceIndex, applicationIndex, manifest.instances[instanceIndex].applications[applicationIndex], 'application')
 }
 
+function handleRemoveArrayConfiguration(button){
+    button = $("#" + button.id)
+    var valueId = button.data("value-id")
+    var configId = button.data("config-id")
+    var instanceId = button.data("instance-id")
+    var typeId = button.data("type-id")
+    var type = button.data("type")
+
+    if(manifest.instances[instanceId][type+'s'][typeId].configurations[configId].value.json.length == 1){
+        //blank existing
+        manifest.instances[instanceId][type+'s'][typeId].configurations[configId].value.json = []
+
+    }else{
+        //remove
+        manifest.instances[instanceId][type+'s'][typeId].configurations[configId].value.json.splice(valueId, 1)
+    }
+    //redraw
+    addConfigurations(instanceId, typeId, manifest.instances[instanceId][type+'s'][typeId], type)
+
+    toggleDirty(true)
+}
+
+function handleAddArrayConfiguration(button){
+    button = $("#" + button.id)
+
+    var configId = button.data("config-id")
+    var instanceId = button.data("instance-id")
+    var typeId = button.data("type-id")
+    var type = button.data("type")
+    //add one
+    var values = manifest.instances[instanceId][type+'s'][typeId].configurations[configId].value.json
+    if(values.length > 0 && values[values.length - 1].length > 0){
+        values.push("")
+        $('#' + instanceId + '_' + typeId + type + 's').empty()
+        addConfigurations(instanceId, typeId, manifest.instances[instanceId][type+'s'][typeId], type)
+    }
+
+    toggleDirty(true)
+}
+
+function addStringConfiguration(config, configIndex, instanceIndex, type, typeIndex){
+    var html = '<input type="text" data-data-type="String" value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
+    return html
+}
+
+function addArrayConfiguration(config, configIndex, instanceIndex, type, typeIndex){
+
+    var html = ""
+    $.each(config.value.json, function(valueIndex, value){
+        html += '<div id="'+ valueIndex + '_' +configIndex + '_' + typeIndex +'">'+
+            '<input type="text" data-data-type="Array" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ value + '" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'+
+            '<a href="#'+configIndex + '_' + typeIndex +'" id="'+ valueIndex + '_' +configIndex + '_' + typeIndex + '_a" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" onclick="handleRemoveArrayConfiguration(this)"> <i class="icon-remove-sign"></i></a><br></div>'
+    })
+
+    if(html.length == 0){
+        html = '<input type="text" value="" data-data-type="Array" data-value-id="0" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')"><br>'
+
+    }
+
+    html += '<a href="#'+configIndex + '_' + typeIndex +'" id="'+ +configIndex + '_' + typeIndex + '_a" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" onclick="handleAddArrayConfiguration(this)"> <i class="icon-plus-sign"></i></a> '
+
+    return html
+}
+
 function addConfigurations(instanceIndex, index, object, type){
-    if($('#'+instanceIndex + index + type +'s').length > 0)
-        return
+    $('#' + instanceIndex + '_' + index + type + 's').empty()
+
     var html = '<hr id="'+instanceIndex + index + type+'s">'
 
-    $.each(object.configurations, function(mm, configuration){
-
-        html += '<div class="control-group">' +
-            '<label class="control-label" for="'+ mm +'">'+ configuration.name +'</label>' +
-            '<div class="controls">' +
-            '<input type="text" value="'+ configuration.value + '" class="input-xlarge" id="'+ mm +'"  name="'+ instanceIndex + '_'+ index +'" onchange="handleInputChange(this, \''+type+'s\')">'
+    $.each(object.configurations, function(configIndex, configuration){
+        var configType = "String"
+        if(configuration.value.json instanceof Array){
+            configType = "Array"
+        }
+//TODO move id to control-group and iterate on inputs
+        html += '<div data-instance-id="'+instanceIndex+'" data-type-id="'+index+'" class="control-group" data-type="'+type+'">' +
+            '<label class="control-label" for="'+ configIndex +'">'+ configuration.name +'</label>' +
+            '<div class="controls">'
+            if(configType == "String"){
+                html += addStringConfiguration(configuration, configIndex, instanceIndex, type, index)
+            }else{
+                html += addArrayConfiguration(configuration, configIndex, instanceIndex, type, index)
+            }
         if(configuration.description)
             html += '<p class="help-block">' +configuration.description+ '</p>'
         html += '</div>' +
@@ -307,9 +379,22 @@ function addConfigurations(instanceIndex, index, object, type){
 }
 
 function handleInputChange(input, type){
-    var instanceId = $(input)[0].name.split("_")[0]
-    var inputId = $(input)[0].name.split("_")[1]
-    manifest.instances[instanceId][type][inputId].configurations[$(input)[0].id].value = $(input).val()
+
+    var valueId = $(input).data("value-id")
+    var dataType = $(input).data("data-type")
+
+    var instanceId = $(input).data("instance-id")
+    var typeId = $(input).data("type-id")
+    var configId = $(input).data("config-id")
+
+    if(dataType == "String")
+        manifest.instances[instanceId][type][typeId].configurations[configId].value['json'] = $(input).val()
+    else
+        manifest.instances[instanceId][type][typeId].configurations[configId].value.json[valueId] = $(input).val()
+
+
+    toggleDirty(true)
+    addConfigurations(instanceId, typeId, manifest.instances[instanceId][type][typeId], type.replace(/s$/, ''))
 }
 
 function handleCloseNewInstance(button){

@@ -3,6 +3,7 @@ package node.builder
 
 
 import grails.test.mixin.*
+import grails.test.mixin.web.ControllerUnitTestMixin
 import org.junit.*
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
@@ -12,6 +13,7 @@ import org.springframework.core.io.Resource
  */
 
 @Mock([Node,NodeConfiguration,Application,ApplicationConfiguration])
+@TestMixin(ControllerUnitTestMixin)
 class InputFileChangeListenerTests {
 
     void testNewFileWithEmptyApplicationData() {
@@ -60,10 +62,12 @@ class InputFileChangeListenerTests {
         assert Application.last().name == "class::app_2"
         assert Application.last().flavorId == "1"
 
-        assert ApplicationConfiguration.count == 3
-        assert NodeConfiguration.count == 1
+        assert ApplicationConfiguration.count == 2
+        assert NodeConfiguration.count == 2
 
         assert Node.first().configurations.first().name == "config_name"
-        assert Application.first().configurations.first().name == "app_config_1"
+        assert Node.first().configurations.last().value.class == java.util.ArrayList
+        assert Application.last().configurations.first().name == "app_config_3"
+        assert Application.last().configurations.last().value.class == java.util.ArrayList
     }
 }
