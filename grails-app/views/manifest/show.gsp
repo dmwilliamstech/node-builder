@@ -31,7 +31,7 @@
 </div>
 
 <div class="btn-group pull-right">
-    <a id="saveManifestButton"  class="btn btn-info " onclick="handleConfigure(this, false)" >Save</a>
+    <a id="saveManifestButton"  class="btn btn-info disabled" onclick="handleConfigure(this, false)" >Save</a>
     <a class="btn btn-info " onclick="handleConfigure(this, true)" >Deploy</a>
 </div>
 

@@ -130,9 +130,11 @@ function handleConfigure(button, deploy){
 
 function toggleDirty(dirty){
     if(dirty){
+        $('#saveManifestButton').removeClass('disabled')
         $('#saveManifestButton').removeClass('btn-info')
         $('#saveManifestButton').addClass('btn-warning')
     }else{
+        $('#saveManifestButton').addClass('disabled')
         $('#saveManifestButton').removeClass('btn-warning')
         $('#saveManifestButton').addClass('btn-info')
     }
@@ -321,7 +323,7 @@ function handleAddArrayConfiguration(button){
         addConfigurations(instanceId, typeId, manifest.instances[instanceId][type+'s'][typeId], type)
     }
 
-    toggleDirty(true)
+//    toggleDirty(true)
 }
 
 function addStringConfiguration(config, configIndex, instanceIndex, type, typeIndex){
@@ -369,7 +371,7 @@ function addConfigurations(instanceIndex, index, object, type){
             }
         if(configuration.description)
             html += '<p class="help-block">' +configuration.description+ '</p>'
-        html += '</div>' +
+        html += '<hr></div>' +
             '</div>';
     });
 
