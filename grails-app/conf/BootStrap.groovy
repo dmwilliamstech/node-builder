@@ -55,7 +55,11 @@ class BootStrap {
 
     def loadConfig() {
         try{
-            ConfigObject config = new ConfigSlurper().parse(new URL("file://${System.getenv("HOME")}/.opendx/config")).flatten()
+            def configFile = new File("${System.getenv("HOME")}/.opendx/config")
+            if(!configFile.exists())
+                configFile = new File("/etc/node-builder.conf")
+
+            ConfigObject config = new ConfigSlurper().parse(new URL("file://${configFile.absolutePath}")).flatten()
             def master = new Master()
             master.name = config.get("master.name")
             master.hostname = config.get("master.hostname")
