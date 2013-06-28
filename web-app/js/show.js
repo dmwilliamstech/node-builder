@@ -43,7 +43,7 @@ $(document).ready(function() {
         loadTabsFromManifest(manifest.instances[0].name)
         $("#manifestName").val(manifest.name)
         $("#manifestDescription").val(manifest.description)
-        if(document.referrer.indexOf("new") > -1)
+        if(document.referrer.indexOf("manifest/show/new") > -1)
             $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + manifest.name + '</i></div>')
     }
 });
@@ -126,7 +126,7 @@ function handleConfigure(button, deploy){
                 location = location.pathname.replace(/show.*/,"deploy/") + data.id
             else{
                 $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + name + '</i></div>')
-                if(location.pathname.indexOf("new") > -1)
+                if(location.pathname.indexOf("manifest/show/new") > -1)
                     location = location.pathname.replace(/show.*/,"show/") + data.id
             }
             toggleDirty(false)
