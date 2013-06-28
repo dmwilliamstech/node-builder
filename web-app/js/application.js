@@ -1,3 +1,13 @@
+
+
+$(document).ready(function() {
+//fix for bootstrap
+var btn = $("a.btn-navbar")
+if(btn.attr("href") == "")
+    btn.attr("href", "#")
+
+})
+
 // Array Remove - By John Resig (MIT Licensed)
 Array.prototype.remove = function(from, to) {
     var rest = this.slice((to || from) + 1 || this.length);
