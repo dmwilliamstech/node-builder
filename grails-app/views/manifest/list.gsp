@@ -46,7 +46,7 @@
                     <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
                 </td>
 
-				<td><pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
+				<td>${manifest.description}<pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
 
                 <td>
                     <ul>

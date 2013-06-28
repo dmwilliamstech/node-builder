@@ -42,6 +42,9 @@ $(document).ready(function() {
     if(manifest.id){
         loadTabsFromManifest(manifest.instances[0].name)
         $("#manifestName").val(manifest.name)
+        $("#manifestDescription").val(manifest.description)
+        if(document.referrer.indexOf("new") > -1)
+            $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + manifest.name + '</i></div>')
     }
 });
 
@@ -94,7 +97,7 @@ function validateManifest(name){
     }
 
     if(manifest.instances.length == 0){
-        alert += "Not much point in proceeding without an instance<br>"
+        alert += "Not much point in proceeding without an instance, is there?<br>"
     }
 
     return alert
@@ -103,13 +106,14 @@ function validateManifest(name){
 function handleConfigure(button, deploy){
     //post manifest and forward to configure screen
     var name = $("#manifestName").val()
+    var description = $("#manifestDescription").val()
     var alert = validateManifest(name)
     if(alert.length > 0){
         $("#alert").html('<div class="alert alert-error">'+alert+'</div>')
         return
     }
 
-
+    manifest.description = description
     manifest.name = name
 
     var path = location.pathname.replace(/show.*/, (manifest.id ? "update/"+manifest.id : "create"))
@@ -120,9 +124,11 @@ function handleConfigure(button, deploy){
         success: function(data){
             if(deploy)
                 location = location.pathname.replace(/show.*/,"deploy/") + data.id
-            else
+            else{
                 $("#alert").html('<div class="alert alert-success">'+'Successfully saved manifest <i>' + name + '</i></div>')
-
+                if(location.pathname.indexOf("new") > -1)
+                    location = location.pathname.replace(/show.*/,"show/") + data.id
+            }
             toggleDirty(false)
         }
     });

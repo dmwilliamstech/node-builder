@@ -30,6 +30,7 @@ class ManifestController {
 
         def instance = new Manifest()
         instance.name = jsonObject.name
+        instance.description = jsonObject.description
         instance.manifest = jsonObject
         instance.save()
         jsonObject.id = instance.id

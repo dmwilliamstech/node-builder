@@ -20,6 +20,14 @@
         <p class="help-block">Save manifest as</p>
     </div>
 </div>
+<h4>Manifest Description</h4>
+<div class="control-group">
+
+        <div class="controls">
+        <textarea class="input-xlarge" onchange="toggleDirty(true)" id="manifestDescription"></textarea>
+        <p class="help-block">Give it a description</p>
+    </div>
+</div>
 <div class="tabtable">
     <ul class="nav nav-tabs">
         <li >

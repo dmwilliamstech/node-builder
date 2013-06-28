@@ -18,6 +18,7 @@ class Manifest {
 	Date	lastUpdated
 
     String name
+    String description
     JSONObject manifest //not persisted
     String manifestAsJSON //updated and synched with map
 
@@ -41,7 +42,8 @@ class Manifest {
     static transients = ['manifest']
 
     static constraints = {
-        manifestAsJSON( maxSize:20000)
+        manifestAsJSON(maxSize: 20000)
+        description(nullable: true)
     }
 
 	/*
