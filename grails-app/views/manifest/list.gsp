@@ -42,9 +42,10 @@
                     <a href="show/${manifest.id}"><i class="icon-pencil"></i></a>
                     <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
                     <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
+                    <a class="" data-toggle="collapse" data-target="#viewdetails${manifest.id}"><i class="icon-info-sign"></i></a>
                     <div class="collapse-group">
                         <p id="viewdetails${manifest.id}" class="collapse">${manifest.description}</p>
-                        <p><a class="" data-toggle="collapse" data-target="#viewdetails${manifest.id}"><i class="icon-info-sign"></i></a></p>
+
                     </div>
                 </td>
 
