@@ -30,10 +30,6 @@
 
                 <g:sortableColumn property="instances" title="${message(code: 'manifest.instances.label', default: 'Instances')}" />
 
-				<g:sortableColumn property="dateCreated" title="${message(code: 'manifest.dateCreated.label', default: 'Date Created')}" />
-			
-				<g:sortableColumn property="lastUpdated" title="${message(code: 'manifest.lastUpdated.label', default: 'Last Updated')}" />
-			
 			</tr>
 		</thead>
 		<tbody>
@@ -41,13 +37,19 @@
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                 <td>
                     <h4>${manifest.name}</h4>
+                    <g:formatDate date="${manifest.lastUpdated}" />
+                    <hr>
                     <a href="show/${manifest.id}"><i class="icon-pencil"></i></a>
                     <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
                     <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
+                    <div class="collapse-group">
+                        <p id="viewdetails${manifest.id}" class="collapse">${manifest.description}</p>
+                        <p><a class="" data-toggle="collapse" data-target="#viewdetails${manifest.id}"><i class="icon-info-sign"></i></a></p>
+                    </div>
                 </td>
 
-				<td>${manifest.description}<pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
-
+				<td>
+                    <pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
                 <td>
                     <ul>
                     <g:each in="${manifest.instances}" var="instance">
@@ -56,10 +58,6 @@
                     </ul>
                 </td>
 
-				<td><g:formatDate date="${manifest.dateCreated}" /></td>
-			
-				<td><g:formatDate date="${manifest.lastUpdated}" /></td>
-			
 			</tr>
 		</g:each>
 		</tbody>
