@@ -27,7 +27,7 @@ class InstanceService {
                 instanceInstance.hostId = server.hostId
                 instanceInstance.privateIP = server?.addresses?.private?.getAt(0)?.addr
                 instanceInstance.keyName = server.key_name.toString()
-                instanceInstance.flavorId = server.flavor.id
+                instanceInstance.flavor = Flavor.get(server.flavor.id)
                 instanceInstance.userId = server.user_id
                 instanceInstance.tenantId = server.tenant_id
                 instanceInstance.progress = server.progress
@@ -41,7 +41,7 @@ class InstanceService {
                     hostId: server.hostId,
                     privateIP: server?.addresses?.private?.getAt(0)?.addr,
                     keyName: server.key_name.toString(),
-                    flavorId: server.flavor.id,
+                    flavor: Flavor.get(server.flavor.id),
                     instanceId: server.id,
                     userId: server.user_id,
                     tenantId: server.tenant_id,

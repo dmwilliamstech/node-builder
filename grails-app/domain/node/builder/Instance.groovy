@@ -19,7 +19,6 @@ class Instance {
     String hostId
     String privateIP
     String keyName
-    String flavorId
     String instanceId
     String userId
     String tenantId
@@ -28,6 +27,7 @@ class Instance {
     String metadata
     Manifest manifest
     Image image
+    Flavor flavor
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -51,6 +51,7 @@ class Instance {
         keyName(nullable: true)
         progress(nullable: true)
         configDrive(nullable: true)
+        flavor(nullable: true)
     }
 	
 	/*

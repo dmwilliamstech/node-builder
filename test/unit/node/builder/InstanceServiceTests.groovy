@@ -10,7 +10,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(InstanceService)
-@Mock([Instance,Image])
+@Mock([Instance,Image,Flavor])
 @TestMixin(ControllerUnitTestMixin)
 class InstanceServiceTests {
 

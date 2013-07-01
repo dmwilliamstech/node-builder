@@ -19,9 +19,13 @@
 			
 				<g:sortableColumn property="name" title="${message(code: 'image.name.label', default: 'Name')}" />
 			
-				<g:sortableColumn property="dateCreated" title="${message(code: 'image.dateCreated.label', default: 'Date Created')}" />
+				<g:sortableColumn property="progress" title="${message(code: 'image.progress.label', default: 'Progress')}" />
 			
-				<g:sortableColumn property="lastUpdated" title="${message(code: 'image.lastUpdated.label', default: 'Last Updated')}" />
+				<g:sortableColumn property="minDisk" title="${message(code: 'image.minDisk.label', default: 'Minimum Disk')}" />
+
+                <g:sortableColumn property="minRam" title="${message(code: 'image.minRam.label', default: 'Minimum Ram')}" />
+
+                <g:sortableColumn property="status" title="${message(code: 'image.status.label', default: 'Status')}" />
 			
 			</tr>
 		</thead>
@@ -29,12 +33,27 @@
 		<g:each in="${imageInstanceList}" status="i" var="imageInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
-				<td><g:link action="show" id="${imageInstance.id}">${fieldValue(bean: imageInstance, field: "name")}</g:link></td>
-			
-				<td><g:formatDate date="${imageInstance.dateCreated}" /></td>
-			
-				<td><g:formatDate date="${imageInstance.lastUpdated}" /></td>
-			
+				<td>
+                    <g:link action="show" id="${imageInstance.id}">${fieldValue(bean: imageInstance, field: "name")}</g:link>
+                    <br>
+                    ${imageInstance.lastUpdated}
+                </td>
+
+                <td>
+                    ${imageInstance.progress}%
+                </td>
+
+                <td>
+                    ${imageInstance.minDisk}
+                </td>
+
+                <td>
+                    ${imageInstance.minRam}
+                </td>
+
+                <td>
+                    ${imageInstance.status}
+                </td>
 			</tr>
 		</g:each>
 		</tbody>

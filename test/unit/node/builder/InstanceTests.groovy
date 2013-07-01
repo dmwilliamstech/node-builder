@@ -90,7 +90,7 @@ class InstanceTests {
                hostId: "A Host",
                privateIP: "numbers",
                keyName: "A Key",
-               flavorId: "1",
+
                instanceId: "This Instance",
                userId: "Blah",
                tenantId: "5",
