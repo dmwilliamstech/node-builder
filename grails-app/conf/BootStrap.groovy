@@ -60,8 +60,11 @@ class BootStrap {
                 configFile = new File("/etc/node-builder.conf")
 
             ConfigObject config = new ConfigSlurper().parse(new URL("file://${configFile.absolutePath}")).flatten()
-            def master = new Master()
-            master.name = config.get("master.name")
+            def masterName = config.get("master.name")
+            def master = Master.findByName(masterName)
+            if(master == null)
+                master = new Master()
+            master.name = masterName
             master.hostname = config.get("master.hostname")
             master.username = config.get("master.username")
             master.privateKey = config.get("master.privateKey")
