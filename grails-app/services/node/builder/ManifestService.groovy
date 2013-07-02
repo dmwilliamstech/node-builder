@@ -68,4 +68,54 @@ class ManifestService {
             manifest.addToInstances(instanceDomain)
         }
     }
+
+    def generateGraph(id) {
+        def manifest = Manifest.get(id)
+        def graph = [name: manifest.name, children: []]
+        for(instance in manifest.manifest.instances){
+            def instanceGraph = [name: instance.name]
+            instanceGraph.children = (generateNodesGraph(instance))
+            instanceGraph.children += (generateAppGraph(instance))
+            instanceGraph.children += [[name: Flavor.get(instance.flavorId).name, size: 1]]
+            graph.children.add(instanceGraph)
+        }
+        return graph
+    }
+
+    def generateConfigGraph(object){
+        def configs = []
+        for(configValue in object.configurations){
+            def config = [name: configValue.name, children: []]
+            if(configValue.value.json.class == String){
+                config.children.add([name: configValue.value.json, size: 1])
+            }else{
+                for(value in configValue.value.json){
+                    config.children.add([name: ((String)value), size: 1])
+                }
+
+            }
+            configs.add(config)
+        }
+        return configs
+    }
+
+    def generateAppGraph(instance){
+        def apps = []
+        for(appId in instance.applications){
+            def app = Application.get(appId.key)
+
+            apps.add([name: app.name, children: generateConfigGraph(app)])
+
+        }
+        return apps
+    }
+
+    def generateNodesGraph(instance){
+        def nodes = []
+        for(nodeId in instance.nodes){
+            def node = Node.get(nodeId.key)
+            nodes.add([name: node.name, children: generateConfigGraph(node)])
+        }
+        return nodes
+    }
 }

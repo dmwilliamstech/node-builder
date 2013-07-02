@@ -18,7 +18,7 @@
 
 
 </div>
-<div class="hero-unit">
+<div class="hero-unit pull-left">
     <h2>Image/Instance</h2>
     <div class="dropdown">
         <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select an Image <b class="caret"></b></a>
@@ -31,12 +31,19 @@
             <input type="hidden" class="input-xlarge uneditable-input" id="id" value="${master.id}">
         </div>
     </div>
-</div>
-    <div class="btn-group">
-        <a class="btn btn-success" onclick="handleUpload(this)" id="upload" >Provision</a>
-        <a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
+    <div class="pull-left">
+        <div class="btn-group">
+            <a class="btn btn-success" onclick="handleUpload(this)" id="upload" >Provision</a>
+            <a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
+        </div>
     </div>
+</div>
 
+
+
+<div class="span8 pull-left " style="height: 800px">
+    <g:render template="graph"/>
+</div>
 </div>
 
 <g:javascript>

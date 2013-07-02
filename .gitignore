@@ -2,8 +2,10 @@
 out/
 .DS_Store
 node-builder-grailsPlugins.iml
+node-builder.ids
 node-builder.iml
 node-builder.ipr
 node-builder.iws
 projectFilesBackup/
 target/
+*.db

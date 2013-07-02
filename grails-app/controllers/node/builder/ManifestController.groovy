@@ -158,4 +158,9 @@ class ManifestController {
 
         render(masterInstance as JSON)
     }
+
+    def graph(){
+        response.setHeader("Content-Type", "application/json")// + params.filetype)
+        render((manifestService.generateGraph(params.id) as JSON))
+    }
 }

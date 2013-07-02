@@ -63,6 +63,7 @@ grails.project.dependency.resolution = {
 
         runtime ":database-migration:1.2.1"
         runtime ":rest:0.7"
+        runtime ":content-buffer:1.0.1"
 
 //        cacheDir()
 
