@@ -17,7 +17,7 @@ class ManifestService {
         def scpFileCopier = new SCPFileCopier()
         def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
         for(instance in manifestInstance.manifest.instances){
-            def node = new File(instance.name.toString() + '.pp')
+            def node = new File(instance.name.toString().replaceAll(/\s/, '-') + '.pp')
             node.write(processTemplate(instance, "${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp"))
             scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
         }
