@@ -9,7 +9,7 @@
                     "value" : "Some Value"
                 },
                 {
-                    "name" : "config_name",
+                    "name" : "config_name_2",
                     "value" : ["Some Values","Some More Values"]
                 }
             ],
@@ -31,7 +31,7 @@
                             "value" : "Some Value"
                         },
                         {
-                            "name" : "config_name",
+                            "name" : "config_name_4",
                             "value" : ["Some Values","Some More Values"]
                         }
                     ],
