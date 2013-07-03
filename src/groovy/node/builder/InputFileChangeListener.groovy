@@ -42,14 +42,21 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         log.info "Found ${applications.size()} application entry(s)"
         applications.each { application ->
             def configurations = application.remove("configurations")
-
-            def domain = new Application(application)
-            if(node)
-                domain.node = node
-            else
-                domain.node = Node.first()
-
+            def domain
             Application.withTransaction{
+                 domain = Application.findByName(application.name)
+                if(domain==null)
+                    domain = new Application()
+                domain.name = application.name
+                domain.description = application.description
+                domain.flavorId = application.flavorId
+
+                if(node)
+                    domain.node = node
+                else
+                    domain.node = Node.first()
+
+
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
                 domain.save()
@@ -64,9 +71,17 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         nodes.each { node ->
             def applications = node.remove("applications")
             def configurations = node.remove("configurations")
-
-            def domain = new Node(node)
+            def domain
             Node.withTransaction {
+                domain = Node.findByName(node.name)
+                if(domain == null)
+                    domain = new Node()
+
+                domain.name = node.name
+                domain.description = node.description
+                domain.flavorId = node.flavorId
+
+
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
                 domain.save()
@@ -82,10 +97,12 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     private def loadConfigurations = {parent, configurations, Class configurationType ->
         log.info "Found ${configurations.size()} configuration entry(s)"
         configurations.each { configuration ->
-
-            def domain = configurationType.newInstance()
             try{
             configurationType.withTransaction{
+                def domain = configurationType.findByName(configuration.name)
+                if(domain == null)
+                    domain = configurationType.newInstance()
+
                 domain.name = configuration.name
                 domain.value = configuration.value
                 domain.description = configuration.description
