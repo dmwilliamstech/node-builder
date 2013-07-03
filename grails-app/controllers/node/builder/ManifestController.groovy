@@ -127,7 +127,7 @@ class ManifestController {
             return
         }
         def masterInstance = Master.first()
-        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance, instances: Instance.all])
+        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance, instances: Instance.all, images: Image.findAllByProgress(100)])
     }
 
     def download(){
@@ -154,7 +154,7 @@ class ManifestController {
 
         manifestService.deployTo(manifestInstance, masterInstance)
         instanceService.loadInstances(OpenStackConnection.connection)
-        manifestService.provision(manifestInstance)
+        masterInstance = manifestService.provision(manifestInstance)
 
         render(masterInstance as JSON)
     }

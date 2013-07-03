@@ -14,18 +14,18 @@
 </g:if>
 </div>
 <div class="container">
-    <h2>Deploy <i>${manifest.name}</i> from ${master.hostname} (${master.name})</h2>
+    <h4>Deploy manifest <i>${manifest.name}</i> from master on ${master.hostname} (${master.name})</h4>
 
 
 </div>
-<div class="hero-unit pull-left">
-    <h2>Image/Instance</h2>
-    <div class="dropdown">
-        <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="">Select an Image <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-        </ul>
+<div class="pull-left">
+    <h4>Select an Image</h4>
+
+    <div class="btn-group btn-group-vertical" data-toggle-name="image-select" data-toggle="buttons-radio" >
+<g:each in="${images}" status="i" var="image">
+        <button type="button" value="${image.imageId}" class="span3 btn btn-small  ${image.id == 1?"active":""}" data-name="${image.name}" data-toggle="button">${image.name}</button>
+</g:each>
     </div>
-    <p class="help-block" ><h3><span class="alert alert-success" id="imageName">Select an Image</span></h3></p>
     <div class="control-group">
         <div class="controls">
             <input type="hidden" class="input-xlarge uneditable-input" id="id" value="${master.id}">

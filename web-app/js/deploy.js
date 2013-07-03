@@ -1,25 +1,28 @@
 $(document).ready(function() {
-    if(manifest.imageName)
-        $('#imageName')[0].innerHTML = manifest.imageName
-    if(manifest.instanceName)
-        $('#instanceName').val(manifest.instanceName)
 
-    $('.dropdown-toggle').dropdown()
-    var path = location.pathname.replace(/manifest.*/,"api/image")
 
-    $.getJSON(path, function(images) {
-        var notFound = '<li><a title="No Images Found">Sorry no images found</a></li>'
-        if(images && images.count > 0){
+    $('div.btn-group[data-toggle-name="image-select"]').each(function(){
+        var group   = $(this);
+        var form    = group.parents('form').eq(0);
+        var name    = group.attr('data-toggle-name');
 
-            $.each(images.data, function(index, image){
-                var html = '<li><a onclick="handleImageSelect(this)"  id="' + image.imageId + '" >' + image.name + '</a></li>'
-                $('.dropdown-menu').append(html)
+        var index = 0
+        $('button', group).each(function(){
+            var button = $(this);
+            if(index == 0){
+                manifest.imageId=button.val()
+                manifest.imageName=button.data("name")
+            }
+
+            index++
+            button.live('click', function(){
+                manifest.imageId=$(this).val()
+                manifest.imageName=$(this).data("name")
+                button.addClass('active');
+                console.log(manifest)
             });
 
-        }else{
-            $('.dropdown-menu').append(notFound)
-        }
-
+        });
     });
 });
 
@@ -33,6 +36,7 @@ function handleDownload(button){
 
 function validateManifest(){
     var alert = ""
+
     if(!manifest.imageName){
         alert += "Please select an image <br>"
     }
@@ -44,6 +48,7 @@ function validateManifest(){
 function handleUpload(button){
     var alert = validateManifest()
     if(alert.length == 0){
+        $("#alert").html('')
         $.ajax(location.pathname.replace(/deploy.*/,"update/") +manifest.id , {
             data : JSON.stringify(manifest),
             contentType : 'application/json',
@@ -51,7 +56,10 @@ function handleUpload(button){
             success: function(data){
                 $.post(location.pathname + '/upload/' + $('#id.uneditable-input').val(), {},
                     function(response){
-                        $("#alert").html('<div class="alert alert-info">Provisioning from ' + response.name + ' waiting for instance to start</div>')
+                        if(response.name)
+                            $("#alert").html('<div class="alert alert-info">Provisioning from ' + response.name + ' waiting for instance to start</div>')
+                        else
+                            $("#alert").html('<div class="alert alert-error">Failed to provision instance - '+response.error.message+'</div>')
                     },
                     "json"
                 ).error(function(){
@@ -78,10 +86,10 @@ function handleInstanceNameChange(input){
     manifest.instanceName = name
 }
 
-function handleImageSelect(button){
-    $('#imageName')[0].innerHTML = button.innerHTML
-
-    manifest.imageId = $(button)[0].id
-    manifest.imageName = $(button)[0].innerText
-
-}
+//function handleImageSelect(button){
+//    $('#imageName')[0].innerHTML = button.innerHTML
+//
+//    manifest.imageId = $(button)[0].id
+//    manifest.imageName = $(button)[0].innerText
+//
+//}

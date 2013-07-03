@@ -1,6 +1,6 @@
 package node.builder
 
-import grails.converters.JSON
+
 import groovy.transform.Synchronized
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
@@ -19,7 +19,6 @@ class OpenStackConnection {
     String adminUrl
 
     private static OpenStackConnection connection
-
 
     static def createConnection(hostname, username, password, tenantId, keyId, defaultFlavorId){
         if(connection == null)
@@ -42,12 +41,11 @@ class OpenStackConnection {
 
     }
 
-
     def connect(){
         def keystone = new RESTClient( "http://${this.hostname}:5000/v2.0/" )
 
         def resp = keystone.post( path : 'tokens',
-                body : [auth:[passwordCredentials:[username: "admin", password:"stack"], tenantId: "2ba2d60c5e8d4d1b86549d988131fe48"]],
+                body : [auth:[passwordCredentials:[username: this.username, password:this.password], tenantId: this.tenantId]],
                 contentType : 'application/json' )
 
         this.token = resp.data.access.token.id
@@ -74,10 +72,22 @@ class OpenStackConnection {
         if(this.compute == null)
             this.connect()
 
-        def resp = compute.post( path : 'servers',
-                             contentType : 'application/json',
-                             body :  [server: [flavorRef: (flavor ?: defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
-                             headers : ['X-Auth-Token' : token])
+        def resp
+        try {
+            resp = compute.post( path : 'servers',
+                                 contentType : 'application/json',
+                                 body :  [server: [flavorRef: (flavor ?: defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
+                                 headers : ['X-Auth-Token' : token])
+        } catch (groovyx.net.http.HttpResponseException e) {
+            resp = e.getResponse()
+            if(resp.getStatus() == 413){
+                def error = [error: [message: resp.data.overLimit.message += " ${instanceName}"]]
+
+                log.error("Instance Launch failed ${error.error.message}")
+                return error
+            }
+            throw e
+        }
 
         HttpResponseDecorator details = compute.get ( path : "servers/" + resp.data.server.id,
                 headers : [ 'X-Auth-Token' : token] )

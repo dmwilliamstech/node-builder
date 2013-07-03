@@ -32,7 +32,7 @@
                 height = 700;
 
         var cluster = d3.layout.cluster()
-                .size([height, width - 160]);
+                .size([height, width - 300]);
 
         var diagonal = d3.svg.diagonal()
                 .projection(function(d) { return [d.y, d.x]; });
@@ -41,7 +41,7 @@
                 .attr("width", width)
                 .attr("height", height)
                 .append("g")
-                .attr("transform", "translate(40,0)");
+                .attr("transform", "translate(20,0)");
 
         d3.json(location.pathname.replace(/manifest.*/,"manifest/graph/" + "${manifest.id}"), function(error, root) {
             var nodes = cluster.nodes(root),
@@ -65,14 +65,14 @@
             node.append("foreignObject")
                     .attr("x", function(d) { return d.children ? -d.name.length * 5 - 20 : +10; })
                     .attr("y", -10)
-                    .attr("width", function(d){ return "100px"; })
+                    .attr("width", function(d){ return "300px"; })
                     .attr("height", function(d){ return "25px"; })
 
 //                    .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
                     .append("xhtml:p")
                     .attr("title", function(d){return d.name})
                     .attr("class", "balls")
-                    .text(function(d) { return d.name.replace(/(.{15}).*/, '$1...') ; });
+                    .text(function(d) { return d.name/*.replace(/(.{15}).*//*, '$1...')*/ ; });
         });
 
         d3.select(self.frameElement).style("height", height + "px");

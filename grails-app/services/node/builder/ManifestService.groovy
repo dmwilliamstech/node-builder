@@ -47,26 +47,36 @@ class ManifestService {
 
     def provision(Manifest manifest) {
         for(instance in manifest.manifest.instances){
-            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instance.name)
+
+            def instanceName = instance.name.replaceAll(/\s/, '-')
+            if(Instance.findByName(instanceName)){
+                return [error: [message: "Instance ${instanceName} already exists please update to continue"]]
+            }
+            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
             def server = instanceData.server
-            def instanceDomain = new Instance(
-                    name: server.name,
-                    status: server.status,
-                    hostId: server.hostId,
-                    privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
-                    keyName: server.key_name.toString(),
-                    flavorId: server.flavor.id,
-                    instanceId: server.id,
-                    userId: server.user_id,
-                    tenantId: server.tenant_id,
-                    progress: server.progress,
-                    configDrive: server.config_drive ?: "not set",
-                    metadata: (server.metadata as JSON).toString(),
-                    image: Image.findByImageId(server.image.id)
-            )
-            instanceDomain.save(failOnError: true)
-            manifest.addToInstances(instanceDomain)
+            if(server != null){
+                def instanceDomain = new Instance(
+                        name: server.name,
+                        status: server.status,
+                        hostId: server.hostId,
+                        privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
+                        keyName: server.key_name.toString(),
+                        flavorId: server.flavor.id,
+                        instanceId: server.id,
+                        userId: server.user_id,
+                        tenantId: server.tenant_id,
+                        progress: server.progress,
+                        configDrive: server.config_drive ?: "not set",
+                        metadata: (server.metadata as JSON).toString(),
+                        image: Image.findByImageId(server.image.id)
+                )
+                instanceDomain.save(failOnError: true)
+                manifest.addToInstances(instanceDomain)
+            }else{
+                return instanceData
+            }
         }
+        return manifest
     }
 
     def generateGraph(id) {
