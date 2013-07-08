@@ -37,6 +37,7 @@ grails.project.dependency.resolution = {
         mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
         mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/"
     }
 
     dependencies {
@@ -47,6 +48,8 @@ grails.project.dependency.resolution = {
         compile 'org.apache.ant:ant-jsch:1.8.4'
         compile 'com.jcraft:jsch:0.1.46'
         compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
+        compile 'org.activiti:activiti-engine:5.13'
+
     }
 
     plugins {
