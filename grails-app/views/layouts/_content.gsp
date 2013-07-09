@@ -1,7 +1,14 @@
 
 <div id="Content" class="container">
 	<!-- Show page's content -->
-    <section id="navbar" class="">
+    <div class="pull-right">
+    <sec:ifNotLoggedIn>
+        <g:link controller="login" action="auth">Login</g:link>
+    </sec:ifNotLoggedIn>
+    <sec:ifLoggedIn>
+        Welcome <sec:username />! (<g:link controller="logout">Logout</g:link>)
+    </sec:ifLoggedIn>
+    </div>
         <section class="row-fluid">
             <div class="span12">
                 <div class="navbar">

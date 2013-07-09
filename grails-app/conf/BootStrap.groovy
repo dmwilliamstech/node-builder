@@ -9,10 +9,15 @@ import node.builder.Master
 import node.builder.Node
 import node.builder.Manifest
 import node.builder.OpenStackConnection
+import node.builder.SecRole
+import node.builder.SecUser
+import node.builder.SecUserSecRole
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
     def grailsApplication
+    def springSecurityService
+
     InstanceService instanceService
     ImageService imageService
     FlavorService flavorService
@@ -20,6 +25,8 @@ class BootStrap {
     def init = { servletContext ->
 
         loadConfig()
+        loadSecurity()
+
 
         if(Node.count.is(0)){
             log.info "Creating default Node"
@@ -48,6 +55,20 @@ class BootStrap {
         }catch(Exception e){
             log.error "Failed to load OpenStack data - ${e}"
         }
+    }
+
+    def loadSecurity() {
+        def userRole = SecRole.findByAuthority('ROLE_USER') ?: new SecRole(authority: 'ROLE_USER').save(failOnError: true)
+        def adminRole = SecRole.findByAuthority('ROLE_ADMIN') ?: new SecRole(authority: 'ROLE_ADMIN').save(failOnError: true)
+        def adminUser = SecUser.findByUsername('admin') ?: new SecUser(
+                username: 'admin',
+                password: 'admin',
+                enabled: true).save(failOnError: true)
+
+        if (!adminUser.authorities.contains(adminRole)) {
+            SecUserSecRole.create adminUser, adminRole
+        }
+
     }
 
     def destroy = {

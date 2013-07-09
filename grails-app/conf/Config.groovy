@@ -1,3 +1,5 @@
+import grails.plugins.springsecurity.SecurityConfigType
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -92,3 +94,14 @@ log4j = {
 
 grails.config.defaults.locations = [KickstartResources]
 script.install.directory = "~/.opendx/node-builder"
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'node.builder.SecUser'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'node.builder.SecUserSecRole'
+grails.plugins.springsecurity.authority.className = 'node.builder.SecRole'
+
+grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+grails.plugins.springsecurity.interceptUrlMap = [
+        '/login/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/**':                     ['ROLE_ADMIN','ROLE_USER','IS_AUTHENTICATED_FULLY']
+]
+

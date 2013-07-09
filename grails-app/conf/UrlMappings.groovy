@@ -18,6 +18,9 @@ class UrlMappings {
 		 * Pages with controller
 		 * WARN: No domain/controller should be named "api" or "mobile" or "web"!
 		 */
+        "/login/$action?"(controller: "login")
+        "/logout/$action?"(controller: "logout")
+
         "/"	{
 			controller	= 'manifest'
 			action		= { 'index' }

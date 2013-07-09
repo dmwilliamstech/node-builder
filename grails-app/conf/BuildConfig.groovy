@@ -74,6 +74,7 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.1'
         compile 'org.grails.plugins:json-rest-api:1.0.11'
         compile ":quartz:1.0-RC9"
+        compile ':spring-security-core:1.2.7.3'
     }
 }
 
