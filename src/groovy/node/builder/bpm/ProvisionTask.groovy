@@ -3,14 +3,16 @@ package node.builder.bpm
 import grails.converters.JSON
 import node.builder.Image
 import node.builder.Instance
+import node.builder.Manifest
 import node.builder.OpenStackConnection
+import node.builder.Utilities
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 
 public class ProvisionTask implements JavaDelegate{
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        def manifest = delegateExecution.getVariable("manifest")
-        for(instance in JSON.parse(manifest.manifestAsJSON).instances){
+        def manifest = Manifest.findByName(delegateExecution.getVariable("manifest").name)
+        for(instance in manifest.manifest.instances){
 
             def instanceName = instance.name.replaceAll(/\s/, '-')
             if(Instance.findByName(instanceName)){
@@ -43,6 +45,6 @@ public class ProvisionTask implements JavaDelegate{
             }
         }
         delegateExecution.engineServices
-        delegateExecution.setVariable("result", manifest)
+        delegateExecution.setVariable("result", (new Utilities()).serializeDomain(manifest))
     }
 }

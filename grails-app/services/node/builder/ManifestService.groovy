@@ -31,40 +31,43 @@ class ManifestService {
 
 
     def deployToMasterAndProvision(manifestInstance, masterInstance){
-        // Create Activiti process engine
+        try{
 
 
-        // Get Activiti services
-        RepositoryService repositoryService = processEngine().getRepositoryService();
-        RuntimeService runtimeService = processEngine().getRuntimeService();
+            // Get Activiti services
+            RepositoryService repositoryService = processEngine().getRepositoryService();
+            RuntimeService runtimeService = processEngine().getRuntimeService();
 
-        // Deploy the process definition
-        repositoryService.createDeployment()
-                .addClasspathResource("resources/provision_instance.bpmn20.xml")
-                .deploy();
+            // Deploy the process definition
+            repositoryService.createDeployment()
+                    .addClasspathResource("resources/provision_instance.bpmn20.xml")
+                    .deploy();
 
-        // Start a process instance
-        def variables = new HashMap();
-        def utilities = new Utilities();
-        variables.put("manifest", utilities.serializeDomain(manifestInstance))
-        variables.put("master", utilities.serializeDomain(masterInstance))
-        def processInstance = runtimeService.startProcessInstanceByKey("provisionInstance", variables);
+            // Start a process instance
+            def variables = new HashMap();
+            def utilities = new Utilities();
+            variables.put("manifest", utilities.serializeDomain(manifestInstance))
+            variables.put("master", utilities.serializeDomain(masterInstance))
+            def processInstance = runtimeService.startProcessInstanceByKey("provisionInstance", variables);
 
-        // verify that the process is actually finished
+            // verify that the process is actually finished
 
-        def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
+            def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
 
-        Execution execution = runtimeService.createExecutionQuery()
-                .processInstanceId(processInstance.getId())
-                .activityId("receiveTask")
-                .singleResult();
-        runtimeService.signal(execution.getId());
+            Execution execution = runtimeService.createExecutionQuery()
+                    .processInstanceId(processInstance.getId())
+                    .activityId("receiveTask")
+                    .singleResult();
+            runtimeService.signal(execution.getId());
 
-        HistoryService historyService = processEngine().getHistoryService();
-        HistoricProcessInstance historicProcessInstance =
-            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+            HistoryService historyService = processEngine().getHistoryService();
+            HistoricProcessInstance historicProcessInstance =
+                historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
 
-        return result
+            return result
+        }catch (e){
+            return [error: [message: e.getMessage()]]
+        }
 
     }
 

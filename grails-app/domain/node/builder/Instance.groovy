@@ -42,7 +42,7 @@ class Instance {
     }
     
 	static constraints = {
-        name(unique: true)
+        name(unique: false)
         instanceId(unique: true)
         privateIP(nullable: true)
         metadata(nullable: true)

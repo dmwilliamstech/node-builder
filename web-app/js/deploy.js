@@ -48,7 +48,8 @@ function validateManifest(){
 function handleUpload(button){
     var alert = validateManifest()
     if(alert.length == 0){
-        $("#alert").html('')
+        $("#alert").html('<div class="alert alert-info">Beginning processing of manifest...</div>')
+        $(button).addClass('disabled')
         $.ajax(location.pathname.replace(/deploy.*/,"update/") +manifest.id , {
             data : JSON.stringify(manifest),
             contentType : 'application/json',
@@ -57,13 +58,16 @@ function handleUpload(button){
                 $.post(location.pathname + '/upload/' + $('#id.uneditable-input').val(), {},
                     function(response){
                         if(response.name)
-                            $("#alert").html('<div class="alert alert-info">Provisioning from ' + response.name + ' waiting for instance to start</div>')
+                            $("#alert").html('<div class="alert alert-info">Processing complete for ' + response.name + ' waiting for instance to start</div>')
                         else
                             $("#alert").html('<div class="alert alert-error">Failed to provision instance - '+response.error.message+'</div>')
+
+                        $(button).removeClass('disabled')
                     },
                     "json"
                 ).error(function(){
                     $("#alert").html('<div class="alert alert-error">Failed to provision instance</div>')
+                    $(button).removeClass('disabled')
                 });
             }
         });
@@ -85,11 +89,3 @@ function handleInstanceNameChange(input){
     })
     manifest.instanceName = name
 }
-
-//function handleImageSelect(button){
-//    $('#imageName')[0].innerHTML = button.innerHTML
-//
-//    manifest.imageId = $(button)[0].id
-//    manifest.imageName = $(button)[0].innerText
-//
-//}
