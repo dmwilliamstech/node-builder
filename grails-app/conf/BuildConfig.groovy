@@ -80,6 +80,6 @@ grails.project.dependency.resolution = {
 
 grails.project.dependency.distribution = {
     localRepository = "~/.m2"
-    remoteRepository(id:"codiceSnapshots", url:"https://artifacts.codice.org/content/repositories/snapshots/")
-    remoteRepository(id:"codiceReleases", url:"https://artifacts.codice.org/content/repositories/releases/")
+    remoteRepository(id:"codiceSnapshots", url:"http://artifacts.codice.org/content/repositories/snapshots/")
+    remoteRepository(id:"codiceReleases", url:"http://artifacts.codice.org/content/repositories/releases/")
 }
