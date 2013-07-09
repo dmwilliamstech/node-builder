@@ -1,6 +1,13 @@
 package node.builder
 
 import grails.converters.JSON
+import org.activiti.engine.HistoryService
+import org.activiti.engine.ProcessEngine
+import org.activiti.engine.ProcessEngineConfiguration
+import org.activiti.engine.RepositoryService
+import org.activiti.engine.RuntimeService
+import org.activiti.engine.history.HistoricProcessInstance
+import org.activiti.engine.runtime.Execution
 import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 
 /**
@@ -9,8 +16,57 @@ import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
  */
 class ManifestService {
     def groovyPagesTemplateEngine
+    static ProcessEngine pe
+
 
     static transactional = true
+
+    def processEngine(){
+        if(pe == null)
+            pe= ProcessEngineConfiguration
+                    .createStandaloneInMemProcessEngineConfiguration()
+                    .buildProcessEngine();
+        return pe
+    }
+
+
+    def deployToMasterAndProvision(manifestInstance, masterInstance){
+        // Create Activiti process engine
+
+
+        // Get Activiti services
+        RepositoryService repositoryService = processEngine().getRepositoryService();
+        RuntimeService runtimeService = processEngine().getRuntimeService();
+
+        // Deploy the process definition
+        repositoryService.createDeployment()
+                .addClasspathResource("resources/provision_instance.bpmn20.xml")
+                .deploy();
+
+        // Start a process instance
+        def variables = new HashMap();
+        def utilities = new Utilities();
+        variables.put("manifest", utilities.serializeDomain(manifestInstance))
+        variables.put("master", utilities.serializeDomain(masterInstance))
+        def processInstance = runtimeService.startProcessInstanceByKey("provisionInstance", variables);
+
+        // verify that the process is actually finished
+
+        def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
+
+        Execution execution = runtimeService.createExecutionQuery()
+                .processInstanceId(processInstance.getId())
+                .activityId("receiveTask")
+                .singleResult();
+        runtimeService.signal(execution.getId());
+
+        HistoryService historyService = processEngine().getHistoryService();
+        HistoricProcessInstance historicProcessInstance =
+            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+
+        return result
+
+    }
 
     def deployTo(manifestInstance, masterInstance) {
 
@@ -128,4 +184,5 @@ class ManifestService {
         }
         return nodes
     }
+
 }

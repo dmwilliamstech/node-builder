@@ -152,9 +152,10 @@ class ManifestController {
             return
         }
 
-        manifestService.deployTo(manifestInstance, masterInstance)
+//        manifestService.deployTo(manifestInstance, masterInstance)
         instanceService.loadInstances(OpenStackConnection.connection)
-        masterInstance = manifestService.provision(manifestInstance)
+        masterInstance = manifestService.deployToMasterAndProvision(manifestInstance, masterInstance)
+//        masterInstance = manifestService.provision(manifestInstance)
 
         render(masterInstance as JSON)
     }

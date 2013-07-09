@@ -54,8 +54,11 @@ class Manifest {
 		return "${manifestAsJSON}";
 	}
 
+
+
     def setManifest(JSONObject map){
         manifest = map
         manifestAsJSON = map as JSON
     }
+
 }
