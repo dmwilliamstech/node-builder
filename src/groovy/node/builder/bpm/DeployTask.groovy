@@ -19,9 +19,10 @@ class DeployTask implements JavaDelegate{
         def scpFileCopier = new SCPFileCopier()
         def key = new File(master.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
         for(instance in JSON.parse(manifest.manifestAsJSON).instances){
-            def node = new File( System.getProperty("java.io.tmpdir") + "/" + instance.name.toString().replaceAll(/\s/, '-') + '.pp')
+            def nodeName = instance.name.toString().replaceAll(/\s/, '-')
+            def node = new File( System.getProperty("java.io.tmpdir") + "/" + nodeName + '.pp')
             node.write(processTemplate(instance, this.class.classLoader.getResourceAsStream("/templates/node.pp.gsp")))
-            scpFileCopier.copyTo(node, master.hostname, new File(master.remotePath), master.username, key)
+            scpFileCopier.copyTo(node, master.hostname, new File(master.remotePath + '/' + nodeName + '.pp'), master.username, key)
         }
     }
 
