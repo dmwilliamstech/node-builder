@@ -333,7 +333,7 @@ function handleAddArrayConfiguration(button){
 }
 
 function addStringConfiguration(config, configIndex, instanceIndex, type, typeIndex){
-    var html = '<input style="width:80%" type="text" data-data-type="String" value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
+    var html = '<input style="width:80%" type="text" data-data-type="String" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
     return html
 }
 
