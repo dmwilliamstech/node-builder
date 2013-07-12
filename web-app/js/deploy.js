@@ -76,19 +76,3 @@ function handleUpload(button){
         $('#alert').html( '<div class="alert alert-info">'+alert+'</div>')
     }
 }
-
-
-
-function handleInstanceNameChange(input){
-    var name = $(input).val()
-    $.each(instances, function(index, instance){
-        if(name == instance.name){
-            $("#alert").html('<div class="alert alert-error"><strong>'+name+'</strong> already in use, please choose a different name</div>')
-            return
-        }else{
-            $("#alert").html('')
-        }
-
-    })
-    manifest.instanceName = name
-}

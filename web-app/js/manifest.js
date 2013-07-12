@@ -1,11 +1,24 @@
 $(document).on("click", ".icon-remove-sign", function () {
-    var manifestId = $(this).data('manifest-id');
-    var manifestName = $(this).data('manifest-name');
-    $(".modal-body #deleteManifestConfirm").html( "Are you sure you want to delete <i>" + manifestName + "</i>?" );
-    $(".modal-footer .btn-primary").data("manifest-id", manifestId)
+console.log($(this).data("type"))
+    if($(this).data("type") == "manifest"){
+        var manifestId = $(this).data('manifest-id');
+        var manifestName = $(this).data('manifest-name');
+        $(".modal-body #deleteManifestConfirm").html( "Are you sure you want to delete <i>" + manifestName + "</i>?" );
+        $(".modal-footer .btn-primary").data("manifest-id", manifestId)
+    }else if($(this).data("type") == "deployment"){
+
+        var deploymentId = $(this).data('deployment-id');
+        var manifestId = $(this).data('manifest-id');
+        var manifestName = $(this).data('manifest-name');
+        $(".modal-body #deleteDeploymentConfirm").html( "Are you sure you want to delete deployment "+deploymentId+" for <i>" + manifestName + "</i>?" );
+        $("#deleteDeploymentButton").data("manifest-id", manifestId)
+        $("#deleteDeploymentButton").data("deployment-id", deploymentId)
+        $("#deleteDeploymentButton").data("manifest-name", manifestName)
+    }
 });
 
 function handleUndeploy(button){
+    $('#deleteDeploymentModal').modal('hide');
     var manifestId = $(button).data('manifest-id')
     var manifestName = $(button).data('manifest-name')
     var deploymentId = $(button).data('deployment-id')
