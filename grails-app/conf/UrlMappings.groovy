@@ -46,6 +46,11 @@ class UrlMappings {
             action		= { 'upload' }
             view		= { 'deploy' }
         }
+        "/manifest/undeploy/$id/deployment/$deploymentId"	{
+            controller	= 'manifest'
+            action		= { 'undeploy' }
+            view		= { 'list' }
+        }
         "/deploy/$id/download/$file"	{
             controller	= 'manifest'
             action		= { 'download' }

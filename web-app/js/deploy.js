@@ -19,7 +19,6 @@ $(document).ready(function() {
                 manifest.imageId=$(this).val()
                 manifest.imageName=$(this).data("name")
                 button.addClass('active');
-                console.log(manifest)
             });
 
         });
@@ -46,6 +45,8 @@ function validateManifest(){
 
 
 function handleUpload(button){
+    if($(button).hasClass('disabled'))
+        return
     var alert = validateManifest()
     if(alert.length == 0){
         $("#alert").html('<div class="alert alert-info">Beginning processing of manifest...</div>')
@@ -75,6 +76,8 @@ function handleUpload(button){
         $('#alert').html( '<div class="alert alert-info">'+alert+'</div>')
     }
 }
+
+
 
 function handleInstanceNameChange(input){
     var name = $(input).val()

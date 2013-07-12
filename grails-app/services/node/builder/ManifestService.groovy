@@ -70,26 +70,26 @@ class ManifestService {
         }
 
     }
+//
+//    def deployTo(manifestInstance, masterInstance) {
+//
+//        def scpFileCopier = new SCPFileCopier()
+//        def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
+//        for(instance in manifestInstance.manifest.instances){
+//            def node = new File(instance.name.toString().replaceAll(/\s/, '-') + '.pp')
+//            node.write(processTemplate(instance, "${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp"))
+//            scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
+//        }
+//    }
 
-    def deployTo(manifestInstance, masterInstance) {
 
-        def scpFileCopier = new SCPFileCopier()
-        def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
-        for(instance in manifestInstance.manifest.instances){
-            def node = new File(instance.name.toString().replaceAll(/\s/, '-') + '.pp')
-            node.write(processTemplate(instance, "${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp"))
-            scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
-        }
-    }
-
-
-    def processTemplate(instance, template){
-        def output = new StringWriter()
-        def templateText = new File(template).text
-        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: instance, service: this]).writeTo(output)
-        return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
-    }
-
+//    def processTemplate(instance, template){
+//        def output = new StringWriter()
+//        def templateText = new File(template).text
+//        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: instance, service: this]).writeTo(output)
+//        return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
+//    }
+//
     def processConfigurationValue(value){
         if(value.class == java.lang.String){
             return "\"${value}\""
@@ -103,40 +103,40 @@ class ManifestService {
             return string
         }
     }
-
-    def provision(Manifest manifest) {
-        for(instance in manifest.manifest.instances){
-
-            def instanceName = instance.name.replaceAll(/\s/, '-')
-            if(Instance.findByName(instanceName)){
-                return [error: [message: "Instance ${instanceName} already exists please update to continue"]]
-            }
-            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
-            def server = instanceData.server
-            if(server != null){
-                def instanceDomain = new Instance(
-                        name: server.name,
-                        status: server.status,
-                        hostId: server.hostId,
-                        privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
-                        keyName: server.key_name.toString(),
-                        flavorId: server.flavor.id,
-                        instanceId: server.id,
-                        userId: server.user_id,
-                        tenantId: server.tenant_id,
-                        progress: server.progress,
-                        configDrive: server.config_drive ?: "not set",
-                        metadata: (server.metadata as JSON).toString(),
-                        image: Image.findByImageId(server.image.id)
-                )
-                instanceDomain.save(failOnError: true)
-                manifest.addToInstances(instanceDomain)
-            }else{
-                return instanceData
-            }
-        }
-        return manifest
-    }
+//
+//    def provision(Manifest manifest) {
+//        for(instance in manifest.manifest.instances){
+//
+//            def instanceName = instance.name.replaceAll(/\s/, '-')
+//            if(Instance.findByName(instanceName)){
+//                return [error: [message: "Instance ${instanceName} already exists please update to continue"]]
+//            }
+//            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
+//            def server = instanceData.server
+//            if(server != null){
+//                def instanceDomain = new Instance(
+//                        name: server.name,
+//                        status: server.status,
+//                        hostId: server.hostId,
+//                        privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
+//                        keyName: server.key_name.toString(),
+//                        flavorId: server.flavor.id,
+//                        instanceId: server.id,
+//                        userId: server.user_id,
+//                        tenantId: server.tenant_id,
+//                        progress: server.progress,
+//                        configDrive: server.config_drive ?: "not set",
+//                        metadata: (server.metadata as JSON).toString(),
+//                        image: Image.findByImageId(server.image.id)
+//                )
+//                instanceDomain.save(failOnError: true)
+//                manifest.addToInstances(instanceDomain)
+//            }else{
+//                return instanceData
+//            }
+//        }
+//        return manifest
+//    }
 
     def generateGraph(id) {
         def manifest = Manifest.get(id)
@@ -188,4 +188,47 @@ class ManifestService {
         return nodes
     }
 
+    def deprovisionAndUndeployFromMaster(Manifest manifest, Master master, Deployment deployment) {
+        try{
+
+
+            // Get Activiti services
+            RepositoryService repositoryService = processEngine().getRepositoryService();
+            RuntimeService runtimeService = processEngine().getRuntimeService();
+
+            // Deploy the process definition
+            repositoryService.createDeployment()
+                    .addClasspathResource("resources/deprovision_instance.bpmn20.xml")
+                    .deploy();
+
+            // Start a process instance
+            def variables = new HashMap();
+            def utilities = new Utilities();
+            variables.put("manifest", utilities.serializeDomain(manifest))
+
+            variables.put("master", utilities.serializeDomain(master))
+
+            variables.put("deployment", utilities.serializeDomain(deployment))
+            def processInstance = runtimeService.startProcessInstanceByKey("deprovisionInstance", variables);
+
+            // verify that the process is actually finished
+
+            def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
+
+            Execution execution = runtimeService.createExecutionQuery()
+                    .processInstanceId(processInstance.getId())
+                    .activityId("receiveTask")
+                    .singleResult();
+            runtimeService.signal(execution.getId());
+
+            HistoryService historyService = processEngine().getHistoryService();
+            HistoricProcessInstance historicProcessInstance =
+                historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+            manifest.removeFromDeployments(deployment)
+            deployment.delete()
+            return result
+        }catch (e){
+            return [error: [message: e.getMessage()]]
+        }
+    }
 }

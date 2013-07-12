@@ -67,6 +67,30 @@ class OpenStackConnection {
         return objects("servers")
     }
 
+
+    @Synchronized
+    def delete(instanceId){
+        if(this.compute == null)
+            this.connect()
+
+        def resp
+        try {
+            compute.delete( path : "servers/${instanceId}",
+                    headers : ['X-Auth-Token' : token])
+        } catch (groovyx.net.http.HttpResponseException e) {
+            resp = e.getResponse()
+            if(resp.getStatus() >= 400){
+                def error = [error: [message: resp.data + " ${instanceId}"]]
+
+                throw ("Instance delete failed ${error.error.message}")
+            }
+            throw e
+        }
+
+
+        return true
+    }
+
     @Synchronized
     def launch(flavor, image, instanceName){
         if(this.compute == null)

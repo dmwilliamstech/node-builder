@@ -51,6 +51,8 @@ class OpenStackTestConnection {
         return new JsonSlurper().parseText(file.text)
     }
 
-
+    def delete(instanceId){
+        return true
+    }
 
 }

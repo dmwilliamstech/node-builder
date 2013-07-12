@@ -26,9 +26,9 @@
 			<tr>
                 <g:sortableColumn property="name" title="${message(code: 'manifest.name.label', default: 'Name')}" />
 
-				<g:sortableColumn property="manifest" title="${message(code: 'manifest.manifest.label', default: 'Manifest')}" />
+                <th><g:message code="manifest.manifest.label" default="Manifest" /></th>
 
-                <g:sortableColumn property="instances" title="${message(code: 'manifest.instances.label', default: 'Instances')}" />
+                <th><g:message code="manifest.deployments.label" default="Deployments" /></th>
 
 			</tr>
 		</thead>
@@ -40,8 +40,8 @@
                     <g:formatDate date="${manifest.lastUpdated}" />
                     <hr>
                     <a href="show/${manifest.id}"><i class="icon-pencil"></i></a>
-                    <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
                     <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
+                    <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
                     <a class="" data-toggle="collapse" data-target="#viewdetails${manifest.id}"><i class="icon-info-sign"></i></a>
                     <div class="collapse-group">
                         <p id="viewdetails${manifest.id}" class="collapse">${manifest.description}</p>
@@ -52,11 +52,17 @@
 				<td>
                     <pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
                 <td>
+                <g:each in="${manifest.deployments}" var="deployment">
+                    <div id="deployment${deployment.id}">
+                    Deployment ${manifest.name} ${deployment.id}
+                    <a onclick="handleUndeploy(this)" data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" data-deployment-id="${deployment.id}"> <i class="icon-remove-sign"></i></a>
                     <ul>
-                    <g:each in="${manifest.instances}" var="instance">
+                    <g:each in="${deployment.instances}" var="instance">
                         <li>${instance.name} (${instance.instanceId})</li>
                     </g:each>
                     </ul>
+                    </div>
+                </g:each>
                 </td>
 
 			</tr>

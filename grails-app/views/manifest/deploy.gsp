@@ -34,7 +34,6 @@
     <div class="pull-left">
         <div class="btn-group">
             <a class="btn btn-success" onclick="handleUpload(this)" id="upload" >Provision</a>
-            <a class="btn btn-info" onclick="handleDownload(this)" >Download</a>
         </div>
     </div>
 </div>

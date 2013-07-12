@@ -1,6 +1,7 @@
 package node.builder.bpm
 
 import grails.converters.JSON
+import node.builder.Deployment
 import node.builder.Image
 import node.builder.Instance
 import node.builder.Manifest
@@ -12,6 +13,7 @@ import org.activiti.engine.delegate.JavaDelegate;
 public class ProvisionTask implements JavaDelegate{
     public void execute(DelegateExecution delegateExecution) throws Exception {
         def manifest = Manifest.findByName(delegateExecution.getVariable("manifest").name)
+        def instances = []
         for(instance in manifest.manifest.instances){
 
             def instanceName = instance.name.replaceAll(/\s/, '-')
@@ -38,12 +40,16 @@ public class ProvisionTask implements JavaDelegate{
                         image: Image.findByImageId(server.image.id)
                 )
                 instanceDomain.save(failOnError: true)
-                manifest.addToInstances(instanceDomain)
+                instances.add(instanceDomain)
             }else{
                 delegateExecution.setVariable("result", instanceData)
                 return
             }
         }
+
+        def deployment = new Deployment(manifest: manifest, instances: instances)
+        deployment.save(failOnError: true)
+
         delegateExecution.engineServices
         delegateExecution.setVariable("result", (new Utilities()).serializeDomain(manifest))
     }

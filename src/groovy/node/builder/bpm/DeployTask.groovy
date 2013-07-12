@@ -21,7 +21,11 @@ class DeployTask implements JavaDelegate{
         for(instance in JSON.parse(manifest.manifestAsJSON).instances){
             def nodeName = instance.name.toString().replaceAll(/\s/, '-')
             def node = new File( System.getProperty("java.io.tmpdir") + "/" + nodeName + '.pp')
-            node.write(processTemplate(instance, this.class.classLoader.getResourceAsStream("/templates/node.pp.gsp")))
+            def template = this.class.classLoader.getResourceAsStream("/templates/node.pp.gsp")
+            if(template == null){
+                template = this.class.classLoader.getResourceAsStream("resources/node.pp.gsp")
+            }
+            node.write(processTemplate(instance, template))
             scpFileCopier.copyTo(node, master.hostname, new File(master.remotePath + '/' + nodeName + '.pp'), master.username, key)
         }
     }

@@ -13,7 +13,7 @@ class ManifestController {
     def manifestService
     def instanceService
 
-    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST", upload: "POST"]
+    static allowedMethods = [create: "POST", update: "POST", delete: "DELETE", download: "POST", upload: "POST", undeploy: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -86,7 +86,7 @@ class ManifestController {
             return
         }
 
-        render(manifestInstance as JSON)
+        render((new Utilities()).serializeDomain(manifestInstance) as JSON)
     }
 
     def delete() {
@@ -158,6 +158,19 @@ class ManifestController {
 //        masterInstance = manifestService.provision(manifestInstance)
 
         render(masterInstance as JSON)
+    }
+
+    def undeploy(){
+        def manifestInstance = Manifest.get(params.id)
+        def deploymentInstance = Deployment.get(params.deploymentId)
+        def masterInstance = Master.get(1)
+        if (!manifestInstance || !deploymentInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'manifest.label', default: 'Manifest'), params.id])
+            render( [error : [message : 'Unknown ' + (manifestInstance? "deployment with id ${params.deploymentId}" : "manifest with id ${params.id}")]] as JSON )
+            return
+        }
+        def result = manifestService.deprovisionAndUndeployFromMaster(manifestInstance, masterInstance, deploymentInstance)
+        render(result as JSON)
     }
 
     def graph(){
