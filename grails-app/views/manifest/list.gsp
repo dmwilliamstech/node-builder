@@ -41,7 +41,7 @@
                     <hr>
                     <a href="show/${manifest.id}"><i class="icon-pencil"></i></a>
                     <a href="deploy/${manifest.id}"> <i class="icon-upload"></i></a>
-                    <a href="#deleteModal" data-toggle="modal"> <i data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
+                    <a href="#deleteModal" data-toggle="modal"> <i data-type="manifest" data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" class="icon-remove-sign"></i></a>
                     <a class="" data-toggle="collapse" data-target="#viewdetails${manifest.id}"><i class="icon-info-sign"></i></a>
                     <div class="collapse-group">
                         <p id="viewdetails${manifest.id}" class="collapse">${manifest.description}</p>
@@ -56,7 +56,7 @@
                 <g:each in="${manifest.deployments}" var="deployment">
                     <div  id="deployment${deployment.id}">
                     Deployment ${manifest.name} ${deployment.id}
-                    <a onclick="handleUndeploy(this)" data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" data-deployment-id="${deployment.id}"> <i class="icon-remove-sign"></i></a>
+                    <a href="#deleteDeploymentModal" data-toggle="modal" > <i data-type="deployment" data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" data-deployment-id="${deployment.id}" class="icon-remove-sign"></i></a>
                     <ul>
                     <g:each in="${deployment.instances}" var="instance">
                         <li>${instance.name} (${instance.instanceId})</li>
@@ -86,6 +86,20 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" data-target="#deleteModal" >Cancel</button>
         <button class="btn btn-primary" onclick="handleDeleteManifest(this)" >Delete</button>
+    </div>
+</div>
+
+<div id="deleteDeploymentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="deleteDeploymentModalLabel">Delete Deployment</h3>
+    </div>
+    <div class="modal-body">
+        <div id="deleteDeploymentConfirm">Are you sure you want to delete?</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" data-target="#deleteDeploymentModal" >Cancel</button>
+        <button id="deleteDeploymentButton" class="btn btn-primary" onclick="handleUndeploy(this)" >Delete</button>
     </div>
 </div>
 

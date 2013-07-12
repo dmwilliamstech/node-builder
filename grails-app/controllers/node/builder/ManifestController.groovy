@@ -24,7 +24,6 @@ class ManifestController {
         render(view: "list", model: [manifests:Manifest.list(params), manifestInstanceTotal: Manifest.count()])
     }
 
-
     def create() {
         def jsonObject = request.JSON
 
@@ -127,7 +126,7 @@ class ManifestController {
             return
         }
         def masterInstance = Master.first()
-        render(view: "deploy", model: [manifest: manifestService.manifestForJson(manifestInstance), master: masterInstance, instances: new Utilities().serializeDomain(Instance.all), images: Image.findAllByProgress(100)])
+        render(view: "deploy", model: [manifest: manifestService.manifestForJson(manifestInstance), master: masterInstance, instances: Instance.all, images: Image.findAllByProgress(100)])
     }
 
     def download(){

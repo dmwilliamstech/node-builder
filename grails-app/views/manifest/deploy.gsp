@@ -48,7 +48,6 @@
 <g:javascript>
     var json = ${manifest as grails.converters.JSON}
     manifest = json.manifest
-    var instances = ${instances as grails.converters.JSON}
 </g:javascript>
 <script type="text/javascript" src="/node-builder/static/js/deploy.js" ></script>
 </body>

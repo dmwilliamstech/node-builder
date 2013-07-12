@@ -1,8 +1,11 @@
 package node.builder
 
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
-class Utilities {
-    def grailsApplication
+class Utilities implements GrailsApplicationAware {
+    def gApp
 
     def isSerializable(object){
         try{
@@ -19,7 +22,8 @@ class Utilities {
         if(domain == null || level > 1)
             return null
 
-        def domainClass = grailsApplication.getDomainClass(domain.class.name.replaceAll(/\_\$\$\_javassist.*/, ""))
+
+        def domainClass = new DefaultGrailsDomainClass(Class.forName(domain.class.name.replaceAll(/\_\$\$\_javassist.*/, ""), true, Thread.currentThread().contextClassLoader))
 
         def map = new HashMap()
         if(domainClass == null)
@@ -28,7 +32,8 @@ class Utilities {
 
         domainClass.persistentProperties.each { property ->
             if(domain[property.name] == null || isSerializable(domain[property.name])){
-                map[property.name.toString()] = domain[property.name].toString()
+                if(domain[property.name] != null )
+                    map[property.name.toString()] = domain[property.name].toString()
             }else if(domain[property.name] instanceof java.util.LinkedHashSet || domain[property.name] instanceof org.hibernate.collection.PersistentSet){
                 def list = []
                 domain[property.name].each{ d ->
@@ -49,5 +54,9 @@ class Utilities {
         map.id = domain.id
 
         return map
+    }
+
+    void setGrailsApplication(GrailsApplication grailsApplication) {
+        this.gApp = grailsApplication
     }
 }

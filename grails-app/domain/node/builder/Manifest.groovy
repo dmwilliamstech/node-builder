@@ -1,6 +1,7 @@
 package node.builder
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**
@@ -8,7 +9,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
  * A domain class describes the manifest object and it's mapping to the manifestbase
  */
 class Manifest {
-
+    static expose = 'manifest'
 	/* Default (injected) attributes of GORM */
 	Long	id
 //	Long	version

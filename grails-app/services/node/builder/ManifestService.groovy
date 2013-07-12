@@ -16,6 +16,7 @@ import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
  */
 class ManifestService {
     def groovyPagesTemplateEngine
+
     static ProcessEngine pe
 
     static utilities = new Utilities()
