@@ -10,8 +10,7 @@ class Utilities {
                 return false
             new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(object);
             return true
-        }catch(e){
-            e.printStackTrace()
+        }catch( e){
             return false
         }
     }

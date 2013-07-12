@@ -50,10 +50,11 @@
                 </td>
 
 				<td>
-                    <pre>${(manifest.manifest as JSON).toString(true)}</pre></td>
-                <td>
+                    <pre>${(manifest.manifest as JSON).toString(true)}</pre>
+                </td>
+                <td class="span4">
                 <g:each in="${manifest.deployments}" var="deployment">
-                    <div id="deployment${deployment.id}">
+                    <div  id="deployment${deployment.id}">
                     Deployment ${manifest.name} ${deployment.id}
                     <a onclick="handleUndeploy(this)" data-manifest-id="${manifest.id}" data-manifest-name="${manifest.name}" data-deployment-id="${deployment.id}"> <i class="icon-remove-sign"></i></a>
                     <ul>

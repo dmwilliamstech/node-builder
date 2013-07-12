@@ -41,6 +41,12 @@ class ImageService {
             }
             imageInstance.save()
         }
-        Image.deleteAll(savedImages)
+        savedImages.each{ savedImage ->
+            savedImage.instances.each{ instance ->
+                instance.delete()
+            }
+            savedImage.delete()
+        }
+
     }
 }

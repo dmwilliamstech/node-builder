@@ -9,7 +9,7 @@ class Application {
 
 	/* Default (injected) attributes of GORM */
 	Long	id
-	Long	version
+
     String  name
     String  description
     String  flavorId

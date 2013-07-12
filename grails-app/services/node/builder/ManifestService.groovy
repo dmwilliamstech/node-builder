@@ -18,6 +18,7 @@ class ManifestService {
     def groovyPagesTemplateEngine
     static ProcessEngine pe
 
+    static utilities = new Utilities()
 
     static transactional = true
 
@@ -102,6 +103,12 @@ class ManifestService {
             string += " ]"
             return string
         }
+    }
+
+    def manifestForJson(manifest){
+        def json = utilities.serializeDomain(manifest)
+        json.manifest = manifest.manifest
+        return json
     }
 //
 //    def provision(Manifest manifest) {

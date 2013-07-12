@@ -86,7 +86,7 @@ class ManifestController {
             return
         }
 
-        render((new Utilities()).serializeDomain(manifestInstance) as JSON)
+        render(manifestService.manifestForJson(manifestInstance) as JSON)
     }
 
     def delete() {
@@ -127,7 +127,7 @@ class ManifestController {
             return
         }
         def masterInstance = Master.first()
-        render(view: "deploy", model: [manifest: manifestInstance, master: masterInstance, instances: Instance.all, images: Image.findAllByProgress(100)])
+        render(view: "deploy", model: [manifest: manifestService.manifestForJson(manifestInstance), master: masterInstance, instances: new Utilities().serializeDomain(Instance.all), images: Image.findAllByProgress(100)])
     }
 
     def download(){
