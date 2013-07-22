@@ -9,3 +9,4 @@ node-builder.iws
 projectFilesBackup/
 target/
 *.db
+logs/
