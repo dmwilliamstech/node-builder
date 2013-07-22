@@ -1,6 +1,7 @@
 {
     "applications" : [
         {
+            "priority": 1,
             "name": "Some Application",
             "description": "awesome",
             "configurations": [

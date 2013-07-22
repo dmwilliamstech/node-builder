@@ -11,6 +11,7 @@ class Application {
 	Long	id
 
     String  name
+    Integer  priority
     String  description
     String  flavorId
 	

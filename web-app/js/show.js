@@ -26,7 +26,7 @@ $(document).ready(function() {
                     '<td>' +
                     '    <div class="btn-toolbar">' +
                     '        <a title="'+ application.name + '" name="application" id="app'+application.id+'" class="btn" onclick="handleIncludeApplication(this)" title="Node added to manifest" >Include</a>' +
-                    '        <a href="#" id="infoApp'+application.id+'" data-flavor="'+application.flavorId+'" class="btn" rel="popover" data-content="'+application.description+'" data-original-title="'+application.name+'"  ><i class="icon-info-sign icon-white"></i></a>' +
+                    '        <a href="#" id="infoApp'+application.id+'" data-priority="'+application.priority+'" data-flavor="'+application.flavorId+'" class="btn" rel="popover" data-content="'+application.description+'" data-original-title="'+application.name+'"  ><i class="icon-info-sign icon-white"></i></a>' +
                     '    </div>' +
                     '</td>' +
                     '</tr>');
@@ -85,7 +85,7 @@ function handleIncludeApplication(button){
         $(button).html("Include")
     }else{
         $(button).addClass("btn-success")
-        newInstance.applications[id] = {id: id, configurations: configurations.applications[id], name:button.title, flavorId: $('#infoApp' + id).data("flavor") }
+        newInstance.applications[id] = {id: id, configurations: configurations.applications[id], name:button.title, priority:$('#infoApp' + id).data("priority"), flavorId: $('#infoApp' + id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Included')
     }
 }

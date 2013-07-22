@@ -49,6 +49,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
                     domain = new Application()
                 domain.name = application.name
                 domain.description = application.description
+                domain.priority = application.priority
                 domain.flavorId = application.flavorId
 
                 if(node)
@@ -59,7 +60,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
 
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
-                domain.save()
+                domain.save(failOnError:true)
             }
             if(configurations)
                 loadConfigurations(domain, configurations, ApplicationConfiguration)
@@ -84,7 +85,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
 
                 if(domain.errors.hasErrors())
                     throw new Exception(domain.errors.toString())
-                domain.save()
+                domain.save(failOnError:true)
             }
             if(applications)
                 loadApplications(domain, applications)

@@ -16,6 +16,7 @@
             "flavorId": "2",
             "applications": [
                 {
+                    "priority": 10,
                     "name": "class::app_1",
                     "description": "awesome",
                     "configurations": [
@@ -23,6 +24,7 @@
                     "flavorId" : 3
                 },
                 {
+                    "priority": 1,
                     "name": "class::app_2",
                     "description": "awesomer",
                     "configurations": [
