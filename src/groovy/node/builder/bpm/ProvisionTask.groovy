@@ -45,10 +45,15 @@ public class ProvisionTask implements JavaDelegate{
                 delegateExecution.setVariable("result", instanceData)
                 return
             }
+
         }
 
         def deployment = new Deployment(manifest: manifest, instances: instances)
         deployment.save(failOnError: true)
+        instances.each{instance ->
+            instance.deployment = deployment
+            instance.save()
+        }
 
         delegateExecution.engineServices
         delegateExecution.setVariable("result", (new Utilities()).serializeDomain(manifest))

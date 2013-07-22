@@ -25,7 +25,7 @@ class Instance {
     Integer progress
     String configDrive
     String metadata
-    Manifest manifest
+    Deployment deployment
     Image image
     Flavor flavor
 
@@ -46,7 +46,7 @@ class Instance {
         instanceId(unique: true)
         privateIP(nullable: true)
         metadata(nullable: true)
-        manifest(nullable: true)
+        deployment(nullable: true)
         image(nullable: true)
         keyName(nullable: true)
         progress(nullable: true)

@@ -10,8 +10,6 @@ class Deployment {
 	Long	id
 //	Long	version
 
-
-
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated

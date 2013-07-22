@@ -29,8 +29,6 @@
                 <g:sortableColumn property="progress" title="${message(code: 'instance.progress.label', default: 'Progress')}" />
 
                 <g:sortableColumn property="status" title="${message(code: 'instance.status.label', default: 'Status')}" />
-
-
 			</tr>
 		</thead>
 		<tbody>
@@ -48,12 +46,12 @@
                 </td>
 			
 				<td>
-                    ${instanceInstance.flavor.name}
+                    ${instanceInstance.flavor?.name}
                 </td>
 
                 <td>${instanceInstance.image.name}</td>
 			
-				<td>${instanceInstance.manifest?.name}</td>
+				<td>${instanceInstance.deployment?.manifest?.name}</td>
 			
 				<td>${instanceInstance.status.toUpperCase() == 'ACTIVE' &&  instanceInstance.progress == 0? 100 : instanceInstance.progress}%</td>
 

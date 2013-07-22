@@ -11,6 +11,7 @@ class InstanceService {
     static transactional = true
 
     def loadInstances(connection){
+        log.info("Loading instances")
         def instances = connection.instances()
         def savedInstances = Instance.all
         instances.each { server ->
@@ -55,7 +56,11 @@ class InstanceService {
 
         }
 
-        Instance.deleteAll(savedInstances)
+        savedInstances.each{ Instance instance ->
+            log.info("Deleting instance ${instance.name} (${instance.instanceId})")
+            instance.deployment?.removeFromInstances(instance)
+            instance.delete()
+        }
     }
 
 
