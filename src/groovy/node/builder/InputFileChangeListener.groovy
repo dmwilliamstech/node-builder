@@ -11,10 +11,14 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     def persistenceInterceptor
 
     void onChange(File file) {
-
+        loadFile(file)
     }
 
     void onNew(File file) {
+        loadFile(file)
+    }
+
+    private void loadFile(File file){
         try{
             log.info "File added ${file.absolutePath}"
             def json = (new JsonSlurper()).parseText(file.text)
@@ -36,7 +40,6 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             log.error "Failed to load file ${file.path} caused by ${e}"
         }
     }
-
 
     private void loadApplications(node, applications){
         log.info "Found ${applications.size()} application entry(s)"

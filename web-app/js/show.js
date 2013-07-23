@@ -59,7 +59,7 @@ function handleAddNode(button){
     }else{
         $(button).addClass("btn-success")
 
-        newInstance.nodes[id] = {id: id, configurations: configurations.nodes[id], name:button.title, flavorId: $('#infoNode' + id).data("flavor") }
+        newInstance.nodes[id] = {id: id, configurations: JSON.parse(JSON.stringify(configurations.nodes[id])), name:button.title, flavorId: $('#infoNode' + id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Added')
 
         $.each(nodes.data, function(index, node){
@@ -85,7 +85,7 @@ function handleIncludeApplication(button){
         $(button).html("Include")
     }else{
         $(button).addClass("btn-success")
-        newInstance.applications[id] = {id: id, configurations: configurations.applications[id], name:button.title, priority:$('#infoApp' + id).data("priority"), flavorId: $('#infoApp' + id).data("flavor") }
+        newInstance.applications[id] = {id: id, configurations: JSON.parse(JSON.stringify(configurations.applications[id])), name:button.title, priority:$('#infoApp' + id).data("priority"), flavorId: $('#infoApp' + id).data("flavor") }
         $(button).html('<i class="icon-ok icon-white"></i>Included')
     }
 }
@@ -247,7 +247,7 @@ function loadTabsFromManifest(active){
             '<tbody>'
         $.each(instance.applications, function(jndex, application){
             tabHtml += '<tr><td id="'+ index +'_'+ jndex +'applications">' + application.name +
-            '</td><td><a href="#" onclick="handleApplicationEdit('+index+','+jndex+')"><i class="icon-pencil"></i></a></td></tr>'
+            '</td><td><a href="#'+ index +'_'+ jndex +'applications" onclick="handleApplicationEdit('+index+','+jndex+')"><i class="icon-pencil"></i></a></td></tr>'
         });
 
 
@@ -359,7 +359,7 @@ function addArrayConfiguration(config, configIndex, instanceIndex, type, typeInd
 function addConfigurations(instanceIndex, index, object, type){
     $('#' + instanceIndex + '_' + index + type + 's').empty()
 
-    var html = '<hr id="'+instanceIndex + index + type+'s">'
+    var html = manifest.instances[instanceIndex][type+'s'][index].name + '<hr id="'+instanceIndex + index + type+'s">'
 
     $.each(object.configurations, function(configIndex, configuration){
         var configType = "String"
@@ -399,7 +399,6 @@ function handleInputChange(input, type){
         manifest.instances[instanceId][type][typeId].configurations[configId].value['json'] = $(input).val()
     else
         manifest.instances[instanceId][type][typeId].configurations[configId].value.json[valueId] = $(input).val()
-
 
     toggleDirty(true)
     addConfigurations(instanceId, typeId, manifest.instances[instanceId][type][typeId], type.replace(/s$/, ''))
