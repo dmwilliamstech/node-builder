@@ -247,7 +247,7 @@ function loadTabsFromManifest(active){
             '<tbody>'
         $.each(instance.applications, function(jndex, application){
             tabHtml += '<tr><td id="'+ index +'_'+ jndex +'applications">' + application.name +
-            '</td><td><a href="#'+ index +'_'+ jndex +'applications" onclick="handleApplicationEdit('+index+','+jndex+')"><i class="icon-pencil"></i></a></td></tr>'
+            '</td><td><a href="#'+ index +'_'+ jndex +'applications" onclick="handleApplicationEdit('+index+','+jndex+')"><i id="edit_'+ index +'_'+ jndex +'_applications" class="icon-pencil"></i></a></td></tr>'
         });
 
 
@@ -333,22 +333,25 @@ function handleAddArrayConfiguration(button){
 }
 
 function addStringConfiguration(config, configIndex, instanceIndex, type, typeIndex){
-    var html = '<input style="width:80%" type="text" data-data-type="String" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ config.value.json + '" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
+    var id = 'input_' + configIndex + '_' + instanceIndex + '_' + typeIndex + '_' + 0
+    var html = '<input id="'+id+'" style="width:80%" type="text" data-data-type="String" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ config.value.json + '" class="input-xlarge"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'
     return html
 }
 
 function addArrayConfiguration(config, configIndex, instanceIndex, type, typeIndex){
+    var id = 'input_' + configIndex + '_' + instanceIndex + '_' + typeIndex
 
     var html = ""
     $.each(config.value.json, function(valueIndex, value){
+        id = id + '_' + valueIndex
         html += '<div id="'+ valueIndex + '_' +configIndex + '_' + typeIndex +'">'+
-            '<input style="width:80%" type="text" data-data-type="Array" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ value + '" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'+
+            '<input id="'+id+'" style="width:80%" type="text" data-data-type="Array" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'"  value="'+ value + '" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')">'+
             '<a href="#'+configIndex + '_' + typeIndex +'" id="'+ valueIndex + '_' +configIndex + '_' + typeIndex + '_a" data-value-id="'+valueIndex+'" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" onclick="handleRemoveArrayConfiguration(this)"> <i class="icon-remove-sign"></i></a><br></div>'
     })
 
     if(html.length == 0){
-        html = '<input style="width:80%" type="text" value="" data-data-type="Array" data-value-id="0" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" class="input-xlarge" id="'+ configIndex +'"  name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')"><br>'
-
+        id = id + '_' + 0
+        html = '<input style="width:80%" id="'+id+'" type="text" value="" data-data-type="Array" data-value-id="0" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" class="input-xlarge" name="'+ instanceIndex + '_'+ typeIndex +'" onchange="handleInputChange(this, \''+type+'s\')"><br>'
     }
 
     html += '<a href="#'+configIndex + '_' + typeIndex +'" id="'+ +configIndex + '_' + typeIndex + '_a" data-config-id="' + configIndex + '" data-instance-id="'+instanceIndex+'" data-type-id="'+typeIndex+'" data-type="'+type+'" onclick="handleAddArrayConfiguration(this)"> <i class="icon-plus-sign"></i></a> '

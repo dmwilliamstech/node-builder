@@ -36,7 +36,7 @@ class ManifestListTest extends GebReportingTest {
         assert $('h4').first().text() == "Manifest Name"
     }
 
-    private void login(){
+    void login(){
         go('login/auth')
         assert title == "Login"
 

@@ -1,0 +1,45 @@
+{
+    "nodes": [
+        {
+            "name": "class::name",
+            "description": "great",
+            "configurations": [
+                {
+                    "name" : "config_name",
+                    "value" : "Some Value"
+                },
+                {
+                    "name" : "config_name_2",
+                    "value" : ["Some Values","Some More Values"]
+                }
+            ],
+            "flavorId": "2",
+            "applications": [
+                {
+                    "priority": 10,
+                    "name": "class::app_1",
+                    "description": "awesome",
+                    "configurations": [
+                    ],
+                    "flavorId" : 3
+                },
+                {
+                    "priority": 1,
+                    "name": "class::app_2",
+                    "description": "awesomer",
+                    "configurations": [
+                        {
+                            "name" : "app_config_3",
+                            "value" : "Some Value"
+                        },
+                        {
+                            "name" : "config_name_4",
+                            "value" : ["Some Values","Some More Values"]
+                        }
+                    ],
+                    "flavorId": "1"
+                }
+            ]
+        }
+    ]
+}
