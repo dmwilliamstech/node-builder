@@ -47,9 +47,9 @@ grails.project.dependency.resolution = {
         test "org.gebish:geb-junit4:0.9.0"
         test "org.seleniumhq.selenium:selenium-support:2.33.0"
 
-        test("org.seleniumhq.selenium:selenium-htmlunit-driver:2.33.0") {
-            exclude "xml-apis"
-        }
+//        test("org.seleniumhq.selenium:selenium-htmlunit-driver:2.33.0") {
+//            exclude "xml-apis"
+//        }
         test("org.seleniumhq.selenium:selenium-chrome-driver:2.33.0")
         test("org.seleniumhq.selenium:selenium-firefox-driver:2.33.0")
         compile 'org.apache.ant:ant-jsch:1.8.4'
