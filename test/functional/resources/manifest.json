@@ -1,0 +1,427 @@
+{
+    "id": 3,
+    "imageId": "68e69e00-925e-4d8d-ba7b-8f3499154ded",
+    "imageName": "centos6.3+pe3",
+    "description": "Test",
+    "name": "Test",
+    "instances": [
+        {
+            "id": 1,
+            "flavorId": 2,
+            "nodes": {"2": {
+                "id": "2",
+                "flavorId": null,
+                "name": "plain ddf",
+                "configurations": []
+            }},
+            "name": "nodeone",
+            "applications": {
+                "2": {
+                    "id": "2",
+                    "flavorId": 2,
+                    "priority": 10,
+                    "name": "ddf",
+                    "configurations": [
+                        {
+                            "id": 6,
+                            "valueAsJson": "{\"json\":[\"catalog-opensearch-source\"]}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "list of features to install",
+                            "name": "features",
+                            "attached": true,
+                            "value": {"json": ["catalog-opensearch-source"]},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"catalog-opensearch-source\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "list of features to install",
+                                "name": "features",
+                                "value": {"json": ["catalog-opensearch-source"]},
+                                "applicationId": 2,
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 1,
+                            "valueAsJson": "{\"json\":\"ddf\"}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Package Type",
+                            "name": "package",
+                            "attached": true,
+                            "value": {"json": "ddf"},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"ddf\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Package Type",
+                                "name": "package",
+                                "applicationId": 2,
+                                "value": {"json": "ddf"},
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "valueAsJson": "{\"json\":[]}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "list of hosts to connect as opensearch endpoints",
+                            "name": "opensearch_sources",
+                            "attached": true,
+                            "value": {"json": ["nodetwo.novalocal"]},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "list of hosts to connect as opensearch endpoints",
+                                "name": "opensearch_sources",
+                                "applicationId": 2,
+                                "value": {"json": []},
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 3,
+                            "valueAsJson": "{\"json\":\"/usr/java/default\"}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Location of the Java Installation",
+                            "name": "java_home",
+                            "attached": true,
+                            "value": {"json": "/usr/java/default"},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"/usr/java/default\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Location of the Java Installation",
+                                "name": "java_home",
+                                "value": {"json": "/usr/java/default"},
+                                "applicationId": 2,
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 4,
+                            "valueAsJson": "{\"json\":[\"http://artifacts.codice.org/content/repositories/releases/@id=codice-releases\",\"http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots\"]}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "remote repositories for installing features",
+                            "name": "mvn_repos",
+                            "attached": true,
+                            "value": {"json": [
+                                "http://artifacts.codice.org/content/repositories/releases/@id=codice-releases",
+                                "http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots"
+                            ]},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"http://artifacts.codice.org/content/repositories/releases/@id=codice-releases\",\"http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "remote repositories for installing features",
+                                "name": "mvn_repos",
+                                "applicationId": 2,
+                                "value": {"json": [
+                                    "http://artifacts.codice.org/content/repositories/releases/@id=codice-releases",
+                                    "http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots"
+                                ]},
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 5,
+                            "valueAsJson": "{\"json\":[\"mvn:org.codice/opendx-features/1.0.1/xml/features\"]}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "maven url to a feature store front",
+                            "name": "feature_repos",
+                            "attached": true,
+                            "value": {"json": ["mvn:org.codice/opendx-features/1.0.1/xml/features"]},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"mvn:org.codice/opendx-features/1.0.1/xml/features\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "maven url to a feature store front",
+                                "name": "feature_repos",
+                                "value": {"json": ["mvn:org.codice/opendx-features/1.0.1/xml/features"]},
+                                "applicationId": 2,
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "id": 2,
+                            "valueAsJson": "{\"json\":\"2.2.0.RC4\"}",
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Release Version",
+                            "name": "version",
+                            "attached": true,
+                            "value": {"json": "2.2.0.RC4"},
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"2.2.0.RC4\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Release Version",
+                                "name": "version",
+                                "applicationId": 2,
+                                "value": {"json": "2.2.0.RC4"},
+                                "lastUpdated": "2013-07-22T19:44:04Z",
+                                "dateCreated": "2013-07-22T19:44:04Z"
+                            }
+                        }
+                    ]
+                },
+                "1": {
+                    "id": "1",
+                    "flavorId": null,
+                    "priority": 1,
+                    "name": "oraclejdk",
+                    "configurations": []
+                }
+            }
+        },
+        {
+            "id": 2,
+            "flavorId": 2,
+            "nodes": {"2": {
+                "id": "2",
+                "flavorId": null,
+                "name": "plain ddf",
+                "configurations": []
+            }},
+            "name": "nodetwo",
+            "applications": {
+                "2": {
+                    "id": "2",
+                    "flavorId": 2,
+                    "priority": 10,
+                    "name": "ddf",
+                    "configurations": [
+                        {
+                            "valueAsJson": "{\"json\":[]}",
+                            "id": 7,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "list of hosts to connect as opensearch endpoints",
+                            "name": "opensearch_sources",
+                            "value": {"json": ["nodeone.novalocal"]},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "list of hosts to connect as opensearch endpoints",
+                                "name": "opensearch_sources",
+                                "value": {"json": []},
+                                "applicationId": 2,
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":[\"http://artifacts.codice.org/content/repositories/releases/@id=codice-releases\",\"http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots\"]}",
+                            "id": 4,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "remote repositories for installing features",
+                            "name": "mvn_repos",
+                            "value": {"json": [
+                                "http://artifacts.codice.org/content/repositories/releases/@id=codice-releases",
+                                "http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots"
+                            ]},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"http://artifacts.codice.org/content/repositories/releases/@id=codice-releases\",\"http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "remote repositories for installing features",
+                                "name": "mvn_repos",
+                                "value": {"json": [
+                                    "http://artifacts.codice.org/content/repositories/releases/@id=codice-releases",
+                                    "http://artifacts.codice.org/content/repositories/snapshots/@id=codice-snapshots"
+                                ]},
+                                "applicationId": 2,
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":\"ddf\"}",
+                            "id": 1,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Package Type",
+                            "name": "package",
+                            "value": {"json": "ddf"},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"ddf\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Package Type",
+                                "name": "package",
+                                "value": {"json": "ddf"},
+                                "applicationId": 2,
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":[\"mvn:org.codice/opendx-features/1.0.1/xml/features\"]}",
+                            "id": 5,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "maven url to a feature store front",
+                            "name": "feature_repos",
+                            "value": {"json": ["mvn:org.codice/opendx-features/1.0.1/xml/features"]},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"mvn:org.codice/opendx-features/1.0.1/xml/features\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "maven url to a feature store front",
+                                "name": "feature_repos",
+                                "applicationId": 2,
+                                "value": {"json": ["mvn:org.codice/opendx-features/1.0.1/xml/features"]},
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":\"/usr/java/default\"}",
+                            "id": 3,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Location of the Java Installation",
+                            "name": "java_home",
+                            "value": {"json": "/usr/java/default"},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"/usr/java/default\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Location of the Java Installation",
+                                "name": "java_home",
+                                "applicationId": 2,
+                                "value": {"json": "/usr/java/default"},
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":\"2.2.0.RC4\"}",
+                            "id": 2,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "Release Version",
+                            "name": "version",
+                            "value": {"json": "2.2.0.RC4"},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":\"2.2.0.RC4\"}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "Release Version",
+                                "name": "version",
+                                "value": {"json": "2.2.0.RC4"},
+                                "applicationId": 2,
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        },
+                        {
+                            "valueAsJson": "{\"json\":[\"catalog-opensearch-source\"]}",
+                            "id": 6,
+                            "application": 2,
+                            "errors": {"errors": []},
+                            "description": "list of features to install",
+                            "name": "features",
+                            "value": {"json": ["catalog-opensearch-source"]},
+                            "attached": true,
+                            "lastUpdated": "2013-07-22T19:44:04Z",
+                            "dateCreated": "2013-07-22T19:44:04Z",
+                            "properties": {
+                                "valueAsJson": "{\"json\":[\"catalog-opensearch-source\"]}",
+                                "application": {
+                                    "_ref": "../../../..",
+                                    "class": "node.builder.Application"
+                                },
+                                "description": "list of features to install",
+                                "name": "features",
+                                "applicationId": 2,
+                                "value": {"json": ["catalog-opensearch-source"]},
+                                "dateCreated": "2013-07-22T19:44:04Z",
+                                "lastUpdated": "2013-07-22T19:44:04Z"
+                            }
+                        }
+                    ]
+                },
+                "1": {
+                    "id": "1",
+                    "flavorId": null,
+                    "priority": 1,
+                    "name": "oraclejdk",
+                    "configurations": []
+                }
+            }
+        }
+    ]
+}

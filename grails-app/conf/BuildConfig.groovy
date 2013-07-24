@@ -44,7 +44,14 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
+        test "org.gebish:geb-junit4:0.9.0"
+        test "org.seleniumhq.selenium:selenium-support:2.33.0"
 
+        test("org.seleniumhq.selenium:selenium-htmlunit-driver:2.33.0") {
+            exclude "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-chrome-driver:2.33.0")
+        test("org.seleniumhq.selenium:selenium-firefox-driver:2.33.0")
         compile 'org.apache.ant:ant-jsch:1.8.4'
         compile 'com.jcraft:jsch:0.1.46'
         compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
@@ -69,6 +76,7 @@ grails.project.dependency.resolution = {
         runtime ":content-buffer:1.0.1"
 
 //        cacheDir()
+        test ":geb:0.9.0"
 
         compile ":maven-publisher:0.8.1"
         compile ':cache:1.0.1'
