@@ -49,18 +49,19 @@ class ManifestShowTest extends GebReportingTest {
 
         createInstanceAddNode("test1", "#node2")
 
-        waitFor(1){
-            assert $('#edit_0_2_applications').size() > 0
-            $('#edit_0_2_applications').click()
-            $('#input_0_0_2_0').value("Some New Values")
-        }
+        sleep(1000)
+        assert $('#edit_0_2_applications').size() > 0
+        $('#edit_0_2_applications').click()
+        $('#input_0_0_2_0').value("Some New Values")
+
         $('#input_0_0_2_0').value() == "Some New Values"
 
         createInstanceAddNode("test2", "#node2")
-        waitFor(1){
-            assert $('#edit_1_2_applications').size() > 0
-            $('#edit_1_2_applications').click()
-        }
+
+        sleep(1000)
+        assert $('#edit_1_2_applications').size() > 0
+        $('#edit_1_2_applications').click()
+
 
         assert ($('#input_0_1_2_0').value() == "Some Values" || $('#input_1_1_2_0').value() == "Some Values" )
 
