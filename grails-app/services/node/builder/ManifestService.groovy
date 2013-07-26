@@ -1,6 +1,7 @@
 package node.builder
 
 import grails.converters.JSON
+import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.HistoryService
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.ProcessEngineConfiguration
@@ -17,28 +18,17 @@ import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 class ManifestService {
     def groovyPagesTemplateEngine
 
-    static ProcessEngine pe
-
     static utilities = new Utilities()
 
     static transactional = true
-
-    def processEngine(){
-        if(pe == null)
-            pe= ProcessEngineConfiguration
-                    .createStandaloneInMemProcessEngineConfiguration()
-                    .buildProcessEngine();
-        return pe
-    }
-
 
     def deployToMasterAndProvision(manifestInstance, masterInstance){
         try{
 
 
             // Get Activiti services
-            RepositoryService repositoryService = processEngine().getRepositoryService();
-            RuntimeService runtimeService = processEngine().getRuntimeService();
+            RepositoryService repositoryService = ProcessEngineFactory.defaultProcessEngine().getRepositoryService();
+            RuntimeService runtimeService = ProcessEngineFactory.defaultProcessEngine().getRuntimeService();
 
             // Deploy the process definition
             repositoryService.createDeployment()
@@ -62,7 +52,7 @@ class ManifestService {
                     .singleResult();
             runtimeService.signal(execution.getId());
 
-            HistoryService historyService = processEngine().getHistoryService();
+            HistoryService historyService = ProcessEngineFactory.defaultProcessEngine().getHistoryService();
             HistoricProcessInstance historicProcessInstance =
                 historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
 
@@ -72,26 +62,7 @@ class ManifestService {
         }
 
     }
-//
-//    def deployTo(manifestInstance, masterInstance) {
-//
-//        def scpFileCopier = new SCPFileCopier()
-//        def key = new File(masterInstance.privateKey.replaceAll("\\~",System.getenv()["HOME"]))
-//        for(instance in manifestInstance.manifest.instances){
-//            def node = new File(instance.name.toString().replaceAll(/\s/, '-') + '.pp')
-//            node.write(processTemplate(instance, "${GrailsResourceUtils.VIEWS_DIR_PATH}/templates/node.pp.gsp"))
-//            scpFileCopier.copyTo(node, masterInstance.hostname, new File(masterInstance.remotePath), masterInstance.username, key)
-//        }
-//    }
 
-
-//    def processTemplate(instance, template){
-//        def output = new StringWriter()
-//        def templateText = new File(template).text
-//        groovyPagesTemplateEngine.createTemplate(templateText, 'node.pp').make([manifest: instance, service: this]).writeTo(output)
-//        return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
-//    }
-//
     def processConfigurationValue(value){
         if(value.class == java.lang.String){
             return "\"${value}\""
@@ -111,40 +82,6 @@ class ManifestService {
         json.manifest = manifest.manifest
         return json
     }
-//
-//    def provision(Manifest manifest) {
-//        for(instance in manifest.manifest.instances){
-//
-//            def instanceName = instance.name.replaceAll(/\s/, '-')
-//            if(Instance.findByName(instanceName)){
-//                return [error: [message: "Instance ${instanceName} already exists please update to continue"]]
-//            }
-//            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
-//            def server = instanceData.server
-//            if(server != null){
-//                def instanceDomain = new Instance(
-//                        name: server.name,
-//                        status: server.status,
-//                        hostId: server.hostId,
-//                        privateIP: (server.addresses?.private?.getAt(0)?.addr ?: "not set"),
-//                        keyName: server.key_name.toString(),
-//                        flavorId: server.flavor.id,
-//                        instanceId: server.id,
-//                        userId: server.user_id,
-//                        tenantId: server.tenant_id,
-//                        progress: server.progress,
-//                        configDrive: server.config_drive ?: "not set",
-//                        metadata: (server.metadata as JSON).toString(),
-//                        image: Image.findByImageId(server.image.id)
-//                )
-//                instanceDomain.save(failOnError: true)
-//                manifest.addToInstances(instanceDomain)
-//            }else{
-//                return instanceData
-//            }
-//        }
-//        return manifest
-//    }
 
     def generateGraph(id) {
         def manifest = Manifest.get(id)
@@ -201,8 +138,8 @@ class ManifestService {
 
 
             // Get Activiti services
-            RepositoryService repositoryService = processEngine().getRepositoryService();
-            RuntimeService runtimeService = processEngine().getRuntimeService();
+            RepositoryService repositoryService = ProcessEngineFactory.defaultProcessEngine().getRepositoryService();
+            RuntimeService runtimeService = ProcessEngineFactory.defaultProcessEngine().getRuntimeService();
 
             // Deploy the process definition
             repositoryService.createDeployment()
@@ -229,7 +166,7 @@ class ManifestService {
                     .singleResult();
             runtimeService.signal(execution.getId());
 
-            HistoryService historyService = processEngine().getHistoryService();
+            HistoryService historyService = ProcessEngineFactory.defaultProcessEngine().getHistoryService();
             HistoricProcessInstance historicProcessInstance =
                 historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
             manifest.removeFromDeployments(deployment)

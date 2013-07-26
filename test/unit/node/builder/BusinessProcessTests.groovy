@@ -73,4 +73,6 @@ class BusinessProcessTests {
         System.out.println("Process instance end time: " + historicProcessInstance.getEndTime());
     }
 
+
+    void test
 }

@@ -5,13 +5,23 @@ import node.builder.ImageService
 import node.builder.InputFileChangeListener
 import node.builder.Instance
 import node.builder.InstanceService
+import node.builder.ManifestService
 import node.builder.Master
 import node.builder.Node
 import node.builder.Manifest
 import node.builder.OpenStackConnection
+import node.builder.Repository
 import node.builder.SecRole
 import node.builder.SecUser
 import node.builder.SecUserSecRole
+import node.builder.Utilities
+import node.builder.bpm.ProcessEngineFactory
+import org.activiti.engine.HistoryService
+import org.activiti.engine.ProcessEngineConfiguration
+import org.activiti.engine.RepositoryService
+import org.activiti.engine.RuntimeService
+import org.activiti.engine.history.HistoricProcessInstance
+import org.activiti.engine.runtime.Execution
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
@@ -23,7 +33,6 @@ class BootStrap {
     FlavorService flavorService
 
     def init = { servletContext ->
-
         loadConfig()
         loadSecurity()
 
@@ -46,7 +55,6 @@ class BootStrap {
         directoryWatcher.addListener(new InputFileChangeListener())
         directoryWatcher.start()
 
-        log.info "should be running"
 
         try{
             imageService.loadImages(OpenStackConnection.getConnection())
@@ -55,6 +63,8 @@ class BootStrap {
         }catch(Exception e){
             log.error "Failed to load OpenStack data - ${e}"
         }
+
+        log.info("Node Builder startup complete")
     }
 
     def loadSecurity() {
@@ -101,8 +111,19 @@ class BootStrap {
                 config.get("openstack.key.id"),
                 config.get("openstack.flavor.id")
             )
+
+            log.info("Checking for repositories to monitor")
+            Repository.where { id > 0l }.deleteAll()
+            config.get("monitor.repos")?.each{ repoData ->
+                log.info("Found repository (${repoData.name}) in config, updating system")
+                def repoInstance = Repository.findByName(repoData.name) ?: new Repository(name: repoData.name)
+                repoInstance.localPath = repoData.localPath
+                repoInstance.remotePath = repoData.remotePath
+                repoInstance.save()
+            }
         }catch (e){
             log.warn("Failed to load config file - " + e.getMessage())
+            e.printStackTrace()
         }
     }
 

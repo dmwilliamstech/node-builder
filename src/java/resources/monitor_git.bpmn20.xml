@@ -1,0 +1,54 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <process id="gitChangeMonitor" name="Monitor Git Repo For Changes">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='gitMonitor' />
+
+        <serviceTask id="gitMonitor"
+                     name="Check a Git Repo For changes"
+                     activiti:class="node.builder.bpm.GitMonitorTask" />
+
+        <sequenceFlow id='flow2' sourceRef='gitMonitor' targetRef='changeTask' >
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${repositoryDidChange}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id='flow3' sourceRef='gitMonitor' targetRef='noChangeTask' >
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${!repositoryDidChange}]]>
+            </conditionExpression>
+        </sequenceFlow>
+
+        <scriptTask id="changeTask"
+                     name="Create a VM instance"
+                     scriptFormat="groovy" >
+            <script>
+                println "'we got change'"
+            </script>
+        </scriptTask>
+        <scriptTask id="noChangeTask"
+                    name="Create a VM instance"
+                    scriptFormat="groovy" >
+            <script>
+                println "'sorry no change at ${localPath}'"
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow4' sourceRef='changeTask' targetRef='receiveTask' />
+        <sequenceFlow id='flow5' sourceRef='noChangeTask' targetRef='receiveTask' />
+
+        <receiveTask id="receiveTask" />
+
+        <sequenceFlow id='flow6' sourceRef='receiveTask' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>

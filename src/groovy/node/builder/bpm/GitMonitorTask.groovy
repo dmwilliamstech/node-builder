@@ -1,12 +1,10 @@
 package node.builder.bpm
 
-import node.builder.Manifest
-import node.builder.Utilities
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
-import org.eclipse.jgit.lib.StoredConfig
+
 
 
 class GitMonitorTask implements JavaDelegate{
@@ -36,9 +34,9 @@ class GitMonitorTask implements JavaDelegate{
         results.successful = pullResult.successful
 
         def fetchResult = pullResult.fetchResult
-        results.advertisedRefs = fetchResult.advertisedRefs
+//        results.advertisedRefs = fetchResult.advertisedRefs
+//        results.trackingRefUpdates = fetchResult.trackingRefUpdates
         results.messages = fetchResult.messages
-        results.trackingRefUpdates = fetchResult.trackingRefUpdates
         results.uri = fetchResult.getURI()
 
         def mergeResult = pullResult.mergeResult
@@ -62,4 +60,6 @@ class GitMonitorTask implements JavaDelegate{
         delegateExecution.setVariable("repositoryDidChange", !fetchResult.trackingRefUpdates.empty)
         delegateExecution.setVariable("repositoryChangeResults", results)
     }
+
+    def serialize
 }
