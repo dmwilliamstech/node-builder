@@ -25,35 +25,11 @@ class MonitorGitJob {
 
         repos.each{ Repository repo ->
             log.info("Running git monitor for repository ${repo.name}")
-            RepositoryService repositoryService = ProcessEngineFactory.defaultProcessEngine().getRepositoryService();
-            RuntimeService runtimeService = ProcessEngineFactory.defaultProcessEngine().getRuntimeService();
-
-            // Deploy the process definition
-            repositoryService.createDeployment()
-                    .addClasspathResource("resources/monitor_git.bpmn20.xml")
-                    .deploy();
-
-            // Start a process instance
+            def processEngine = ProcessEngineFactory.defaultProcessEngine(repo.name)
             def variables = new HashMap();
-            def utilities = new Utilities();
             variables.put("remotePath", repo.remotePath)
             variables.put("localPath", repo.localPath)
-
-            def processInstance = runtimeService.startProcessInstanceByKey("gitChangeMonitor", variables);
-
-            // verify that the process is actually finished
-
-            def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
-
-            Execution execution = runtimeService.createExecutionQuery()
-                    .processInstanceId(processInstance.getId())
-                    .activityId("receiveTask")
-                    .singleResult();
-            runtimeService.signal(execution.getId());
-
-            HistoryService historyService = ProcessEngineFactory.defaultProcessEngine().getHistoryService();
-            HistoricProcessInstance historicProcessInstance =
-                historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+            def result = ProcessEngineFactory.runProcessWithVariables(processEngine, "gitChangeMonitor", variables)
             //TODO record update in record
         }
     }

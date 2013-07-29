@@ -1,20 +1,12 @@
 package node.builder
 
-import grails.converters.JSON
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.GitMonitorTask
 import org.activiti.engine.delegate.DelegateExecution
-import org.eclipse.jgit.api.CreateBranchCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
-import org.eclipse.jgit.lib.StoredConfig
-import org.eclipse.jgit.revwalk.RevCommit
-import org.eclipse.jgit.revwalk.RevCommitList
-import org.eclipse.jgit.transport.RemoteRefUpdate
-import org.junit.After
-import org.junit.AfterClass
 import org.junit.Before
 
 @TestMixin(ControllerUnitTestMixin)

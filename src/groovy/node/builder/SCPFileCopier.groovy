@@ -1,9 +1,8 @@
 package node.builder
 
 import org.apache.commons.io.FileUtils
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.taskdefs.optional.ssh.Scp;
-
+import org.apache.tools.ant.Project
+import org.apache.tools.ant.taskdefs.optional.ssh.Scp
 
 class SCPFileCopier {
 

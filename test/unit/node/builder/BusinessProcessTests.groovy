@@ -1,14 +1,8 @@
 package node.builder
 
-import org.activiti.engine.HistoryService
-import org.activiti.engine.ProcessEngine
-import org.activiti.engine.ProcessEngineConfiguration
-import org.activiti.engine.RepositoryService
-import org.activiti.engine.RuntimeService
-import org.activiti.engine.TaskService
+import org.activiti.engine.*
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.task.Task
-
 
 class BusinessProcessTests {
 

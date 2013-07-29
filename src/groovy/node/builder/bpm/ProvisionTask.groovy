@@ -1,14 +1,9 @@
 package node.builder.bpm
 
 import grails.converters.JSON
-import node.builder.Deployment
-import node.builder.Image
-import node.builder.Instance
-import node.builder.Manifest
-import node.builder.OpenStackConnection
-import node.builder.Utilities
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.JavaDelegate;
+import node.builder.*
+import org.activiti.engine.delegate.DelegateExecution
+import org.activiti.engine.delegate.JavaDelegate
 
 public class ProvisionTask implements JavaDelegate{
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -21,7 +16,14 @@ public class ProvisionTask implements JavaDelegate{
                 delegateExecution.setVariable("error", [error: [message: "Instance ${instanceName} already exists please update to continue"]])
                 return
             }
-            def instanceData =  OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
+            def instanceData
+            try{
+                instanceData = OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
+            }catch(e){
+                println(e.message)
+                e.printStackTrace()
+                throw e
+            }
             def server = instanceData.server
             if(server != null){
                 def instanceDomain = new Instance(

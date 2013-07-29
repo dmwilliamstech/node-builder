@@ -1,32 +1,12 @@
-import grails.converters.JSON
-import node.builder.FlavorService
-import node.builder.Image
-import node.builder.ImageService
-import node.builder.InputFileChangeListener
-import node.builder.Instance
-import node.builder.InstanceService
-import node.builder.ManifestService
-import node.builder.Master
-import node.builder.Node
-import node.builder.Manifest
-import node.builder.OpenStackConnection
-import node.builder.Repository
-import node.builder.SecRole
-import node.builder.SecUser
-import node.builder.SecUserSecRole
-import node.builder.Utilities
+import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
-import org.activiti.engine.HistoryService
-import org.activiti.engine.ProcessEngineConfiguration
+import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
-import org.activiti.engine.RuntimeService
-import org.activiti.engine.history.HistoricProcessInstance
-import org.activiti.engine.runtime.Execution
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 class BootStrap {
     def grailsApplication
-    def springSecurityService
+
 
     InstanceService instanceService
     ImageService imageService
@@ -35,6 +15,7 @@ class BootStrap {
     def init = { servletContext ->
         loadConfig()
         loadSecurity()
+        loadProcessDefinitions()
 
 
         if(Node.count.is(0)){
@@ -124,6 +105,23 @@ class BootStrap {
         }catch (e){
             log.warn("Failed to load config file - " + e.getMessage())
             e.printStackTrace()
+        }
+    }
+
+    def loadProcessDefinitions(){
+        ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine("loaded")
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        [
+            "resources/monitor_git.bpmn20.xml",
+            "resources/deprovision_instance.bpmn20.xml",
+            "resources/provision_instance.bpmn20.xml"
+        ].each{ resourceLocation ->
+            org.activiti.engine.repository.Deployment deployment = repositoryService.createDeployment()
+                .addClasspathResource(resourceLocation)
+                .deploy();
+
+            log.info("Loaded process definition ${resourceLocation} with id (${deployment.id})")
         }
     }
 

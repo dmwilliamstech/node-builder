@@ -1,7 +1,6 @@
 package node.builder
 
 import grails.converters.JSON
-import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**

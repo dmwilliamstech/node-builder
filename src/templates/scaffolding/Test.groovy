@@ -1,7 +1,8 @@
 <%=packageName ? "package ${packageName}\n\n" : ''%>
 
-import org.junit.*
-import grails.test.mixin.*
+
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
 /**
  * ${className}ControllerTests

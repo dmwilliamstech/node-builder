@@ -1,15 +1,11 @@
 package node.builder.bpm
 
 import grails.converters.JSON
-import groovy.text.GStringTemplateEngine
 import groovy.text.SimpleTemplateEngine
 import node.builder.SCPFileCopier
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.apache.commons.io.IOUtils
-import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
-import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine
-
 
 class DeployTask implements JavaDelegate{
 

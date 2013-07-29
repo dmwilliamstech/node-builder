@@ -1,11 +1,5 @@
 package node.builder
 
-import org.h2.jdbc.JdbcSQLException
-import org.hibernate.exception.GenericJDBCException
-import org.quartz.core.QuartzScheduler
-
-
-
 class UpdateFromOpenStackJob {
     ImageService imageService
     InstanceService instanceService

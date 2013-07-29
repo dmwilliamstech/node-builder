@@ -1,15 +1,7 @@
 package node.builder
 
-import grails.converters.JSON
 import node.builder.bpm.ProcessEngineFactory
-import org.activiti.engine.HistoryService
-import org.activiti.engine.ProcessEngine
-import org.activiti.engine.ProcessEngineConfiguration
-import org.activiti.engine.RepositoryService
-import org.activiti.engine.RuntimeService
-import org.activiti.engine.history.HistoricProcessInstance
-import org.activiti.engine.runtime.Execution
-import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
+
 
 /**
  * ManifestService
@@ -17,6 +9,7 @@ import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
  */
 class ManifestService {
     def groovyPagesTemplateEngine
+    def instanceService
 
     static utilities = new Utilities()
 
@@ -24,39 +17,12 @@ class ManifestService {
 
     def deployToMasterAndProvision(manifestInstance, masterInstance){
         try{
-
-
-            // Get Activiti services
-            RepositoryService repositoryService = ProcessEngineFactory.defaultProcessEngine().getRepositoryService();
-            RuntimeService runtimeService = ProcessEngineFactory.defaultProcessEngine().getRuntimeService();
-
-            // Deploy the process definition
-            repositoryService.createDeployment()
-                    .addClasspathResource("resources/provision_instance.bpmn20.xml")
-                    .deploy();
-
             // Start a process instance
             def variables = new HashMap();
             def utilities = new Utilities();
             variables.put("manifest", utilities.serializeDomain(manifestInstance))
             variables.put("master", utilities.serializeDomain(masterInstance))
-            def processInstance = runtimeService.startProcessInstanceByKey("provisionInstance", variables);
-
-            // verify that the process is actually finished
-
-            def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
-
-            Execution execution = runtimeService.createExecutionQuery()
-                    .processInstanceId(processInstance.getId())
-                    .activityId("receiveTask")
-                    .singleResult();
-            runtimeService.signal(execution.getId());
-
-            HistoryService historyService = ProcessEngineFactory.defaultProcessEngine().getHistoryService();
-            HistoricProcessInstance historicProcessInstance =
-                historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
-
-            return result
+            return ProcessEngineFactory.runProcessWithVariables(ProcessEngineFactory.defaultProcessEngine("provision"), "provisionInstance", variables)
         }catch (e){
             return [error: [message: e.getMessage()]]
         }
@@ -135,44 +101,26 @@ class ManifestService {
 
     def deprovisionAndUndeployFromMaster(Manifest manifest, Master master, Deployment deployment) {
         try{
-
-
-            // Get Activiti services
-            RepositoryService repositoryService = ProcessEngineFactory.defaultProcessEngine().getRepositoryService();
-            RuntimeService runtimeService = ProcessEngineFactory.defaultProcessEngine().getRuntimeService();
-
-            // Deploy the process definition
-            repositoryService.createDeployment()
-                    .addClasspathResource("resources/deprovision_instance.bpmn20.xml")
-                    .deploy();
-
             // Start a process instance
             def variables = new HashMap();
             def utilities = new Utilities();
+
             variables.put("manifest", utilities.serializeDomain(manifest))
-
             variables.put("master", utilities.serializeDomain(master))
-
             variables.put("deployment", utilities.serializeDomain(deployment))
-            def processInstance = runtimeService.startProcessInstanceByKey("deprovisionInstance", variables);
 
-            // verify that the process is actually finished
+            def result = ProcessEngineFactory.runProcessWithVariables(ProcessEngineFactory.defaultProcessEngine("deprovision"), "deprovisionInstance", variables)
 
-            def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
 
-            Execution execution = runtimeService.createExecutionQuery()
-                    .processInstanceId(processInstance.getId())
-                    .activityId("receiveTask")
-                    .singleResult();
-            runtimeService.signal(execution.getId());
-
-            HistoryService historyService = ProcessEngineFactory.defaultProcessEngine().getHistoryService();
-            HistoricProcessInstance historicProcessInstance =
-                historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
             manifest.removeFromDeployments(deployment)
-            deployment.delete()
+            if(!result.error){
+                deployment.instances.each{instance -> instance.delete()}
+                deployment.delete()
+            }
+
             return result
         }catch (e){
+            e.printStackTrace()
             return [error: [message: e.getMessage()]]
         }
     }

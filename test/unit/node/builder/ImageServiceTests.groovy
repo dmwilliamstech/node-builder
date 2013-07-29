@@ -1,11 +1,7 @@
 package node.builder
 
-
-
-import grails.test.mixin.*
-import org.junit.*
-import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.Resource
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions

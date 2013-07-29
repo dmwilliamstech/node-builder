@@ -1,7 +1,4 @@
 package node.builder
-
-import grails.converters.JSON
-
 /**
  * FlavorService
  * A service class encapsulates the core business logic of a Grails application

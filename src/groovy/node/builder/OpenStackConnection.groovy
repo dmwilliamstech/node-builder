@@ -1,6 +1,6 @@
 package node.builder
 
-
+import grails.converters.JSON
 import groovy.transform.Synchronized
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
@@ -106,6 +106,11 @@ class OpenStackConnection {
             resp = e.getResponse()
             if(resp.getStatus() == 413){
                 def error = [error: [message: resp.data.overLimit.message += " ${instanceName}"]]
+
+                log.error("Instance Launch failed ${error.error.message}")
+                return error
+            }else if(resp.getStatus() >= 400){
+                def error = [error: [message: resp.data.toString()]]
 
                 log.error("Instance Launch failed ${error.error.message}")
                 return error
