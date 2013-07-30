@@ -9,7 +9,7 @@ import grails.test.mixin.TestFor
 class RepositoryTests {
 
     void testCreate() {
-        def repo = new Repository(name: "Some Repo", localPath: "/path", remotePath:"https://repo")
+        def repo = new Repository(name: "Some Repo", localPath: "/path", remotePath:"https://repo", workflowKey: "someWorkflow")
         repo.save()
         assert !repo.hasErrors()
 
@@ -17,5 +17,7 @@ class RepositoryTests {
         assert first.name == "Some Repo"
         assert first.localPath == "/path"
         assert first.remotePath == "https://repo"
+        assert first.workflowKey == "someWorkflow"
+
     }
 }

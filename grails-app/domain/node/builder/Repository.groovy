@@ -12,6 +12,7 @@ class Repository {
 	String name
     String localPath
     String remotePath
+    String workflowKey
 
 	/* Automatic timestamping of GORM */
 	Date	dateCreated

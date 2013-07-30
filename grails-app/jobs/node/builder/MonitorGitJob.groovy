@@ -42,7 +42,7 @@ class MonitorGitJob {
                     variables.put("remotePath", repo.remotePath)
                     variables.put("localPath", repo.localPath)
 
-                    def result = ProcessEngineFactory.runProcessWithVariables(processEngine, "gitChangeMonitor", variables)
+                    def result = ProcessEngineFactory.runProcessWithVariables(processEngine, repo.workflowKey, variables)
 
                     log.info("Finished monitoring for repository, ${(result.data.repositoryDidChange? "change":"no change")} detected")
                 }}))

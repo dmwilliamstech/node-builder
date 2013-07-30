@@ -100,6 +100,7 @@ class BootStrap {
                 def repoInstance = Repository.findByName(repoData.name) ?: new Repository(name: repoData.name)
                 repoInstance.localPath = repoData.localPath
                 repoInstance.remotePath = repoData.remotePath
+                repoInstance.workflowKey = repoData.workflowKey
                 repoInstance.save()
             }
         }catch (e){
