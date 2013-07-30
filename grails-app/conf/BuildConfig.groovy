@@ -58,6 +58,7 @@ grails.project.dependency.resolution = {
         compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
         compile 'org.activiti:activiti-engine:5.13'
         compile 'org.eclipse.jgit:org.eclipse.jgit:3.0.0.201306101825-r'
+        compile 'com.offbytwo.jenkins:jenkins-client:0.1.5'
 
     }
 
