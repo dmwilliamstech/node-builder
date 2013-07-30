@@ -11,8 +11,11 @@ class GitMonitorTask implements JavaDelegate{
 
     void execute(DelegateExecution delegateExecution) throws Exception {
         //check dir exists
+
         def remotePath = delegateExecution.getVariable("remotePath")
         def localPath = delegateExecution.getVariable("localPath")
+        def result = new ProcessResult()
+        result.data = [:]
 
         def localCopy = new File(localPath)
         if(!localCopy.exists()){
@@ -21,7 +24,8 @@ class GitMonitorTask implements JavaDelegate{
                     .setDirectory(localCopy)
                     .call();
             assert new File(localPath).exists()
-            delegateExecution.setVariable("repositoryDidChange", false)
+            result.data.repositoryDidChange = false
+            delegateExecution.setVariable("result", result)
             return
         }
         def localRepo = new FileRepository(localPath + "/.git");
@@ -30,36 +34,36 @@ class GitMonitorTask implements JavaDelegate{
         def pullResult = git.pull()
                             .call()
 
-        def results = [:]
-        results.successful = pullResult.successful
-
         def fetchResult = pullResult.fetchResult
-//        results.advertisedRefs = fetchResult.advertisedRefs
-//        results.trackingRefUpdates = fetchResult.trackingRefUpdates
-        results.messages = fetchResult.messages
-        results.uri = fetchResult.getURI()
+//        result.data.advertisedRefs = fetchResult.advertisedRefs
+//        result.data.trackingRefUpdates = fetchResult.trackingRefUpdates
+        result.message = fetchResult.messages.toString()
+        result.data.uri = fetchResult.getURI()
 
         def mergeResult = pullResult.mergeResult
         if(mergeResult){
-            results.mergeBase = mergeResult.base
-            results.mergeCheckoutConflicts = mergeResult.checkoutConflicts
-            results.mergeConflicts = mergeResult.conflicts
-            results.mergeFailingPaths = mergeResult.failingPaths
-            results.mergedCommits = mergeResult.mergedCommits
-            results.mergeStatus = mergeResult.mergeStatus
-            results.mergeNewHead = mergeResult.newHead
+            result.data.mergeBase = mergeResult.base
+            result.data.mergeCheckoutConflicts = mergeResult.checkoutConflicts
+            result.data.mergeConflicts = mergeResult.conflicts
+            result.data.mergeFailingPaths = mergeResult.failingPaths
+            result.data.mergedCommits = mergeResult.mergedCommits
+            result.data.mergeStatus = mergeResult.mergeStatus
+            result.data.mergeNewHead = mergeResult.newHead
         }
 
         def rebaseResult = pullResult.rebaseResult
         if(rebaseResult){
-            results.rebaseConflicts = rebaseResult.conflicts
-            results.rebaseCurrentCommit = rebaseResult.currentCommit
-            results.rebaseFailingPaths = rebaseResult.failingPaths
-            results.rebaseStatus = rebaseResult.status
+            result.data.rebaseConflicts = rebaseResult.conflicts
+            result.data.rebaseCurrentCommit = rebaseResult.currentCommit
+            result.data.rebaseFailingPaths = rebaseResult.failingPaths
+            result.data.rebaseStatus = rebaseResult.status
         }
-        delegateExecution.setVariable("repositoryDidChange", !fetchResult.trackingRefUpdates.empty)
-        delegateExecution.setVariable("repositoryChangeResults", results)
+
+        result.data.repositoryDidChange = !fetchResult.trackingRefUpdates.empty
+
+        delegateExecution.setVariable("result", result)
+
     }
 
-    def serialize
+
 }

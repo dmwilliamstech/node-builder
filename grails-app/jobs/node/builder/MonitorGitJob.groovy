@@ -1,17 +1,25 @@
 package node.builder
 
 import node.builder.bpm.ProcessEngineFactory
-import org.activiti.engine.HistoryService
-import org.activiti.engine.RepositoryService
-import org.activiti.engine.RuntimeService
-import org.activiti.engine.history.HistoricProcessInstance
-import org.activiti.engine.runtime.Execution
+import node.builder.bpm.ProcessResult
+
+
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 
 
 class MonitorGitJob {
     static triggers = {
-      simple repeatInterval: (300 * 1000)l // execute job once in 5 minutes
+      simple repeatInterval: (30 * 1000)l // execute job once in 5 minutes
+    }
+
+    static def pool
+    static Map futures = [:]
+
+    def MonitorGitJob(){
+        if(pool == null)
+            pool = Executors.newCachedThreadPool()
     }
 
     def execute() {
@@ -24,13 +32,21 @@ class MonitorGitJob {
         }
 
         repos.each{ Repository repo ->
-            log.info("Running git monitor for repository ${repo.name}")
-            def processEngine = ProcessEngineFactory.defaultProcessEngine(repo.name)
-            def variables = new HashMap();
-            variables.put("remotePath", repo.remotePath)
-            variables.put("localPath", repo.localPath)
-            def result = ProcessEngineFactory.runProcessWithVariables(processEngine, "gitChangeMonitor", variables)
-            //TODO record update in record
+            if(futures.get(repo.name) == null || futures.get(repo.name).isDone()){
+            futures.put(repo.name, pool.submit(new Callable<ProcessResult>() {
+                public ProcessResult call() {
+                    log.info("Running git monitor for repository ${repo.name}")
+                    def processEngine = ProcessEngineFactory.defaultProcessEngine(repo.name)
+
+                    def variables = new HashMap();
+                    variables.put("remotePath", repo.remotePath)
+                    variables.put("localPath", repo.localPath)
+
+                    def result = ProcessEngineFactory.runProcessWithVariables(processEngine, "gitChangeMonitor", variables)
+
+                    log.info("Finished monitoring for repository, ${(result.data.repositoryDidChange? "change":"no change")} detected")
+                }}))
+            }
         }
     }
 }

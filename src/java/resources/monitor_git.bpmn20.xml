@@ -16,12 +16,12 @@
 
         <sequenceFlow id='flow2' sourceRef='gitMonitor' targetRef='changeTask' >
             <conditionExpression xsi:type="tFormalExpression">
-                <![CDATA[${repositoryDidChange}]]>
+                <![CDATA[${result.data.repositoryDidChange}]]>
             </conditionExpression>
         </sequenceFlow>
         <sequenceFlow id='flow3' sourceRef='gitMonitor' targetRef='noChangeTask' >
             <conditionExpression xsi:type="tFormalExpression">
-                <![CDATA[${!repositoryDidChange}]]>
+                <![CDATA[${!result.data.repositoryDidChange}]]>
             </conditionExpression>
         </sequenceFlow>
 

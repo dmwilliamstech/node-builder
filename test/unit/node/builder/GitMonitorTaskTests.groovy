@@ -87,7 +87,7 @@ class GitMonitorTaskTests {
         task.execute(mockDelegateExecutionWithVariables(variables,1))
 
         assert (new File(localPath)).exists()
-        assert !variables.repositoryDidChange
+        assert !variables.result.data.repositoryDidChange
     }
 
     def testDetectChange(){
@@ -97,7 +97,7 @@ class GitMonitorTaskTests {
         def variables = [localPath: localPath, remotePath: remotePath]
         task.execute(mockDelegateExecutionWithVariables(variables,2))
 
-        assert variables.repositoryDidChange
+        assert variables.result.data.repositoryDidChange
     }
 
     def testDetectNoChange(){
@@ -105,7 +105,7 @@ class GitMonitorTaskTests {
         setupLocalRepo(new File(localPath))
         def variables = [localPath: localPath, remotePath: remotePath]
         task.execute(mockDelegateExecutionWithVariables(variables,2))
-        assert !variables.repositoryDidChange
+        assert !variables.result.data.repositoryDidChange
     }
 
 }
