@@ -3,10 +3,11 @@ package node.builder.bpm
 class ProcessResult extends HashMap{
 
     def ProcessResult(){
+        init("", null, null)
     }
 
     def ProcessResult(String message){
-        init(message)
+        init(message, null, null)
     }
 
     def ProcessResult(String message, ProcessResultError error){
@@ -22,22 +23,20 @@ class ProcessResult extends HashMap{
     }
 
     private def init(message, data, error){
-        this.message = message
-        this.data = data
-        this.error = error
+        this.message = message ?: ""
+        this.data = data ?: [:]
+        this.error = error ?: new ProcessResultError(null, null)
+        log.info "created ${this.data} ${this.error} ${this.message}"
     }
 
     public class ProcessResultError extends HashMap{
 
         def ProcessResultError(message, data){
-            this.message = message
-            this.data = data
+            this.message = message ?: ""
+            this.data = data ?: [:]
         }
 
     }
-
-
-
 
     public Boolean wasSuccessfull(){
         return error == null
