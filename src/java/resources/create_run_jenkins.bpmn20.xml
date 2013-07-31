@@ -1,0 +1,32 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <process id="createAndRunJenkinsJob" name="Derovision Instances in openstack">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='createTask' />
+
+        <serviceTask id="createTask"
+                     name="create a job"
+                     activiti:class="node.builder.bpm.CreateJenkinsJobTask" />
+
+        <sequenceFlow id='flow2' sourceRef='createTask' targetRef='runTask' />
+
+        <serviceTask id="runTask"
+                     name="run a job"
+                     activiti:class="node.builder.bpm.RunJenkinsJobTask" />
+
+        <sequenceFlow id='flow3' sourceRef='runTask' targetRef='receiveTask' />
+
+        <receiveTask id="receiveTask" />
+
+        <sequenceFlow id='flow4' sourceRef='receiveTask' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>

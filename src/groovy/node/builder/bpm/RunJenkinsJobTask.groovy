@@ -3,11 +3,12 @@ package node.builder.bpm
 import com.offbytwo.jenkins.JenkinsServer
 import com.offbytwo.jenkins.model.Job
 import com.offbytwo.jenkins.model.JobWithDetails
+import grails.converters.JSON
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
 
-class RunJenkinsJobTask implements JavaDelegate{
+class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
     void execute(DelegateExecution delegateExecution) throws Exception {
         log.info "Starting Jenkins build"
         ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
@@ -20,13 +21,7 @@ class RunJenkinsJobTask implements JavaDelegate{
         //TODO handle properly
         if(jobName == null)
             return
-        Job job
-        jenkins.jobs.each { name, j ->
-            if(name == jobName){
-                job = j
-            }
-        }
-
+        Job job = jenkins.jobs[jobName]
         if(job == null)
             throw new Exception("Unable to find Jenkins job named ${jobName}")
 
@@ -43,11 +38,7 @@ class RunJenkinsJobTask implements JavaDelegate{
             details = job.details()
         }
         def build = details.builds.last().details()
-        result.data.jenkinsBuildResult = build.result
-        result.data.jenkinsBuildDuration = build.duration
-        result.data.jenkinsBuildId = build.id
-        result.data.jenkinsBuildName = build.fullDisplayName
-        result.data.jenkinsBuildParameters = build.parameters
+        result.data.jenkinsBuild = getMapFromBuild(build)
 
         delegateExecution.setVariable("result", result)
 

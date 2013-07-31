@@ -116,7 +116,8 @@ class BootStrap {
         [
             "resources/monitor_git.bpmn20.xml",
             "resources/deprovision_instance.bpmn20.xml",
-            "resources/provision_instance.bpmn20.xml"
+            "resources/provision_instance.bpmn20.xml",
+            "resources/create_run_jenkins.bpmn20.xml"
         ].each{ resourceLocation ->
             org.activiti.engine.repository.Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(resourceLocation)
@@ -125,5 +126,25 @@ class BootStrap {
             log.info("Loaded process definition ${resourceLocation} with id (${deployment.id})")
         }
     }
-
+    def getJobXml(){
+        return """\
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+</project>
+"""
+    }
 }

@@ -8,6 +8,7 @@ import org.junit.Test
 
 
 class CreateJenkinsJobTaskTests {
+    final shouldFail = new GroovyTestCase().&shouldFail
 
     def mockDelegateExecutionWithVariables(variables, variablecount, shouldSet){
         def delegateExecution = new MockFor(DelegateExecution.class)
@@ -16,11 +17,11 @@ class CreateJenkinsJobTaskTests {
             delegateExecution.demand.getVariable(){variable -> variables[variable]}
         }
 
-        if(shouldSet){
-            (0..variablecount).each {
-                delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-            }
+
+        (0..shouldSet).each {
+            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
         }
+
         return delegateExecution.proxyInstance()
     }
 
@@ -31,17 +32,22 @@ class CreateJenkinsJobTaskTests {
     @Ignore("Requires Jenkins")
     @Test
     void connectToJenkins(){
-        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin"], 4, false)
+        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin"], 4, 0)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
-        createJenkinsJobTask.execute(delegateExecution)
+        shouldFail(Exception){
+            createJenkinsJobTask.execute(delegateExecution)
+        }
     }
 
     @Ignore("Requires Jenkins")
     @Test
     void createJobInJenkins(){
-        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin", jenkinsJobName:"test-job-" + UUID.randomUUID().toString(), jenkinsJobXml:getJobXml()], 5, false)
+        def name = "test-job-" + UUID.randomUUID().toString()
+        def variables = [jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin", jenkinsJobName:name, jenkinsJobXml:getJobXml()]
+        def delegateExecution = mockDelegateExecutionWithVariables(variables , 5, 1)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         createJenkinsJobTask.execute(delegateExecution)
+        assert variables.result.data.jenkinsJob.displayName == name
     }
 
     def getJobXml(){
