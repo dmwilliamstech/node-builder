@@ -26,6 +26,9 @@
                                     <li class="${request.getServletPath().contains('image') ? 'active' : '' }"><a href="${request.contextPath}/image">Images</a></li>
                                     <li class="${request.getServletPath().contains('instance') ? 'active' : '' }"><a href="${request.contextPath}/instance">Instances</a></li>
                                 </ul>
+                                <ul class="nav pull-right">
+                                    <li class="${request.getServletPath().contains('about') ? 'active' : '' }"><a href="${request.contextPath}/about" >About</a></li>
+                                </ul>
                             </div><!-- /.nav-collapse -->
                         </div>
                     </div><!-- /navbar-inner -->

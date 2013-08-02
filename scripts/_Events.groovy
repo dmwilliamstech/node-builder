@@ -19,5 +19,22 @@ eventCleanStart = {
     }
 
     println "| Deleted generated puppet files"
-    System.exit(0)
+
+    ant.delete{
+        fileset(dir: System.properties['base.dir'], includes: "grails-app/conf/dependency-report.xml")
+    }
+    println "| Deleted dependency report"
+
+    ant.delete{
+        fileset(dir: System.properties['base.dir'], includes: "grails-app/conf/reference.txt")
+    }
+    println "| Deleted reference file"
+}
+
+eventCompileStart = { kind ->
+    def reference = "git rev-parse HEAD".execute().text
+    new File("grails-app/conf/reference.txt").write(reference)
+    println "| Current git reference is ${reference}"
+    "grails refresh-dependencies grails-app/conf/dependency-report.xml".execute()
+    println "| Created dependency report"
 }

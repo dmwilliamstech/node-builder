@@ -1,3 +1,5 @@
+grails-app/conf/dependency-report.xml
+grails-app/conf/reference.txt
 /*.pp
 out/
 .DS_Store

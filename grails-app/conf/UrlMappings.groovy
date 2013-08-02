@@ -6,7 +6,6 @@ class UrlMappings {
 		 * Pages without controller 
 		 */
 //		"/"				(view:"/index")
-		"/about"		(view:"/siteinfo/about")
 		"/blog"			(view:"/siteinfo/blog")
 		"/systeminfo"	(view:"/siteinfo/systeminfo")
 		"/contact"		(view:"/siteinfo/contact")
@@ -60,6 +59,10 @@ class UrlMappings {
             controller	= 'manifest'
             action		= { 'deploy' }
             view		= { 'deploy' }
+        }
+        "/api/v1/dependency-report" {
+            controller = 'dependencyReport'
+            action		= { 'index' }
         }
 		"/$controller/$action?/$id?"{
 			constraints {
