@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
         mavenRepo "http://download.java.net/maven/2/"
         mavenRepo "http://repository.jboss.com/maven2/"
         mavenRepo "https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/"
+        mavenRepo "https://m2proxy.atlassian.com/repository/public"
     }
 
     dependencies {
@@ -59,6 +60,8 @@ grails.project.dependency.resolution = {
         compile 'org.activiti:activiti-engine:5.13'
         compile 'org.eclipse.jgit:org.eclipse.jgit:3.0.0.201306101825-r'
         compile 'com.offbytwo.jenkins:jenkins-client:0.1.5'
+        compile 'com.atlassian.jira:jira-rest-java-client-core:2.0.0-m25'
+        compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
 
     }
 
