@@ -1,0 +1,52 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <process id="setVariables" name="Do something and set a variable">
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='createVariable' />
+
+        <scriptTask id="createVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                assert execution.getVariable("myName") == "Some Name"
+                def myName = "Test Name"
+                execution.setVariable("myName",myName)
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow2' sourceRef='createVariable' targetRef='updateVariable' />
+
+        <scriptTask id="updateVariable"
+                    name="Update A Variable"
+                    scriptFormat="groovy" >
+            <script>
+                def newName = "New Name"
+                execution.setVariable("myName",newName)
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow3' sourceRef='updateVariable' targetRef='readVariable' />
+
+        <scriptTask id="readVariable"
+                    name="Read and verify A Variable"
+                    scriptFormat="groovy" >
+            <script>
+                assert execution.getVariable("myName") == "New Name"
+                execution.setVariable("result", [myName: "New Name"])
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow4' sourceRef='readVariable' targetRef='receiveTask' />
+
+        <receiveTask id="receiveTask" />
+
+        <sequenceFlow id='flow5' sourceRef='receiveTask' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>

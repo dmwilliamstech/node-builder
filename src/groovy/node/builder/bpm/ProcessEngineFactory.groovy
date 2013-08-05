@@ -34,6 +34,18 @@ class ProcessEngineFactory {
         }
     }
 
+    public static Deployment deployProcessDefinitionFromUrlWithProcessEngine(String url, String engineName, String deploymentName = null){
+        ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine(engineName)
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        Deployment deployment = repositoryService.createDeployment()
+                .addClasspathResource(url)
+                .name(deploymentName)
+                .deploy();
+        assert deployment != null
+
+        return deployment
+    }
 
     public static def runProcessWithVariables(ProcessEngine processEngine, String processKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();

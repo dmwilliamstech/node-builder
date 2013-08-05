@@ -1,8 +1,11 @@
 package node.builder
 
+import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.*
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.task.Task
+import org.activiti.engine.repository.Deployment
+
 
 class BusinessProcessTests {
 
@@ -67,4 +70,14 @@ class BusinessProcessTests {
         System.out.println("Process instance end time: " + historicProcessInstance.getEndTime());
     }
 
+
+
+    void testSetVariableInBpmn(){
+        Deployment deployment = ProcessEngineFactory.deployProcessDefinitionFromUrlWithProcessEngine("resources/setVariables.bpmn20.xml", "test", "test")
+        assert deployment.name == "test"
+
+        def processEngine = ProcessEngineFactory.defaultProcessEngine("test")
+        def result = ProcessEngineFactory.runProcessWithVariables(processEngine, "setVariables", [myName: "Some Name"])
+        assert result.myName == "New Name"
+    }
 }
