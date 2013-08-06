@@ -29,21 +29,21 @@ class CreateJenkinsJobTaskTests {
         assert true
     }
 
-    @Ignore("Requires Jenkins")
+
     @Test
     void connectToJenkins(){
-        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin"], 4, 0)
+        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99"], 4, 0)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         shouldFail(Exception){
             createJenkinsJobTask.execute(delegateExecution)
         }
     }
 
-    @Ignore("Requires Jenkins")
+
     @Test
     void createJobInJenkins(){
         def name = "test-job-" + UUID.randomUUID().toString()
-        def variables = [jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin", jenkinsJobName:name, jenkinsJobXml:getJobXml()]
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:name, jenkinsJobXml:getJobXml()]
         def delegateExecution = mockDelegateExecutionWithVariables(variables , 5, 1)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         createJenkinsJobTask.execute(delegateExecution)

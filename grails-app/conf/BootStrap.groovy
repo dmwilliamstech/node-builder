@@ -117,7 +117,8 @@ class BootStrap {
             "resources/monitor_git.bpmn20.xml",
             "resources/deprovision_instance.bpmn20.xml",
             "resources/provision_instance.bpmn20.xml",
-            "resources/create_run_jenkins.bpmn20.xml"
+            "resources/create_run_jenkins.bpmn20.xml",
+            "resources/monitor_git_create_job_create_issue.bpmn20.xml"
         ].each{ resourceLocation ->
             org.activiti.engine.repository.Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(resourceLocation)

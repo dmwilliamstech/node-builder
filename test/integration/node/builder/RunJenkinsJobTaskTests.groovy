@@ -4,9 +4,7 @@ import com.offbytwo.jenkins.model.BuildResult
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.RunJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
-import org.junit.Ignore
 import org.junit.Test
-
 
 class RunJenkinsJobTaskTests {
 
@@ -29,21 +27,21 @@ class RunJenkinsJobTaskTests {
         assert true
     }
 
-    @Ignore("Requires Jenkins")
+
     @Test
     void runTestJob(){
         def jenkinsTask = new RunJenkinsJobTask()
-        def variables = [jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin", jenkinsJobName:"test"]
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)
         jenkinsTask.execute(delegateExecution)
         assert variables.result.data.jenkinsBuild.result == BuildResult.SUCCESS
     }
 
-    @Ignore("Requires Jenkins")
+
     @Test
     void runFailJob(){
         def jenkinsTask = new RunJenkinsJobTask()
-        def variables = [jenkinsUrl: "http://localhost:9090/", jenkinsUser:"admin", jenkinsPassword:"admin", jenkinsJobName:"fail"]
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"fail"]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)
         jenkinsTask.execute(delegateExecution)
         assert variables.result.data.jenkinsBuild.result == BuildResult.FAILURE

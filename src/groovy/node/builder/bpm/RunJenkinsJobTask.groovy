@@ -12,7 +12,8 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
     void execute(DelegateExecution delegateExecution) throws Exception {
         log.info "Starting Jenkins build"
         ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
-        JenkinsServer jenkins = new JenkinsServer(new URI(delegateExecution.getVariable("jenkinsUrl")),
+        def jenkinsUrl = delegateExecution.getVariable("jenkinsUrl")
+        JenkinsServer jenkins = new JenkinsServer(new URI(jenkinsUrl),
                 delegateExecution.getVariable("jenkinsUser"), delegateExecution.getVariable("jenkinsPassword"))
         if(jenkins == null)
             throw new Exception("Unable to Connect to Jenkins server")
@@ -39,9 +40,11 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
         }
         def build = details.builds.last().details()
         result.data.jenkinsBuild = getMapFromBuild(build)
+        result.data.jenkinsBuild.url = "${jenkinsUrl}/job/${jobName}/${build.number}"
+        result.data.jenkinsBuild.consoleUrl = "${jenkinsUrl}/job/${jobName}/${build.number}/console"
 
         delegateExecution.setVariable("result", result)
 
-        log.info "Building Job ${jobName} is finished"
+        log.info "Building Job ${jobName} finished with result ${result.data.jenkinsBuild.result}"
     }
 }

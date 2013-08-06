@@ -3,7 +3,23 @@ package node.builder.bpm
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.diff.DiffEntry
+import org.eclipse.jgit.diff.DiffFormatter
+import org.eclipse.jgit.diff.RawTextComparator
 import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.IndexDiff
+import org.eclipse.jgit.lib.ObjectId
+import org.eclipse.jgit.lib.ObjectReader
+import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.treewalk.AbstractTreeIterator
+import org.eclipse.jgit.treewalk.CanonicalTreeParser
+import org.eclipse.jgit.treewalk.FileTreeIterator
+import org.eclipse.jgit.treewalk.WorkingTreeIterator
+import org.eclipse.jgit.util.io.DisabledOutputStream
+
+import java.text.MessageFormat
 
 
 
@@ -28,8 +44,13 @@ class GitMonitorTask implements JavaDelegate{
             delegateExecution.setVariable("result", result)
             return
         }
+
         def localRepo = new FileRepository(localPath + "/.git");
         def git = new Git(localRepo)
+
+
+
+        result.data.diff = getDiffFromRemoteMaster(git)
 
         def pullResult = git.pull()
                             .call()
@@ -37,6 +58,7 @@ class GitMonitorTask implements JavaDelegate{
         def fetchResult = pullResult.fetchResult
 //        result.data.advertisedRefs = fetchResult.advertisedRefs
 //        result.data.trackingRefUpdates = fetchResult.trackingRefUpdates
+        result.data.reference = localRepo.resolve("HEAD").name
         result.message = fetchResult.messages.toString()
         result.data.uri = fetchResult.getURI()
 
@@ -59,11 +81,42 @@ class GitMonitorTask implements JavaDelegate{
             result.data.rebaseStatus = rebaseResult.status
         }
 
-        result.data.repositoryDidChange = !fetchResult.trackingRefUpdates.empty
+        result.data.repositoryDidChange = !result.data.diff.empty
 
         delegateExecution.setVariable("result", result)
-
     }
 
+
+    String getDiffFromRemoteMaster(Git git){
+        def fetchResult = git.fetch()
+                .call()
+
+        ObjectId headId = git.getRepository().resolve("origin/master")
+        ObjectId oldId = git.getRepository().resolve("master")
+            OutputStream out = new ByteArrayOutputStream()
+
+
+
+            List<DiffEntry> diffs= git.diff()
+                    .setNewTree(getTreeIterator(headId, git))
+                    .setOldTree(getTreeIterator(oldId, git))
+                    .setOutputStream(out)
+                    .call();
+
+
+        return out.toString()
+    }
+
+    private AbstractTreeIterator getTreeIterator(ObjectId id, Git git)
+    throws IOException {
+        final CanonicalTreeParser p = new CanonicalTreeParser();
+        final ObjectReader or = git.repository.newObjectReader();
+        try {
+            p.reset(or, new RevWalk(git.repository).parseTree(id));
+            return p;
+        } finally {
+            or.release();
+        }
+    }
 
 }
