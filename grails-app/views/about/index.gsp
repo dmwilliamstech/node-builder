@@ -12,8 +12,10 @@
 <body>
 
 <h3 id='application-name'>${name}</h3>
-<h4 id='application-version' class="text-info">Version ${version}</h4>
-<h4 id='application-reference' class="text-info">Reference ${reference}</h4>
+<h4 id='application-version' >Version <div class="text-info">${version}</div></h4>
+<h4 id='application-reference' >Reference <div class="text-info">${reference}</div></h4>
+<hr>
+<h4 id='metadata-dropfolder'>Drop Folder <div class="text-info">${dropFolder.location}</div></h4>
 <hr>
 <section id="list-dependency-build" class="first">
     <h4>Dependencies (Build)</h4>

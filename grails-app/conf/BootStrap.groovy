@@ -33,7 +33,7 @@ class BootStrap {
 
         def directoryWatcher = new DirectoryWatcher()
         directoryWatcher.addWatchDirectory(installDirectory, "json")
-        directoryWatcher.addListener(new InputFileChangeListener())
+        directoryWatcher.addListener(InputFileChangeListener.getDefaultListener(installDirectory))
         directoryWatcher.start()
 
 

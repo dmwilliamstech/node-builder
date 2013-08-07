@@ -8,7 +8,19 @@ import org.codehaus.groovy.grails.compiler.DirectoryWatcher
  */
 class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
 
-    def persistenceInterceptor
+    static InputFileChangeListener listener
+    File directory
+
+    static InputFileChangeListener getDefaultListener(File directory){
+        if(listener == null){
+            listener = new InputFileChangeListener(directory)
+        }
+        return listener
+    }
+
+    def InputFileChangeListener(File directory){
+        this.directory = directory
+    }
 
     void onChange(File file) {
         loadFile(file)
