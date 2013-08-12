@@ -33,7 +33,7 @@ grails.project.dependency.resolution = {
 
 
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
-        mavenRepo "https://tools.codice.org/artifacts/content/repositories/snapshots/"
+        mavenRepo "http://artifacts.codice.org/content/repositories/snapshots/"
         mavenRepo "http://snapshots.repository.codehaus.org"
         mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
