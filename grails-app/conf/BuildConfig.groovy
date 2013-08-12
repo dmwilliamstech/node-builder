@@ -33,6 +33,7 @@ grails.project.dependency.resolution = {
 
 
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
+        mavenRepo "https://tools.codice.org/artifacts/content/repositories/snapshots/"
         mavenRepo "http://snapshots.repository.codehaus.org"
         mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
@@ -59,7 +60,7 @@ grails.project.dependency.resolution = {
         compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
         compile 'org.activiti:activiti-engine:5.13'
         compile 'org.eclipse.jgit:org.eclipse.jgit:3.0.0.201306101825-r'
-        compile 'com.offbytwo.jenkins:jenkins-client:0.1.5'
+        compile 'com.offbytwo.jenkins:jenkins-client:0.1.6-SNAPSHOT'
         compile 'com.atlassian.jira:jira-rest-java-client-core:2.0.0-m25'
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
 

@@ -1,5 +1,6 @@
 package node.builder
 
+import com.offbytwo.jenkins.JenkinsServer
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
@@ -48,6 +49,24 @@ class CreateJenkinsJobTaskTests {
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         createJenkinsJobTask.execute(delegateExecution)
         assert variables.result.data.jenkinsJob.displayName == name
+    }
+
+    @Test
+    void verifyMasterComputer(){
+        JenkinsServer jenkins = new JenkinsServer(new URI("http://stackbox:9999/"),
+                "admin", "foobar99")
+        def computers = jenkins.computers
+        assert computers.size() > 0
+        assert computers.containsKey("master")
+    }
+
+    @Test
+    void verifyMasterLabel(){
+        JenkinsServer jenkins = new JenkinsServer(new URI("http://stackbox:9999/"),
+                "admin", "foobar99")
+        def label = jenkins.getLabel("master")
+        assert label.nodes.size() == 1
+        assert label.name == "master"
     }
 
     def getJobXml(){
