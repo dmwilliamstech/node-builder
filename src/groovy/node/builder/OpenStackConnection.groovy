@@ -6,7 +6,7 @@ import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 
 
-class OpenStackConnection {
+class OpenStackConnection extends Retryable {
 
     def hostname
     def username
@@ -17,6 +17,15 @@ class OpenStackConnection {
     def token
     def defaultFlavorId
     String adminUrl
+    def handler = {exception ->
+        log.warn "Failed to connect to OpenStack"
+        if(exception.getResponse().getStatus() == 401){
+            log.warn "Authentication failed, let's reconnect and try again"
+            this.disconnect()
+            this.connect()
+        }
+    }
+
 
     private static OpenStackConnection connection
 
@@ -59,6 +68,11 @@ class OpenStackConnection {
         }
     }
 
+    def disconnect(){
+        this.compute.shutdown()
+        this.compute = null
+    }
+
     def images(){
         return objects("images")
     }
@@ -75,8 +89,10 @@ class OpenStackConnection {
 
         def resp
         try {
-            compute.delete( path : "servers/${instanceId}",
+            retry(handler, groovyx.net.http.HttpResponseException, 1){
+                compute.delete( path : "servers/${instanceId}",
                     headers : ['X-Auth-Token' : token])
+            }
         } catch (groovyx.net.http.HttpResponseException e) {
             resp = e.getResponse()
             if(resp.getStatus() >= 400){
@@ -98,10 +114,12 @@ class OpenStackConnection {
 
         def resp
         try {
-            resp = compute.post( path : 'servers',
+            retry(handler, groovyx.net.http.HttpResponseException, 1){
+                resp = compute.post( path : 'servers',
                                  contentType : 'application/json',
                                  body :  [server: [flavorRef: (flavor ?: defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
                                  headers : ['X-Auth-Token' : token])
+            }
         } catch (groovyx.net.http.HttpResponseException e) {
             resp = e.getResponse()
             if(resp.getStatus() == 413){
@@ -131,15 +149,18 @@ class OpenStackConnection {
 
     @Synchronized
     private def objects(type){
-        if(this.compute == null)
-            this.connect()
+        return retry(handler, groovyx.net.http.HttpResponseException, 1){
 
-        def objects = []
+            if(this.compute == null)
+                this.connect()
 
-        def resp = compute.get( path : type + "/detail" ,
+            def objects = []
+
+            def resp = compute.get( path : type + "/detail" ,
                 headers : ['X-Auth-Token' : token] )
 
-        return resp.data.get(type)
+            return resp.data.get(type)
+        }
     }
 
 }
