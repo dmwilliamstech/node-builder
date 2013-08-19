@@ -1,8 +1,14 @@
+import grails.build.logging.GrailsConsole
+import grails.converters.JSON
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
+import org.codehaus.groovy.grails.io.support.ClassPathResource
+import org.codehaus.groovy.reflection.ReflectionUtils
+import org.fusesource.jansi.AnsiConsole
+import org.joda.time.DateTime
 
 class BootStrap {
     def grailsApplication
@@ -13,10 +19,18 @@ class BootStrap {
     FlavorService flavorService
 
     def init = { servletContext ->
+
+        org.apache.commons.logging.impl.SLF4JLog.metaClass.foo = { message ->
+            def clazz = ReflectionUtils.getCallingClass(3)
+            def className = clazz.getCanonicalName().find(/[\w]*\.[\w\$]*$/)
+            AnsiConsole.out.append("\r${DateTime.now().toString("yyyy-MM-dd hh:mm:ss,SSS")} [${Thread.currentThread().name}] FOO   ${className} ${message}")
+            AnsiConsole.out.flush()
+        }
+
         loadConfig()
         loadSecurity()
         loadProcessDefinitions()
-
+        addJenkinsAgentManifest()
 
         if(Node.count.is(0)){
             log.info "Creating default Node"
@@ -127,25 +141,20 @@ class BootStrap {
             log.info("Loaded process definition ${resourceLocation} with id (${deployment.id})")
         }
     }
-    def getJobXml(){
-        return """\
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
-  <buildWrappers/>
-</project>
-"""
+
+    def addJenkinsAgentManifest(){
+        def manifest = Manifest.findByName("jenkins-agent")
+        if(manifest == null){
+            manifest = new Manifest(name: "jenkins-agent")
+            def resource = new ClassPathResource("resources/jenkins-agent.json")
+            def json = resource.file.text
+
+            manifest.manifestAsJSON = json
+            manifest.description = "Manifest for creating a jenkins agent node"
+            manifest.manifest = JSON.parse(json)
+
+            manifest.save()
+        }
     }
+
 }

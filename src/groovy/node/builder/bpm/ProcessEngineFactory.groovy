@@ -50,12 +50,14 @@ class ProcessEngineFactory {
     public static def runProcessWithVariables(ProcessEngine processEngine, String processKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();
         def processInstance
-        synchronized($lock) {
+//        synchronized($lock) {
             // Start a process instance
-            processInstance = runtimeService.startProcessInstanceByKey(processKey, variables);
-        }
-        // verify that the process is actually finished
 
+            processInstance = runtimeService.startProcessInstanceByKey(processKey, variables);
+
+//        }
+        // verify that the process is actually finished
+                                                 print processInstance
         def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
 
         Execution execution = runtimeService.createExecutionQuery()

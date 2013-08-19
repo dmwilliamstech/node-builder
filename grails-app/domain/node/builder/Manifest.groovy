@@ -41,6 +41,9 @@ class Manifest {
 
     static transients = ['manifest']
 
+    static mapping = {
+        deployments lazy: false
+    }
     static constraints = {
         manifestAsJSON(maxSize: 20000)
         description(nullable: true)

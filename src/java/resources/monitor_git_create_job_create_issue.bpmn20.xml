@@ -8,7 +8,7 @@
 
         <startEvent id="theStart" />
 
-        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='gitMonitor' />
+        <sequenceFlow id='flow10' sourceRef='theStart' targetRef='gitMonitor' />
 
         <!-- git -->
 
@@ -16,12 +16,12 @@
                      name="Check a Git Repo For changes"
                      activiti:class="node.builder.bpm.GitMonitorTask" />
 
-        <sequenceFlow id='flow2' sourceRef='gitMonitor' targetRef='changeTask' >
+        <sequenceFlow id='flow20' sourceRef='gitMonitor' targetRef='changeTask' >
             <conditionExpression xsi:type="tFormalExpression">
                 <![CDATA[${result.data.repositoryDidChange}]]>
             </conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id='flow3' sourceRef='gitMonitor' targetRef='noChangeTask' >
+        <sequenceFlow id='flow30' sourceRef='gitMonitor' targetRef='noChangeTask' >
             <conditionExpression xsi:type="tFormalExpression">
                 <![CDATA[${!result.data.repositoryDidChange}]]>
             </conditionExpression>
@@ -45,8 +45,8 @@
             </script>
         </scriptTask>
 
-        <sequenceFlow id='flow4' sourceRef='changeTask' targetRef='createJobTask' />
-        <sequenceFlow id='flow5' sourceRef='noChangeTask' targetRef='receiveTask' />
+        <sequenceFlow id='flow40' sourceRef='changeTask' targetRef='createJobTask' />
+        <sequenceFlow id='flow50' sourceRef='noChangeTask' targetRef='receiveTask' />
 
         <!-- end git -->
         <!-- jenkins -->
@@ -55,20 +55,25 @@
                      name="create a job"
                      activiti:class="node.builder.bpm.CreateJenkinsJobTask" />
 
-        <sequenceFlow id='flow6' sourceRef='createJobTask' targetRef='runJobTask' />
+        <sequenceFlow id='flow55' sourceRef='createJobTask' targetRef='createSlaveTask' />
+
+        <serviceTask id="createSlaveTask"
+                     name="create a slave"
+                     activiti:class="node.builder.bpm.CreateJenkinsSlaveTask" />
+
+        <sequenceFlow id='flow60' sourceRef='createSlaveTask' targetRef='runJobTask' />
 
         <serviceTask id="runJobTask"
                      name="run a job"
                      activiti:class="node.builder.bpm.RunJenkinsJobTask" />
-
         <!-- success -->
-        <sequenceFlow id='flow7' sourceRef='runJobTask' targetRef='receiveTask' >
+        <sequenceFlow id='flow70' sourceRef='runJobTask' targetRef='receiveTask' >
             <conditionExpression xsi:type="tFormalExpression">
                 <![CDATA[${result.data.jenkinsBuild.result.toString() == "SUCCESS"}]]>
             </conditionExpression>
         </sequenceFlow>
         <!-- failure -->
-        <sequenceFlow id='flow8' sourceRef='runJobTask' targetRef='prepareIssueTask' >
+        <sequenceFlow id='flow80' sourceRef='runJobTask' targetRef='prepareIssueTask' >
             <conditionExpression xsi:type="tFormalExpression">
                 <![CDATA[${result.data.jenkinsBuild.result.toString() == "FAILURE"}]]>
             </conditionExpression>
@@ -98,19 +103,19 @@
             </script>
         </scriptTask>
 
-        <sequenceFlow id='flow9' sourceRef='prepareIssueTask' targetRef='createIssueTask' />
+        <sequenceFlow id='flow90' sourceRef='prepareIssueTask' targetRef='createIssueTask' />
 
         <serviceTask id="createIssueTask"
                      name="create an issue"
                      activiti:class="node.builder.bpm.CreateJiraIssueTask" />
 
-        <sequenceFlow id='flow10' sourceRef='createIssueTask' targetRef='receiveTask' />
+        <sequenceFlow id='flow100' sourceRef='createIssueTask' targetRef='receiveTask' />
         <!-- end jira -->
 
         <!-- paperwork -->
         <receiveTask id="receiveTask" />
 
-        <sequenceFlow id='flow1000' sourceRef='receiveTask' targetRef='theEnd' />
+        <sequenceFlow id='flow10000' sourceRef='receiveTask' targetRef='theEnd' />
 
         <endEvent id="theEnd" />
         <!-- end paperwork -->

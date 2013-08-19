@@ -18,9 +18,9 @@ class OpenStackConnection extends Retryable {
     def defaultFlavorId
     String adminUrl
     def handler = {exception ->
-        log.warn "Failed to connect to OpenStack"
+        log.error "Failed to connect to OpenStack"
         if(exception.getResponse().getStatus() == 401){
-            log.warn "Authentication failed, let's reconnect and try again"
+            log.error "Authentication failed, let's reconnect and try again"
             this.disconnect()
             this.connect()
         }

@@ -24,6 +24,7 @@ class ManifestService {
             variables.put("master", utilities.serializeDomain(masterInstance))
             return ProcessEngineFactory.runProcessWithVariables(ProcessEngineFactory.defaultProcessEngine("provision"), "provisionInstance", variables)
         }catch (e){
+            e.printStackTrace()
             return [error: [message: e.getMessage()]]
         }
 

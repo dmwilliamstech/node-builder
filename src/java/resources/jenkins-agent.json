@@ -1,0 +1,146 @@
+{
+    "id": 1,
+    "description": "create an agent",
+    "name": "jenkins-agent",
+    "imageId": "68e69e00-925e-4d8d-ba7b-8f3499154ded",
+    "imageName": "centos6.3+pe3",
+    "instances": [{
+        "id": 1,
+        "flavorId": 2,
+        "nodes": {},
+        "name": "jenkins-agent-x",
+        "applications": {"1": {
+            "id": "1",
+            "flavorId": 2,
+            "priority": 1,
+            "name": "jenkins::slave",
+            "configurations": [
+                {
+                    "id": 4,
+                    "valueAsJson": "{\"json\":\"1.9\"}",
+                    "application": 1,
+                    "errors": {"errors": []},
+                    "description": "swarm client version",
+                    "name": "version",
+                    "attached": true,
+                    "value": {"json": "1.9"},
+                    "dateCreated": "2013-08-16T15:27:15Z",
+                    "lastUpdated": "2013-08-16T15:27:15Z",
+                    "properties": {
+                        "valueAsJson": "{\"json\":\"1.9\"}",
+                        "application": {
+                            "_ref": "../../../..",
+                            "class": "node.builder.Application"
+                        },
+                        "description": "swarm client version",
+                        "name": "version",
+                        "applicationId": 1,
+                        "value": {"json": "1.9"},
+                        "lastUpdated": "2013-08-16T15:27:15Z",
+                        "dateCreated": "2013-08-16T15:27:15Z"
+                    }
+                },
+                {
+                    "id": 2,
+                    "valueAsJson": "{\"json\":\"admin\"}",
+                    "application": 1,
+                    "errors": {"errors": []},
+                    "description": "user to login to jenkins with",
+                    "name": "ui_user",
+                    "attached": true,
+                    "value": {"json": "admin"},
+                    "dateCreated": "2013-08-16T15:27:15Z",
+                    "lastUpdated": "2013-08-16T15:27:15Z",
+                    "properties": {
+                        "valueAsJson": "{\"json\":\"admin\"}",
+                        "application": {
+                            "_ref": "../../../..",
+                            "class": "node.builder.Application"
+                        },
+                        "description": "user to login to jenkins with",
+                        "name": "ui_user",
+                        "applicationId": 1,
+                        "value": {"json": "admin"},
+                        "lastUpdated": "2013-08-16T15:27:15Z",
+                        "dateCreated": "2013-08-16T15:27:15Z"
+                    }
+                },
+                {
+                    "id": 5,
+                    "valueAsJson": "{\"json\":\"\"}",
+                    "application": 1,
+                    "errors": {"errors": []},
+                    "description": "space seperated list of labels",
+                    "name": "labels",
+                    "attached": true,
+                    "value": {"json": "expando"},
+                    "dateCreated": "2013-08-16T15:27:15Z",
+                    "lastUpdated": "2013-08-16T15:27:15Z",
+                    "properties": {
+                        "valueAsJson": "{\"json\":\"\"}",
+                        "application": {
+                            "_ref": "../../../..",
+                            "class": "node.builder.Application"
+                        },
+                        "description": "space seperated list of labels",
+                        "name": "labels",
+                        "applicationId": 1,
+                        "value": {"json": ""},
+                        "lastUpdated": "2013-08-16T15:27:15Z",
+                        "dateCreated": "2013-08-16T15:27:15Z"
+                    }
+                },
+                {
+                    "id": 1,
+                    "valueAsJson": "{\"json\":\"http://10.11.12.1:9999/\"}",
+                    "application": 1,
+                    "errors": {"errors": []},
+                    "description": "url that jenkins is running on",
+                    "name": "masterurl",
+                    "attached": true,
+                    "value": {"json": "http://10.11.12.1:9999/"},
+                    "dateCreated": "2013-08-16T15:27:15Z",
+                    "lastUpdated": "2013-08-16T15:27:15Z",
+                    "properties": {
+                        "valueAsJson": "{\"json\":\"http://10.11.12.1:9999/\"}",
+                        "application": {
+                            "_ref": "../../../..",
+                            "class": "node.builder.Application"
+                        },
+                        "description": "url that jenkins is running on",
+                        "name": "masterurl",
+                        "value": {"json": "http://10.11.12.1:9999/"},
+                        "applicationId": 1,
+                        "lastUpdated": "2013-08-16T15:27:15Z",
+                        "dateCreated": "2013-08-16T15:27:15Z"
+                    }
+                },
+                {
+                    "id": 3,
+                    "valueAsJson": "{\"json\":\"foobar99\"}",
+                    "application": 1,
+                    "errors": {"errors": []},
+                    "description": "password for auth",
+                    "name": "ui_pass",
+                    "attached": true,
+                    "value": {"json": "foobar99"},
+                    "dateCreated": "2013-08-16T15:27:15Z",
+                    "lastUpdated": "2013-08-16T15:27:15Z",
+                    "properties": {
+                        "valueAsJson": "{\"json\":\"foobar99\"}",
+                        "application": {
+                            "_ref": "../../../..",
+                            "class": "node.builder.Application"
+                        },
+                        "description": "password for auth",
+                        "name": "ui_pass",
+                        "value": {"json": "foobar99"},
+                        "applicationId": 1,
+                        "lastUpdated": "2013-08-16T15:27:15Z",
+                        "dateCreated": "2013-08-16T15:27:15Z"
+                    }
+                }
+            ]
+        }}
+    }]
+}
