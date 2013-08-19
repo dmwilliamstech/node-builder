@@ -30,8 +30,8 @@ class CreateJiraIssueTaskTests {
 
     void testCreateIssue(){
         def variables = [jiraUrl: "http://stackbox:8181/",
-                jiraUser:"test",
-                jiraPassword:"test99",
+                jiraUser:"admin",
+                jiraPassword:"foobar99",
                 jiraProject: "TST",
                 jiraIssueType: 1l,
                 jiraIssueSummary: "It's all broken!",
