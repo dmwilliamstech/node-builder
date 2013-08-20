@@ -110,3 +110,16 @@ grails.plugins.springsecurity.interceptUrlMap = [
         '/**':                     ['ROLE_ADMIN','ROLE_USER','IS_AUTHENTICATED_FULLY']
 ]
 
+cassandra {
+    keySpace = "node_builder"
+}
+
+astyanax {
+    clusters {
+        standard {
+            seeds = ["localhost:9160"]
+            defaultKeyspace = "node_builder"
+        }
+    }
+    defaultCluster = 'standard'
+}

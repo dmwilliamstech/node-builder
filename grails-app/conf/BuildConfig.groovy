@@ -90,6 +90,11 @@ grails.project.dependency.resolution = {
         compile 'org.grails.plugins:json-rest-api:1.0.11'
         compile ":quartz:1.0-RC9"
         compile ':spring-security-core:1.2.7.3'
+        compile(":cassandra-astyanax:0.4.2"){
+            excludes "slf4j-log4j12"
+            excludes "commons-logging"
+        }
+        compile ':cassandra-orm:0.4.2'
     }
 }
 
