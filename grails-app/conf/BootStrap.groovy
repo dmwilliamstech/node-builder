@@ -1,8 +1,10 @@
+import com.mongodb.MongoClient
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
+import org.codehaus.groovy.reflection.ReflectionUtils
 
 class BootStrap {
     def grailsApplication
@@ -12,11 +14,19 @@ class BootStrap {
     ImageService imageService
     FlavorService flavorService
 
+    def metric = { event, message, group ->
+        def clazz = ReflectionUtils.getCallingClass(3)
+        clazz = clazz.getCanonicalName().find(/[\w]*\.[\w\$]*$/)
+        def thread = Thread.currentThread().name
+        def metric = new Metric(clazz: clazz, thread: thread, group: group, message: message, event: event)
+        metric.save()
+    }
+
+
     def init = { servletContext ->
         loadConfig()
         loadSecurity()
         loadProcessDefinitions()
-
 
         if(Node.count.is(0)){
             log.info "Creating default Node"
@@ -46,6 +56,8 @@ class BootStrap {
         }
 
         log.info("Node Builder startup complete")
+        log.metric("startup", "startup complete", "uptime")
+
     }
 
     def loadSecurity() {
@@ -63,10 +75,15 @@ class BootStrap {
     }
 
     def destroy = {
+        log.metric("shutdown", "shutdown complete", "uptime")
+        log.info "application shutdown complete"
     }
 
     def loadConfig() {
         try{
+            org.apache.commons.logging.impl.SLF4JLog.metaClass.metric = metric
+            log.metaClass.metric = metric
+
             def configFile = new File("${System.getenv("HOME")}/.opendx/config")
             if(!configFile.exists())
                 configFile = new File("/etc/node-builder.conf")
