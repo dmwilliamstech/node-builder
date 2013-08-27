@@ -63,6 +63,7 @@ grails.project.dependency.resolution = {
         compile 'com.offbytwo.jenkins:jenkins-client:0.1.6-SNAPSHOT'
         compile 'com.atlassian.jira:jira-rest-java-client-core:2.0.0-m25'
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
+        compile 'com.sun.mail:all:1.5.0'
 
     }
 

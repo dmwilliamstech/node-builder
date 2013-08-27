@@ -4,9 +4,7 @@ import com.offbytwo.jenkins.JenkinsServer
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
-import org.junit.Ignore
 import org.junit.Test
-
 
 class CreateJenkinsJobTaskTests {
     final shouldFail = new GroovyTestCase().&shouldFail

@@ -11,7 +11,7 @@ import java.util.concurrent.Executors
 
 class MonitorGitJob {
     static triggers = {
-      simple repeatInterval: (30 * 1000)l // execute job once in 5 minutes
+      simple repeatInterval: (30l * 1000l) // execute job once in 5 minutes
     }
 
     static def pool

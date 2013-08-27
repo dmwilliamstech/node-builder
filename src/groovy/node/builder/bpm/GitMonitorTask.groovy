@@ -19,6 +19,7 @@ import org.eclipse.jgit.treewalk.FileTreeIterator
 import org.eclipse.jgit.treewalk.WorkingTreeIterator
 import org.eclipse.jgit.util.io.DisabledOutputStream
 
+import javax.management.RuntimeErrorException
 import java.text.MessageFormat
 
 
@@ -26,8 +27,6 @@ import java.text.MessageFormat
 class GitMonitorTask implements JavaDelegate{
 
     void execute(DelegateExecution delegateExecution) throws Exception {
-        //check dir exists
-
         def remotePath = delegateExecution.getVariable("remotePath")
         def localPath = delegateExecution.getVariable("localPath")
         def result = new ProcessResult()
@@ -47,8 +46,6 @@ class GitMonitorTask implements JavaDelegate{
 
         def localRepo = new FileRepository(localPath + "/.git");
         def git = new Git(localRepo)
-
-
 
         result.data.diff = getDiffFromRemoteMaster(git)
 
@@ -86,25 +83,32 @@ class GitMonitorTask implements JavaDelegate{
         delegateExecution.setVariable("result", result)
     }
 
-
-    String getDiffFromRemoteMaster(Git git){
-        def fetchResult = git.fetch()
-                .call()
-
-        ObjectId headId = git.getRepository().resolve("origin/master")
-        ObjectId oldId = git.getRepository().resolve("master")
-            OutputStream out = new ByteArrayOutputStream()
-
-
-
-            List<DiffEntry> diffs= git.diff()
-                    .setNewTree(getTreeIterator(headId, git))
-                    .setOldTree(getTreeIterator(oldId, git))
-                    .setOutputStream(out)
-                    .call();
-
+    def runCommand(command, git){
+        def process = command.execute(new String[0] , git.repository.workTree)
+        OutputStream out = new ByteArrayOutputStream(), err = new ByteArrayOutputStream()
+        process.consumeProcessOutput(out, err)
+        process.waitFor()
+        if(process.exitValue() > 0 ){
+            throw new RuntimeErrorException("Failed to run git commands " + err)
+        }
 
         return out.toString()
+    }
+
+    String getDiffFromRemoteMaster(Git git){
+        def outs = []
+
+        def reference = runCommand("git rev-list --max-parents=0 HEAD", git)
+
+        ["git fetch",
+        "git checkout origin/master",
+        "git format-patch master --stdout",
+        "git checkout master"].each{ command ->
+            def out = runCommand(command, git)
+            outs.add(out)
+        }
+        new File("/tmp/patch.patch").write(outs[2])
+        return outs[2]
     }
 
     private AbstractTreeIterator getTreeIterator(ObjectId id, Git git)
