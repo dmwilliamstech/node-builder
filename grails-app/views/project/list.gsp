@@ -10,7 +10,8 @@
 </head>
 
 <body>
-	
+
+<sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="create"><i class="icon-plus-sign"></i> <b>New Project</b></g:link><br></sec:ifAnyGranted>
 <section id="list-project" class="first">
 
 	<table class="table table-bordered">
@@ -35,7 +36,11 @@
 		<g:each in="${projectInstanceList}" status="i" var="projectInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
-				<td><g:link action="show" id="${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link> <sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="edit" id="${projectInstance.id}"><i class="icon-pencil"/></g:link></sec:ifAnyGranted></td>
+				<td>
+                    <g:link action="show" id="${projectInstance.id}" elementId="project${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link>
+                    <hr>
+                    <sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="edit" id="${projectInstance.id}" elementId="edit_project${projectInstance.id}"><i class="icon-pencil"></i></g:link></sec:ifAnyGranted>
+                </td>
 			
 				<td>${fieldValue(bean: projectInstance, field: "description")}</td>
 

@@ -51,6 +51,13 @@
 
             </tr>
 
+            <tr class="prop">
+                <td valign="top" class="name"><g:message code="project.processDefinitionKey.label" default="Process Definition ID" /></td>
+
+                <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "processDefinitionKey")}</td>
+
+            </tr>
+
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="project.bpmn.label" default="Bpmn" /></td>
 				

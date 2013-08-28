@@ -25,14 +25,14 @@ class MonitorGitJob {
     def execute() {
         def repos
         try{
-            repos = Repository.all
+            repos = Project.findByProjectType(ProjectType.findByName("GIT Repository"))
         }catch(e){
             log.error("Error retrieving repository data")
             return
         }
 
-        repos.each{ Repository repo ->
-            if(futures.get(repo.name) == null || futures.get(repo.name).isDone()){
+        repos.each{ Project repo ->
+            if(repo.active && (futures.get(repo.name) == null || futures.get(repo.name).isDone())){
             futures.remove(repo.name)
             futures.put(repo.name, pool.submit(new Callable<ProcessResult>() {
                 public ProcessResult call() {
@@ -42,8 +42,8 @@ class MonitorGitJob {
 
                         def variables = new HashMap();
                         variables.put("projectName", repo.name)
-                        variables.put("remotePath", repo.remotePath)
-                        variables.put("localPath", repo.localPath)
+                        variables.put("remotePath", repo.location)
+                        variables.put("localPath", "${Config.getGlobalConfig().get("workspace.path")}/${repo.name.replaceAll("\\W", "").toLowerCase()}")
 
                         variables.put("jenkinsUrl", "http://stackbox:9999/")
                         variables.put("jenkinsUser", "admin")
@@ -58,7 +58,8 @@ class MonitorGitJob {
                         variables.put("jiraProject", "TST")
                         variables.put("jiraIssueType", 1l)
 
-                        def result = ProcessEngineFactory.runProcessWithVariables(processEngine, repo.workflowKey, variables)
+                        def businessKey = "${repo.name}-${java.util.UUID.randomUUID()}"
+                        def result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, repo.processDefinitionKey, businessKey, variables)
 
                         log.info("Finished monitoring for repository, ${(result.data.repositoryDidChange? "change":"no change")} detected")
                     }catch(e){

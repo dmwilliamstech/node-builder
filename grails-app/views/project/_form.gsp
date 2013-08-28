@@ -31,6 +31,14 @@
                 </div>
             </div>
 
+            <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'processDefinitionKey', 'error')} ">
+                <label for="processDefinitionKey" class="control-label"><g:message code="project.processDefinitionKey.label" default="Process Definition ID" /></label>
+                <div class="controls">
+                    <g:textField name="processDefinitionKey" value="${projectInstance?.processDefinitionKey}"/>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'processDefinitionKey', 'error')}</span>
+                </div>
+            </div>
+
             <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'bpmn', 'error')} ">
 				<label for="bpmn" class="control-label"><g:message code="project.bpmn.label" default="Bpmn" /></label>
 				<div class="controls">

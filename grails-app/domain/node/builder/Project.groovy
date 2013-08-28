@@ -16,6 +16,7 @@ class Project {
     String location
     ProjectType projectType
     Boolean active
+    String processDefinitionKey
 
     /* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -26,7 +27,7 @@ class Project {
     }
 
     static constraints = {
-        bpmn type: 'text'
+        bpmn maxSize: 16000
         name blank: false
         name unique: true
         location validator: {value , object ->
