@@ -5,6 +5,7 @@ package node.builder
  * A domain class describes the data object and it's mapping to the database
  */
 class Project {
+    static expose = 'project'
 
     /* Default (injected) attributes of GORM */
 	Long	id
