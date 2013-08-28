@@ -16,6 +16,7 @@ class BootStrap {
         loadConfig()
         loadSecurity()
         loadProcessDefinitions()
+        loadProjectTypes()
 
 
         if(Node.count.is(0)){
@@ -46,6 +47,11 @@ class BootStrap {
         }
 
         log.info("Node Builder startup complete")
+    }
+
+    def loadProjectTypes() {
+        def projectType = ProjectType.findByName("GIT Repository")?: new ProjectType(name: "GIT Repository")
+        projectType.save()
     }
 
     def loadSecurity() {
