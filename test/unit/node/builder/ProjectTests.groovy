@@ -29,7 +29,8 @@ class ProjectTests {
                 description: "some description",
                 location: "git@github.com:user/project.git",
                 active: true,
-                projectType: projectType
+                projectType: projectType,
+                processDefinitionKey: "somekey"
         )
         project.save()
         assert project.errors.errorCount == 1
@@ -43,7 +44,8 @@ class ProjectTests {
                 description: "some description",
                 location: "git@github.com:user/project.git",
                 active: true,
-                projectType: projectType
+                projectType: projectType,
+                processDefinitionKey: "somekey"
         )
         project.save()
         assert project.errors.errorCount == 1
@@ -60,7 +62,8 @@ class ProjectTests {
                 description: "some description",
                 location: "not???**^^^### a url",
                 active: true,
-                projectType: projectType
+                projectType: projectType,
+                processDefinitionKey: "somekey"
         )
         project.validate()
 //        project.save()
