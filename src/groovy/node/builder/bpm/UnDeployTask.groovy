@@ -12,7 +12,8 @@ class UnDeployTask implements JavaDelegate{
         def deployment = delegateExecution.getVariable("deployment")
         for(instance in deployment.instances){
             try{
-                Process p = "puppet cert clean #{instance.name}.novalocal".execute()
+//                Process p = "puppet cert clean #{instance.name}.novalocal".execute()
+                "curl --cacert ~/.ssh/ca_crt.pem --cert ~/.ssh/stackbox_cert.novalocal.pem --key ~/.ssh/stackbox_pk.novalocal.pem -k -X DELETE -H \"Accept: pson\" https://localhost:8140/production/certificate_status/#{instance.name}.novalocal".execute()
             }catch(e){
                 delegateExecution.setVariable("result", [error: [message: "Failed to unregister instance ${instance.name} ${e.getMessage()}"]])
                 return
