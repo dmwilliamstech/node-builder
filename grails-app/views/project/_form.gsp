@@ -40,12 +40,13 @@
             </div>
 
             <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'bpmn', 'error')} ">
-				<label for="bpmn" class="control-label"><g:message code="project.bpmn.label" default="Bpmn" /></label>
+				<label for="bpmnEditor" class="control-label"><g:message code="project.bpmn.label" default="Bpmn" /></label>
 				<div class="controls">
-					<g:textArea rows="20" class="span8" name="bpmn" value="${projectInstance?.bpmn}"/>
-					<span class="help-inline">${hasErrors(bean: projectInstance, field: 'bpmn', 'error')}</span>
+                    <div id="bpmnEditor" style="width:700px;height:200px"/>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'bpmn', 'error')}</span>
 				</div>
 			</div>
+            <g:textArea rows="20" class="span8" name="bpmn" value="${projectInstance?.bpmn}"/>
 
             <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'active', 'error')} ">
                 <label for="active" class="control-label"><g:message code="project.active.label" default="Active" /></label>
@@ -54,3 +55,17 @@
                     <span class="help-inline">${hasErrors(bean: projectInstance, field: 'active', 'error')}</span>
                 </div>
             </div>
+
+            <g:javascript library="ace" />
+            <g:javascript library="mode_xml" />
+            <g:javascript>
+                var editor = ace.edit("bpmnEditor");
+                var Mode = ace.require('ace/mode/xml').Mode;
+                editor.getSession().setMode(new Mode());
+                var textarea = $('textarea[name="bpmn"]').hide();
+
+                editor.getSession().setValue(textarea.val());
+                editor.getSession().on('change', function(){
+                    textarea.val(editor.getSession().getValue());
+                });
+            </g:javascript>

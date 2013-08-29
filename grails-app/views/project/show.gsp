@@ -60,8 +60,10 @@
 
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="project.bpmn.label" default="Bpmn" /></td>
-				
-				<td valign="top" class="value">${fieldValue(bean: projectInstance, field: "bpmn")}</td>
+
+				<td valign="top" class="value">
+                    <div id="bpmnEditor" style="width:700px;height:200px"/>
+                </td>
 				
 			</tr>
 
@@ -82,6 +84,20 @@
 		</tbody>
 	</table>
 </section>
+<g:textArea name="bpmn" value="${fieldValue(bean: projectInstance, field: "bpmn")}" />
+<g:javascript library="ace" />
+<g:javascript library="mode_xml" />
+<g:javascript>
+    var editor = ace.edit("bpmnEditor");
+    var Mode = ace.require('ace/mode/xml').Mode;
+    editor.getSession().setMode(new Mode());
+    var textarea = $('textarea[name="bpmn"]').hide();
+    editor.setReadOnly(true);
+    editor.getSession().setValue(textarea.val());
+    editor.getSession().on('change', function(){
+        textarea.val(editor.getSession().getValue());
+    });
+</g:javascript>
 
 </body>
 
