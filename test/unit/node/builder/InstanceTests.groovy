@@ -64,6 +64,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import org.junit.Test
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -73,44 +74,38 @@ import grails.test.mixin.web.ControllerUnitTestMixin
 @TestMixin(ControllerUnitTestMixin)
 class InstanceTests {
 
-    void testHasManifest() {
-//        def image = new Image(name: "Image Name", imageId: "Image Id", progress: 100, minDisk: "1", minRam: "2", status: "Good")
-//        image.save()
-//        assert !image.hasErrors()
-//
-//        def manifest = new Manifest()
-//        manifest.manifest = [manifest: [fun: "oh yeah!"]]
-//        manifest.name = "Test"
-//        manifest.save()
-//        assert !manifest.hasErrors()
-//
-//        def instance = new Instance(
-//               name:"Some Instance",
-//               status: "Awesome",
-//               hostId: "A Host",
-//               privateIP: "numbers",
-//               keyName: "A Key",
-//
-//               instanceId: "This Instance",
-//               userId: "Blah",
-//               tenantId: "5",
-//               progress: 100,
-//               configDrive: "What?",
-//               metadata: ([blah: "blah"] as JSON).toString(true),
-//               image: image
-//        )
-//        instance.save()
-//        assert !instance.hasErrors()
-//
-//        instance.manifest = manifest
-//        instance.save()
-//        assert !instance.hasErrors()
-//
-//        assert Instance.first().manifest.manifest == manifest.manifest
-//
-//        manifest.addToInstances(instance)
-//        manifest.save()
-//
-//        assert manifest.instances.first().name == instance.name
+    @Test
+    void shouldReturnInstancesFromList(){
+        (1..5).each {
+            def instance = new Instance(
+                    name: "$it",
+                    instanceId: "$it",
+                    hostId: "$it",
+                    status: "good",
+                    tenantId: "$it",
+                    userId: "$it"
+            )
+            instance.save()
+            assert instance.errors.errorCount == 0
+        }
+
+        assert Instance.count == 5
+
+        def criteria = Instance.createCriteria()
+        def instances = criteria.list {
+            'in'("name",["1","2","3","4","5"])
+        }
+        assert instances.size() == 5
+
+        instances = criteria.list {
+            'in'("name",["2","3","4","5"])
+        }
+        assert instances.size() == 4
+
+        instances = criteria.list {
+            'in'("name",["2","5"])
+        }
+        assert instances.size() == 2
     }
+
 }

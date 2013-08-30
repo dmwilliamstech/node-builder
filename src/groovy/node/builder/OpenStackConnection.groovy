@@ -117,7 +117,7 @@ class OpenStackConnection extends Retryable {
             retry(handler, groovyx.net.http.HttpResponseException, 1){
                 resp = compute.post( path : 'servers',
                                  contentType : 'application/json',
-                                 body :  [server: [flavorRef: (flavor ?: defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
+                                 body :  [server: [flavorRef: ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
                                  headers : ['X-Auth-Token' : token])
             }
         } catch (groovyx.net.http.HttpResponseException e) {
