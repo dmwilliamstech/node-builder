@@ -1,27 +1,18 @@
 package node.builder.bpm
 
+import node.builder.exceptions.UnknownGitRepositoryException
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.PullResult
+import org.eclipse.jgit.api.errors.TransportException
 import org.eclipse.jgit.diff.DiffEntry
-import org.eclipse.jgit.diff.DiffFormatter
-import org.eclipse.jgit.diff.RawTextComparator
 import org.eclipse.jgit.internal.storage.file.FileRepository
-import org.eclipse.jgit.lib.Constants
-import org.eclipse.jgit.lib.IndexDiff
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.lib.ObjectReader
-import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.AbstractTreeIterator
 import org.eclipse.jgit.treewalk.CanonicalTreeParser
-import org.eclipse.jgit.treewalk.FileTreeIterator
-import org.eclipse.jgit.treewalk.WorkingTreeIterator
-import org.eclipse.jgit.util.io.DisabledOutputStream
-
-import java.text.MessageFormat
-
-
 
 class GitMonitorTask implements JavaDelegate{
 
@@ -35,30 +26,42 @@ class GitMonitorTask implements JavaDelegate{
 
         def localCopy = new File(localPath)
         if(!localCopy.exists()){
-            Git.cloneRepository()
-                    .setURI(remotePath)
-                    .setDirectory(localCopy)
-                    .call();
-            assert new File(localPath).exists()
-            result.data.repositoryDidChange = false
-            delegateExecution.setVariable("result", result)
+            delegateExecution.setVariable("result", doInitialClone(remotePath, localCopy, localPath, result))
             return
         }
 
         def localRepo = new FileRepository(localPath + "/.git");
         def git = new Git(localRepo)
 
-
-
-        result.data.diff = getDiffFromRemoteMaster(git)
+        getDiffFromRemoteMaster(git, result)
 
         def pullResult = git.pull()
                             .call()
 
-        def fetchResult = pullResult.fetchResult
-//        result.data.advertisedRefs = fetchResult.advertisedRefs
-//        result.data.trackingRefUpdates = fetchResult.trackingRefUpdates
         result.data.reference = localRepo.resolve("HEAD").name
+
+        setResultWithPullResult(pullResult, result)
+
+        delegateExecution.setVariable("result", result)
+    }
+
+    def doInitialClone(String remotePath, File localCopy, String localPath, ProcessResult result){
+        try{
+            Git.cloneRepository()
+                    .setURI(remotePath)
+                    .setDirectory(localCopy)
+                    .call();
+        }catch (TransportException e){
+            throw new UnknownGitRepositoryException("Could not connect to remote repository $remotePath " + e.getMessage(), e)
+        }
+
+        result.data.repositoryDidChange = false
+        return result
+    }
+
+
+    def setResultWithPullResult(PullResult pullResult, ProcessResult result){
+        def fetchResult = pullResult.fetchResult
         result.message = fetchResult.messages.toString()
         result.data.uri = fetchResult.getURI()
 
@@ -80,31 +83,27 @@ class GitMonitorTask implements JavaDelegate{
             result.data.rebaseFailingPaths = rebaseResult.failingPaths
             result.data.rebaseStatus = rebaseResult.status
         }
-
-        result.data.repositoryDidChange = !result.data.diff.empty
-
-        delegateExecution.setVariable("result", result)
     }
 
-
-    String getDiffFromRemoteMaster(Git git){
-        def fetchResult = git.fetch()
+    String getDiffFromRemoteMaster(Git git, result){
+        git.fetch()
                 .call()
 
         ObjectId headId = git.getRepository().resolve("origin/master")
         ObjectId oldId = git.getRepository().resolve("master")
-            OutputStream out = new ByteArrayOutputStream()
+        def file = File.createTempFile("patch", "patch")
 
+        OutputStream out = new FileOutputStream(file)
+        git.diff()
+                .setNewTree(getTreeIterator(headId, git))
+                .setOldTree(getTreeIterator(oldId, git))
+                .setOutputStream(out)
+                .call();
 
-
-            List<DiffEntry> diffs= git.diff()
-                    .setNewTree(getTreeIterator(headId, git))
-                    .setOldTree(getTreeIterator(oldId, git))
-                    .setOutputStream(out)
-                    .call();
-
-
-        return out.toString()
+        out.flush()
+        out.close()
+        result.data.repositoryPatchFile = file.path
+        result.data.repositoryDidChange = file.size() > 0
     }
 
     private AbstractTreeIterator getTreeIterator(ObjectId id, Git git)
