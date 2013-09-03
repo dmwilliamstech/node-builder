@@ -32,7 +32,6 @@ class RunJenkinsJobTaskTests {
         jenkinsTask.execute(delegateExecution)
     }
 
-
     @Test
     void shouldRunTestJob(){
         def jenkinsTask = new RunJenkinsJobTask()
