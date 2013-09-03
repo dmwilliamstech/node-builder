@@ -107,6 +107,7 @@ grails.plugins.springsecurity.authority.className = 'node.builder.SecRole'
 grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 grails.plugins.springsecurity.interceptUrlMap = [
         '/login/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/statusBoard/**':         ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/**':                     ['ROLE_ADMIN','ROLE_USER','IS_AUTHENTICATED_FULLY']
 ]
 

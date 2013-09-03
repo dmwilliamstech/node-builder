@@ -27,9 +27,9 @@ class FlavorService {
                 flavorInstance = new Flavor(
                         name: flavorData.name,
                         flavorId: flavorData.id,
-                        progress: flavorData.progress,
-                        minDisk: flavorData.minDisk,
-                        minRam: flavorData.minRam,
+                        ram: flavorData.ram,
+                        disk: flavorData.disk,
+                        vcpus: flavorData.vcpus,
                         status: flavorData.minRam
                 )
             }

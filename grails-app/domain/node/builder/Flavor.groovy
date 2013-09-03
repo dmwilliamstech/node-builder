@@ -13,6 +13,10 @@ class Flavor {
     /* Automatic timestamping of GORM */
     String flavorId
     String name
+    String ram
+    String disk
+    String vcpus
+
 	Date	dateCreated
 	Date	lastUpdated
 

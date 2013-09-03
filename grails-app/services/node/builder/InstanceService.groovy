@@ -63,5 +63,11 @@ class InstanceService {
         }
     }
 
-
+    def toCSV(instances) {
+        def rows = 'name,lastUpdated\n'
+        instances.each{instance ->
+            rows += "$instance.name,$instance.lastUpdated"
+        }
+        return rows
+    }
 }
