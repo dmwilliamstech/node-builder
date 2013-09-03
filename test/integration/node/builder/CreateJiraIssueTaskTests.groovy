@@ -4,6 +4,7 @@ import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJiraIssueTask
 import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Before
+import org.junit.Ignore
 
 
 class CreateJiraIssueTaskTests {
@@ -28,6 +29,7 @@ class CreateJiraIssueTaskTests {
         return delegateExecution.proxyInstance()
     }
 
+    @Ignore
     void testCreateIssue(){
         def variables = [jiraUrl: "http://stackbox:8181/",
                 jiraUser:"admin",
