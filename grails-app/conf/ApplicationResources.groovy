@@ -14,4 +14,10 @@ modules = {
     manifest {
         resource url: 'js/manifest.js'
     }
+    ace {
+        resource url: 'js/ace.js'
+    }
+    mode_xml {
+        resource url: 'js/mode-xml.js'
+    }
 }

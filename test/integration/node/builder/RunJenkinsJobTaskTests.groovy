@@ -3,6 +3,7 @@ package node.builder
 import com.offbytwo.jenkins.model.BuildResult
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.RunJenkinsJobTask
+import node.builder.exceptions.MissingJenkinsJobException
 import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Test
 
@@ -23,13 +24,16 @@ class RunJenkinsJobTaskTests {
         return delegateExecution.proxyInstance()
     }
 
-    def testSomething(){
-        assert true
+    @Test(expected = MissingJenkinsJobException)
+    void shouldDetectMissingJob(){
+        def jenkinsTask = new RunJenkinsJobTask()
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"notreal"]
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)
+        jenkinsTask.execute(delegateExecution)
     }
 
-
     @Test
-    void runTestJob(){
+    void shouldRunTestJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)
@@ -37,9 +41,18 @@ class RunJenkinsJobTaskTests {
         assert variables.result.data.jenkinsBuild.result == BuildResult.SUCCESS
     }
 
+    @Test
+    void shouldHaveBuildUrlsJob(){
+        def jenkinsTask = new RunJenkinsJobTask()
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)
+        jenkinsTask.execute(delegateExecution)
+        assert variables.result.data.jenkinsBuild.url.contains("http://stackbox:9999/job/test/")
+        assert variables.result.data.jenkinsBuild.consoleUrl.contains("http://stackbox:9999/job/test/")
+    }
 
     @Test
-    void runFailJob(){
+    void shouldRunFailJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"fail"]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 1)

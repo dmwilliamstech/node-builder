@@ -66,7 +66,7 @@ class ManifestShowTest extends GebReportingTest {
         assert ($('#input_0_1_2_0').value() == "Some Values" || $('#input_1_1_2_0').value() == "Some Values" )
 
         $('#saveManifestButton').click()
-        sleep(1000)
+        sleep(5000)
         assert Manifest.count == 1
 
     }

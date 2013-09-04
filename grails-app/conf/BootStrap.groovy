@@ -16,6 +16,7 @@ class BootStrap {
         loadConfig()
         loadSecurity()
         loadProcessDefinitions()
+        loadProjectTypes()
 
 
         if(Node.count.is(0)){
@@ -48,6 +49,11 @@ class BootStrap {
         log.info("Node Builder startup complete")
     }
 
+    def loadProjectTypes() {
+        def projectType = ProjectType.findByName("GIT Repository")?: new ProjectType(name: "GIT Repository")
+        projectType.save()
+    }
+
     def loadSecurity() {
         def userRole = SecRole.findByAuthority('ROLE_USER') ?: new SecRole(authority: 'ROLE_USER').save(failOnError: true)
         def adminRole = SecRole.findByAuthority('ROLE_ADMIN') ?: new SecRole(authority: 'ROLE_ADMIN').save(failOnError: true)
@@ -67,11 +73,7 @@ class BootStrap {
 
     def loadConfig() {
         try{
-            def configFile = new File("${System.getenv("HOME")}/.opendx/config")
-            if(!configFile.exists())
-                configFile = new File("/etc/node-builder.conf")
-
-            ConfigObject config = new ConfigSlurper().parse(new URL("file://${configFile.absolutePath}")).flatten()
+            def config = Config.getGlobalConfig()
             def masterName = config.get("master.name")
             def master = Master.findByName(masterName)
             if(master == null)
@@ -93,16 +95,6 @@ class BootStrap {
                 config.get("openstack.flavor.id")
             )
 
-            log.info("Checking for repositories to monitor")
-            Repository.where { id > 0l }.deleteAll()
-            config.get("monitor.repos")?.each{ repoData ->
-                log.info("Found repository (${repoData.name}) in config, updating system")
-                def repoInstance = Repository.findByName(repoData.name) ?: new Repository(name: repoData.name)
-                repoInstance.localPath = repoData.localPath
-                repoInstance.remotePath = repoData.remotePath
-                repoInstance.workflowKey = repoData.workflowKey
-                repoInstance.save()
-            }
         }catch (e){
             log.warn("Failed to load config file - " + e.getMessage())
             e.printStackTrace()
@@ -127,6 +119,8 @@ class BootStrap {
             log.info("Loaded process definition ${resourceLocation} with id (${deployment.id})")
         }
     }
+
+
     def getJobXml(){
         return """\
 <?xml version='1.0' encoding='UTF-8'?>

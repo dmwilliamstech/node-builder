@@ -4,15 +4,19 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.GitMonitorTask
+import node.builder.exceptions.UnknownGitRepositoryException
 import org.activiti.engine.delegate.DelegateExecution
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.junit.Before
+import org.junit.Test
 
 @TestMixin(ControllerUnitTestMixin)
 class GitMonitorTaskTests {
     def localPath = File.createTempFile("local", Long.toString(System.nanoTime())).getPath()
     def remotePath = File.createTempFile("remote", Long.toString(System.nanoTime())).getPath()
+    def unknownRemotePath = "git@notreal.com:notreal/notreal.git"
+
     Git git
     Git remoteGit
 
@@ -98,6 +102,8 @@ class GitMonitorTaskTests {
         task.execute(mockDelegateExecutionWithVariables(variables,2))
 
         assert variables.result.data.repositoryDidChange
+        def file = new File(variables.result.data.repositoryPatchFile)
+        assert file.exists()
     }
 
     def testDetectNoChange(){
@@ -106,6 +112,14 @@ class GitMonitorTaskTests {
         def variables = [localPath: localPath, remotePath: remotePath]
         task.execute(mockDelegateExecutionWithVariables(variables,2))
         assert !variables.result.data.repositoryDidChange
+    }
+
+    @Test(expected = UnknownGitRepositoryException)
+    void shouldThrowExceptionIfRemoteRepositoryDoesNotExist(){
+        def task = new GitMonitorTask()
+        def variables = [localPath: localPath, remotePath: unknownRemotePath]
+        task.execute(mockDelegateExecutionWithVariables(variables,2))
+        assert false
     }
 
 }

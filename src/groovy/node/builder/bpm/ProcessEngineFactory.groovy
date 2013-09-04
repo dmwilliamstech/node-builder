@@ -47,6 +47,30 @@ class ProcessEngineFactory {
         return deployment
     }
 
+    public static def runProcessWithBusinessKeyAndVariables(ProcessEngine processEngine, String processKey, String businessKey, Map variables){
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        def processInstance
+        synchronized($lock) {
+            // Start a process instance
+            processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables);
+        }
+        // verify that the process is actually finished
+
+        def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
+
+        Execution execution = runtimeService.createExecutionQuery()
+                .processInstanceId(processInstance.getId())
+                .activityId("receiveTask")
+                .singleResult();
+        runtimeService.signal(execution.getId());
+
+        HistoryService historyService = processEngine.getHistoryService();
+        HistoricProcessInstance historicProcessInstance =
+            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+
+        return result
+    }
+
     public static def runProcessWithVariables(ProcessEngine processEngine, String processKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();
         def processInstance
