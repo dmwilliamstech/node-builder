@@ -88,10 +88,10 @@ class GitMonitorTask implements JavaDelegate{
 
 
     def runCommand(command, git, outputFile, errorFile){
-        def process = command.execute(new String[0] , git.repository.workTree)
+        Process process = command.execute(new String[0] , git.repository.workTree)
         FileOutputStream out = new FileOutputStream(outputFile), err = new FileOutputStream(errorFile)
-        process.consumeProcessOutput(out, err)
-        process.waitFor()
+        process.waitForProcessOutput(out, err)
+
         if(process.exitValue() > 0 ){
             throw new RuntimeErrorException("Failed to run git commands " + err)
         }
