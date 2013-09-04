@@ -19,21 +19,21 @@ class WriteSmtpMessagesTaskTests extends BPMNTaskTestBase{
 
     @Test
     void shouldSendMessages(){
+        new File("target/emailAttachment.txt").write("Test test 1 2")
         def task = new WriteSmtpMessagesTask()
-        def variables = [emailSmtpHost:"smtp.example.net",
-                emailSmtpPort:465,
-                emailUsername:"email",
-                emailPassword:"password",
-                emailFrom:"email",
-                emailTo:"email",
+        def variables = [emailSmtpHost: Config.config.get("email.smtp.hostname"),
+                emailSmtpPort: Config.config.get("email.smtp.port"),
+                emailUsername: Config.config.get("email.smtp.username"),
+                emailPassword: Config.config.get("email.smtp.password"),
+                emailFrom: Config.config.get("email.smtp.from"),
+                emailTo: Config.config.get("email.smtp.from"),
                 emailSubject:"test",
-                emailText:"sup?",
-                emailFiles:["/Users/kelly/Documents/airgap.png"]
+                emailText:"this is a test\n",
+                emailFiles:["target/emailAttachment.txt"]
         ]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 8, 2)
         task.execute(delegateExecution)
         assert variables.result.data.emailMessage.subject == "test"
-        sleep(10000)
     }
 
 }

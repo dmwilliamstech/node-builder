@@ -96,7 +96,7 @@ class WriteSmtpMessagesTask implements JavaDelegate{
         DataSource source = new FileDataSource(filename)
         BodyPart messageBodyPart = new MimeBodyPart()
         messageBodyPart.setDataHandler(new DataHandler(source))
-        messageBodyPart.setFileName(FilenameUtils.getBaseName(filename))
+        messageBodyPart.setFileName(FilenameUtils.getName(filename))
         multipart.addBodyPart(messageBodyPart)
     }
 

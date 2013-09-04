@@ -96,15 +96,15 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         assert variables.result.data.repositoryDidChange
         //email patch
         def patch = File.createTempFile("patch",".patch")
-        patch.write(variables.result.data.diff)
+        patch.write(new File(variables.result.data.repositoryPatchFile).text)
 
         task = new WriteSmtpMessagesTask()
-        variables = [emailSmtpHost:"smtp.example.net",
-                emailSmtpPort:465,
-                emailUsername:"email",
-                emailPassword:"password",
-                emailFrom:"email",
-                emailTo:"email",
+        variables = [emailSmtpHost: Config.config.get("email.smtp.hostname"),
+                emailSmtpPort: Config.config.get("email.smtp.port"),
+                emailUsername: Config.config.get("email.smtp.username"),
+                emailPassword: Config.config.get("email.smtp.password"),
+                emailFrom: Config.config.get("email.smtp.from"),
+                emailTo: Config.config.get("email.smtp.from"),
                 emailSubject:"test",
                 emailText:"sup?",
                 emailFiles:[patch.path]
@@ -116,12 +116,16 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
 
         //receive patch
         task = new ReadImapMessagesTask()
-        variables = [emailImapHost:"imap.example.net", emailImapPort:143, emailUsername:"email", emailPassword:"password"]
+        variables = [
+                emailImapHost:Config.config.get("email.imap.hostname"),
+                emailImapPort:Config.config.get("email.imap.port"),
+                emailUsername:Config.config.get("email.imap.username"),
+                emailPassword:Config.config.get("email.imap.password")]
         delegateExecution = mockDelegateExecutionWithVariables(variables, 3, 2)
         task.execute(delegateExecution)
         assert !variables.result.data.emailNewMessages.empty
 
-        def newPatch = new File("/tmp/${FilenameUtils.getBaseName(patch.path)}")
+        def newPatch = new File("/tmp/${FilenameUtils.getName(patch.path)}")
         assert newPatch.exists()
 
         //apply patch

@@ -24,16 +24,17 @@ class ReadImapMessagesTask extends Retryable implements JavaDelegate{
         log.info "Checking for new mail messages"
 
         Properties props = new Properties()
-        props.setProperty("mail.store.protocol", "imap")
+        props.setProperty("mail.store.protocol", "imaps")
         props.setProperty("mail.imap.host", host)
         props.setProperty("mail.imap.port", port.toString())
         def session = Session.getDefaultInstance(props, null)
-        def store = session.getStore("imap")
+        def store = session.getStore("imaps")
         def inbox
         def newMessages = []
 
         try {
-            retry({log.warn "Connected to IMAP server, failed retrying"}, java.io.IOException, 5 ){
+            retry({log.warn "Connecting to IMAP server... failed retrying"}, java.io.IOException, 5 ){
+                log.info "Connecting to IMAP server..."
                 store.connect(host, username, password)
             }
 
