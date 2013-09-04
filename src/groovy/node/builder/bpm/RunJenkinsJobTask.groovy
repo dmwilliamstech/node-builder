@@ -1,6 +1,7 @@
 package node.builder.bpm
 
 import com.offbytwo.jenkins.JenkinsServer
+import com.offbytwo.jenkins.model.Build
 import com.offbytwo.jenkins.model.Job
 import com.offbytwo.jenkins.model.JobWithDetails
 import node.builder.exceptions.MissingJenkinsJobException
@@ -30,16 +31,16 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
 
     def buildJob(job, result){
 
-        def buildCount = job.builds.size()
-
-        job.build()
+        def lastBuilderNumber = ((Build)job.getLastBuild()).number
         def details = job.details()
 
+        job.build()
         log.info "Job ${job.name} has started"
-        while(details.builds.size() == buildCount || details.lastBuild.details().isBuilding()){
+        while(details.getLastBuild().number == lastBuilderNumber || details.getLastBuild().details().isBuilding()){
             sleep(5000)
             details = job.details()
         }
+
         def build = details.builds.last().details()
         result.data.jenkinsBuild = getMapFromBuild(build)
         result.data.jenkinsBuild.url = "${job.url}${build.number}"
