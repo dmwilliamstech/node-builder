@@ -107,7 +107,7 @@ class GitApplyPatchTaskTests {
         assert variables.result.data.repositoryDidChange
 
 
-        variables = [localPath: localPath2, gitPatch: new File(variables.result.data.repositoryPatchFile).text]
+        variables = [localPath: localPath2, gitPatch: variables.result.data.repositoryPatchFile]
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 2)
         task = new GitApplyPatchTask()
         task.execute(delegateExecution)

@@ -17,7 +17,7 @@ class GitApplyPatchTask implements JavaDelegate{
 
     void execute(DelegateExecution delegateExecution) throws Exception {
         def localPath = delegateExecution.getVariable("localPath")
-        def patch = delegateExecution.getVariable("gitPatch")
+        def patchFile = delegateExecution.getVariable("gitPatch")
 
         ProcessResult result = new ProcessResult()
         result.data = [:]
@@ -28,7 +28,7 @@ class GitApplyPatchTask implements JavaDelegate{
             assert new File(localPath).exists()
         }
 
-        def out = applyPatch(patch, localCopy)
+        def out = applyPatch(patchFile, localCopy)
 
         result.message = "Successfully applied patch " + out
         delegateExecution.setVariable("result", result)
@@ -45,10 +45,8 @@ class GitApplyPatchTask implements JavaDelegate{
         return out.toString()
     }
 
-    def applyPatch(patch, localCopy){
-        def patchFile = File.createTempFile("patch",".p")
-        patchFile.write(patch)
-        return runCommand("git am --signoff ${patchFile.path}", localCopy)
+    def applyPatch(patchFile, localCopy){
+        return runCommand("git am --signoff ${patchFile}", localCopy)
     }
 
     def initializeRepository(localCopy){

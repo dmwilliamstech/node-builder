@@ -70,6 +70,7 @@ class GitMonitorTaskTests {
                 .setMessage("testing change")
                 .setOnly("thisisatest.txt")
                 .call()
+
         assert result.id != null
     }
 

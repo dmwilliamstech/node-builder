@@ -129,7 +129,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         assert newPatch.exists()
 
         //apply patch
-        variables = [localPath: localPath2, gitPatch: newPatch.text]
+        variables = [localPath: localPath2, gitPatch: newPatch.path]
         delegateExecution = mockDelegateExecutionWithVariables(variables, 1, 2)
         task = new GitApplyPatchTask()
         task.execute(delegateExecution)
