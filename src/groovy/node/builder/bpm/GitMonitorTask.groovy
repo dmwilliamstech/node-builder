@@ -108,13 +108,13 @@ class GitMonitorTask implements JavaDelegate{
     String getDiffFromRemoteMaster(Git git, result){
         def outs = []
 
-        def reference = runCommand("git rev-list --max-parents=0 HEAD", git, createTempFile("output", "txt"), createTempFile("error", "txt"))
+        def reference = runCommand("git rev-list --max-parents=0 HEAD", git, createTempFile("output", ".txt"), createTempFile("error", ".txt"))
 
         [
-            [string:"git fetch", outputFile: createTempFile("output", "txt"), errorFile: createTempFile("error", "txt")],
-            [string:"git checkout origin/master", outputFile: createTempFile("output", "txt"), errorFile: createTempFile("error", "txt")],
-            [string:"git format-patch master --stdout", outputFile: createTempFile("output", "txt"), errorFile: createTempFile("error", "txt")],
-            [string:"git checkout master", outputFile: createTempFile("output", "txt"), errorFile: createTempFile("error", "txt")]
+            [string:"git fetch", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
+            [string:"git checkout origin/master", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
+            [string:"git format-patch master --stdout", outputFile: createTempFile("patch", ".patch"), errorFile: createTempFile("error", ".txt")],
+            [string:"git checkout master", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")]
         ].each{ command ->
             runCommand(command.string, git, command.outputFile, command.errorFile)
             outs.add(command.outputFile)
