@@ -8,6 +8,7 @@ import node.builder.exceptions.UnknownGitRepositoryException
 import org.activiti.engine.delegate.DelegateExecution
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -123,4 +124,9 @@ class GitMonitorTaskTests {
         assert false
     }
 
+    @After
+    void tearDown(){
+        new File(localPath).deleteDir()
+        new File(remotePath).deleteDir()
+    }
 }

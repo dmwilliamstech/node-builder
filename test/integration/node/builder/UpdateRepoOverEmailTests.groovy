@@ -9,6 +9,7 @@ import node.builder.bpm.WriteSmtpMessagesTask
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.junit.After
 import org.junit.Before
 
 @TestMixin(ControllerUnitTestMixin)
@@ -137,5 +138,10 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         assert variables.result.message.contains("Successfully applied patch")
     }
 
-
+    @After
+    void tearDown(){
+        new File(localPath).deleteDir()
+        new File(localPath2).deleteDir()
+        new File(remotePath).deleteDir()
+    }
 }

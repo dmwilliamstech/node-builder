@@ -8,6 +8,7 @@ import node.builder.bpm.GitMonitorTask
 import org.activiti.engine.delegate.DelegateExecution
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.junit.After
 import org.junit.Before
 
 @TestMixin(ControllerUnitTestMixin)
@@ -113,5 +114,13 @@ class GitApplyPatchTaskTests {
         task.execute(delegateExecution)
 
         assert variables.result.message.contains("Successfully applied patch")
+    }
+
+
+    @After
+    void tearDown(){
+        new File(localPath).deleteDir()
+        new File(localPath2).deleteDir()
+        new File(remotePath).deleteDir()
     }
 }
