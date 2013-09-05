@@ -11,6 +11,8 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
 
 @TestMixin(ControllerUnitTestMixin)
 class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
@@ -84,7 +86,10 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         assert result.id != null
     }
 
-    def testApplyPatch(){
+
+    @Ignore
+    @Test()
+    void shouldDetectChangeSendEmailAndApplyPatch(){
         def task = new GitMonitorTask()
         setupLocalRepo(new File(localPath))
         setupLocalRepo(new File(localPath2))
@@ -95,9 +100,8 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         task.execute(mockDelegateExecutionWithVariables(variables,1,2))
 
         assert variables.result.data.repositoryDidChange
-        //email patch
-        def patch = File.createTempFile("patch",".patch")
-        patch.write(new File(variables.result.data.repositoryPatchFile).text)
+
+        def patch = new File(variables.result.data.repositoryPatchFile)
 
         task = new WriteSmtpMessagesTask()
         variables = [emailSmtpHost: Config.config.get("email.smtp.hostname"),
