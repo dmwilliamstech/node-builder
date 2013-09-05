@@ -83,7 +83,10 @@ class ReadImapMessagesTask extends Retryable implements JavaDelegate{
             BodyPart bodyPart = multipart.getBodyPart(it)
             if(bodyPart.fileName){
                 def file = new File("/tmp/${bodyPart.getFileName()}")
-                file << bodyPart.getInputStream().text.bytes
+                if(file.exists())
+                    file.delete()
+
+                file.append(bodyPart.getInputStream())
                 attachments.add([path: "/tmp/${bodyPart.fileName}", name: bodyPart.fileName])
                 files.add(file.path)
             }
