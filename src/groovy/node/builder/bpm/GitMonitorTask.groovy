@@ -93,7 +93,7 @@ class GitMonitorTask implements JavaDelegate{
         process.waitForProcessOutput(out, err)
 
         if(process.exitValue() > 0 ){
-            throw new RuntimeErrorException("Failed to run git commands " + err)
+            throw new RuntimeException("Failed to run git commands " + err)
         }
 
         out.close()

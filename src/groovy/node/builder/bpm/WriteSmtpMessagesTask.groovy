@@ -28,7 +28,7 @@ class WriteSmtpMessagesTask implements JavaDelegate{
         def text = delegateExecution.getVariable("emailText")
         def files = delegateExecution.getVariable("emailFiles")
 
-        def result
+        def result = delegateExecution.getVariable("result")?: new ProcessResult()
 
         log.info "Sending new mail message"
         log.info "Connecting to smtp server"
@@ -87,7 +87,8 @@ class WriteSmtpMessagesTask implements JavaDelegate{
             }
         }
         log.info "Message sent"
-        result = new ProcessResult("Mail sent!", [emailMessage: normalizeMessage(message)])
+        result.message = "Mail sent!"
+        result.data.emailMessage = normalizeMessage(message)
         delegateExecution.setVariable("result", result)
     }
 

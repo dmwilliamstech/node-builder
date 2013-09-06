@@ -19,8 +19,8 @@ class GitApplyPatchTask implements JavaDelegate{
         def localPath = delegateExecution.getVariable("localPath")
         def patchFile = delegateExecution.getVariable("gitPatch")
 
-        ProcessResult result = new ProcessResult()
-        result.data = [:]
+        ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
+
 
         def localCopy = new File(localPath)
         if(!localCopy.exists()){

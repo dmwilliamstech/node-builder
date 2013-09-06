@@ -1,0 +1,126 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <process id="montitorGitRunJobSendEmail" name="monitor repository and notify">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='gitMonitor' />
+
+        <!-- git -->
+
+        <serviceTask id="gitMonitor"
+                     name="Check a Git Repo For changes"
+                     activiti:class="node.builder.bpm.GitMonitorTask" />
+
+        <sequenceFlow id='flow2' sourceRef='gitMonitor' targetRef='changeTask' >
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${result.data.repositoryDidChange}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id='flow3' sourceRef='gitMonitor' targetRef='noChangeTask' >
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${!result.data.repositoryDidChange}]]>
+            </conditionExpression>
+        </sequenceFlow>
+
+        <scriptTask id="changeTask"
+                    name="log change"
+                    scriptFormat="groovy" >
+            <script>
+                println("Change detected in repository ${projectName}, running Jenkins Job")
+                execution.setVariable("jenkinsJobName", "test".toLowerCase())
+                //execution.setVariable("jenkinsJobXml", "")
+            </script>
+        </scriptTask>
+        <scriptTask id="noChangeTask"
+                    name="log no change"
+                    scriptFormat="groovy" >
+            <script>
+                println("No change detected in repository ${projectName}, repository at ${result.data.reference}")
+                println(result.data.diff)
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow4' sourceRef='changeTask' targetRef='runJobTask' />
+        <sequenceFlow id='flow5' sourceRef='noChangeTask' targetRef='receiveTask' />
+
+        <!-- end git -->
+        <!-- jenkins -->
+
+
+
+        <serviceTask id="runJobTask"
+                     name="run a job"
+                     activiti:class="node.builder.bpm.RunJenkinsJobTask" />
+
+        <sequenceFlow id='flow6' sourceRef='runJobTask' targetRef='downloadJobConsoleTask' />
+
+        <serviceTask id="downloadJobConsoleTask"
+                     name="run a job"
+                     activiti:class="node.builder.bpm.DownloadJenkinsJobConsoleTask" />
+
+        <sequenceFlow id='flow7' sourceRef='downloadJobConsoleTask' targetRef='prepareEmailTask' />
+
+
+        <!-- end jenkins -->
+
+        <!-- email -->
+        <scriptTask id="prepareEmailTask"
+                    name="populate email fields"
+                    scriptFormat="groovy" >
+            <script>
+                import node.builder.Config
+
+                execution.setVariable("", "")
+
+                def emailBody = """\
+
+                Build
+                ${result.data.jenkinsBuild.url}
+
+                Console
+                ${result.data.jenkinsBuild.consoleUrl}
+                """
+
+                def variables = [
+                    emailSmtpHost: Config.config.get("email.smtp.hostname"),
+                    emailSmtpPort: Config.config.get("email.smtp.port"),
+                    emailUsername: Config.config.get("email.smtp.username"),
+                    emailPassword: Config.config.get("email.smtp.password"),
+                    emailFrom: Config.config.get("email.smtp.from"),
+                    emailTo: "kwplummer@radiantblue.com",
+                    emailSubject:"Change Detected in GIT repository",
+                    emailText:emailBody,
+                    emailFiles:[result.data.repositoryPatchFile, result.data.jenkinsConsoleFile]
+                ]
+
+                variables.each(){ key, value ->
+                    execution.setVariable(key, value)
+                }
+
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow9' sourceRef='prepareEmailTask' targetRef='sendEmailTask' />
+
+        <serviceTask id="sendEmailTask"
+                     name="create an issue"
+                     activiti:class="node.builder.bpm.WriteSmtpMessagesTask" />
+
+        <sequenceFlow id='flow10' sourceRef='sendEmailTask' targetRef='receiveTask' />
+        <!-- end jira -->
+
+        <!-- paperwork -->
+        <receiveTask id="receiveTask" />
+
+        <sequenceFlow id='flow1000' sourceRef='receiveTask' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+        <!-- end paperwork -->
+    </process>
+
+</definitions>

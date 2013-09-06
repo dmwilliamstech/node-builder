@@ -19,7 +19,6 @@ class ReadImapMessagesTask extends Retryable implements JavaDelegate{
         def port = delegateExecution.getVariable("emailImapPort")
         def username = delegateExecution.getVariable("emailUsername")
         def password = delegateExecution.getVariable("emailPassword")
-        def result
 
         log.info "Checking for new mail messages"
 
@@ -61,7 +60,10 @@ class ReadImapMessagesTask extends Retryable implements JavaDelegate{
             store.close()
         }
         log.info "Closed connection to IMAP"
-        result = new ProcessResult(newMessages.empty? "No new messages found":"${newMessages.size()} new message(s) found", [emailMessageRecieved: !newMessages.empty, emailNewMessages: newMessages])
+        ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
+        result.message = newMessages.empty? "No new messages found":"${newMessages.size()} new message(s) found"
+        result.data.emailMessageRecieved = !newMessages.empty
+        result.data.emailNewMessages = newMessages
         delegateExecution.setVariable("result", result)
     }
 

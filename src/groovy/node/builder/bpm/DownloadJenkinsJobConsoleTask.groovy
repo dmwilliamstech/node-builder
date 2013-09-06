@@ -19,7 +19,7 @@ class DownloadJenkinsJobConsoleTask implements JavaDelegate{
             url.setRequestProperty("Authorization", remoteAuth);
         }
 
-        def consoleFile = File.createTempFile("console", "txt")
+        def consoleFile = File.createTempFile("console", ".txt")
         consoleFile.withOutputStream { out ->
             out << url.getInputStream()
         }
