@@ -31,7 +31,7 @@ class WriteSmtpMessagesTaskTests extends BPMNTaskTestBase{
                 emailText:"this is a test\n",
                 emailFiles:["target/emailAttachment.txt"]
         ]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 8, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 2)
         task.execute(delegateExecution)
         assert variables.result.data.emailMessage.subject == "test"
     }

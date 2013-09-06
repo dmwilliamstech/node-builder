@@ -8,34 +8,19 @@ import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Test
 
 
-class DownloadJenkinsJobConsoleTaskTests {
-
-    def mockDelegateExecutionWithVariables(variables, variablecount){
-        def delegateExecution = new MockFor(DelegateExecution.class)
-
-        (0..variablecount).each {
-            delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        }
-
-
-
-        delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-
-
-        return delegateExecution.proxyInstance()
-    }
+class DownloadJenkinsJobConsoleTaskTests extends BPMNTaskTestBase{
 
     @Test
     void shouldRunTestJobAndDownloadConsole(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 6, 1)
         jenkinsTask.execute(delegateExecution)
         assert variables.result.data.jenkinsBuild.result == BuildResult.SUCCESS
 
         assert variables.result.data.jenkinsBuild.consoleUrl.contains("http://stackbox:9999/job/test/")
 
-        delegateExecution = mockDelegateExecutionWithVariables(variables, 3)
+        delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
         jenkinsTask = new DownloadJenkinsJobConsoleTask()
         jenkinsTask.execute(delegateExecution)
 
@@ -47,7 +32,7 @@ class DownloadJenkinsJobConsoleTaskTests {
     void shouldDetectMissingConsoleUrl(){
         def jenkinsTask = new DownloadJenkinsJobConsoleTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
         jenkinsTask.execute(delegateExecution)
     }
 }

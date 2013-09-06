@@ -3,6 +3,7 @@ package node.builder
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
 import groovy.mock.interceptor.MockFor
+import groovy.mock.interceptor.StubFor
 import node.builder.bpm.GitApplyPatchTask
 import node.builder.bpm.GitMonitorTask
 import org.activiti.engine.delegate.DelegateExecution
@@ -84,14 +85,11 @@ class GitApplyPatchTaskTests {
     }
 
     def mockDelegateExecutionWithVariables(variables, variablecount){
-        def delegateExecution = new MockFor(DelegateExecution.class)
+        def delegateExecution = new StubFor(DelegateExecution.class)
 
-        delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        delegateExecution.demand.getVariable(){variable -> variables[variable]}
+        delegateExecution.demand.getVariable(3){variable -> variables[variable]}
+        delegateExecution.demand.setVariable(variablecount){name, value -> variables[name] = value}
 
-        (0..variablecount).each {
-            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-        }
         return delegateExecution.proxyInstance()
     }
 
@@ -103,13 +101,13 @@ class GitApplyPatchTaskTests {
         changeRepo(true)
         changeRepo()
         def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,2))
+        task.execute(mockDelegateExecutionWithVariables(variables,1))
 
         assert variables.result.data.repositoryDidChange
 
 
         variables = [localPath: localPath2, gitPatch: variables.result.data.repositoryPatchFile]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 1)
         task = new GitApplyPatchTask()
         task.execute(delegateExecution)
 

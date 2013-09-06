@@ -1,6 +1,7 @@
 package node.builder
 
 import groovy.mock.interceptor.MockFor
+import groovy.mock.interceptor.StubFor
 import org.activiti.engine.delegate.DelegateExecution
 
 /**
@@ -11,17 +12,13 @@ import org.activiti.engine.delegate.DelegateExecution
  * To change this template use File | Settings | File Templates.
  */
 class BPMNTaskTestBase {
-    def mockDelegateExecutionWithVariables(variables, variablecount, shouldSet){
-        def delegateExecution = new MockFor(DelegateExecution.class)
-
-        (0..variablecount).each {
-            delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        }
+    def mockDelegateExecutionWithVariables(variables, variablecount, shouldSet = 0){
+        def delegateExecution = new StubFor(DelegateExecution.class)
 
 
-        (0..shouldSet).each {
-            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-        }
+        delegateExecution.demand.getVariable(variablecount){variable -> variables[variable]}
+        delegateExecution.demand.setVariable(shouldSet){name, value -> variables[name] = value}
+
 
         return delegateExecution.proxyInstance()
     }

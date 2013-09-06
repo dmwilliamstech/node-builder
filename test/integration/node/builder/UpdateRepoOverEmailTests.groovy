@@ -95,7 +95,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         changeRepo(true)
         changeRepo()
         def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,1,2))
+        task.execute(mockDelegateExecutionWithVariables(variables,3,2))
 
         assert variables.result.data.repositoryDidChange
 
@@ -112,7 +112,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
                 emailText:"sup?",
                 emailFiles:[patch.path]
         ]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 8, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 3)
         task.execute(delegateExecution)
         assert variables.result.data.emailMessage.subject == "test"
         sleep(10000)
@@ -124,7 +124,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
                 emailImapPort:Config.config.get("email.imap.port"),
                 emailUsername:Config.config.get("email.imap.username"),
                 emailPassword:Config.config.get("email.imap.password")]
-        delegateExecution = mockDelegateExecutionWithVariables(variables, 3, 2)
+        delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 3)
         task.execute(delegateExecution)
         assert !variables.result.data.emailNewMessages.empty
 
@@ -133,7 +133,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
 
         //apply patch
         variables = [localPath: localPath2, gitPatch: newPatch.path]
-        delegateExecution = mockDelegateExecutionWithVariables(variables, 1, 2)
+        delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 3)
         task = new GitApplyPatchTask()
         task.execute(delegateExecution)
 

@@ -28,7 +28,7 @@ class ReadImapMessagesTaskTests extends BPMNTaskTestBase{
                 emailText:"this is a test\n",
                 emailFiles:["target/emailAttachment.txt"]
         ]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 8, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 2)
         task.execute(delegateExecution)
         assert variables.result.data.emailMessage.subject == "test"
 
@@ -42,7 +42,7 @@ class ReadImapMessagesTaskTests extends BPMNTaskTestBase{
                 emailUsername:Config.config.get("email.imap.username"),
                 emailPassword:Config.config.get("email.imap.password")]
 
-        delegateExecution = mockDelegateExecutionWithVariables(variables, 3, 2)
+        delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
         task.execute(delegateExecution)
         assert !variables.result.data.emailNewMessages.empty
         assert (new File("/tmp/emailAttachment.txt")).exists()

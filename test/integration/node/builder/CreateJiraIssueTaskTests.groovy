@@ -7,26 +7,12 @@ import org.junit.Before
 import org.junit.Ignore
 
 
-class CreateJiraIssueTaskTests {
+class CreateJiraIssueTaskTests extends BPMNTaskTestBase{
     final shouldFail = new GroovyTestCase().&shouldFail
 
     @Before
     void setup(){
 
-    }
-
-    def mockDelegateExecutionWithVariables(variables, variablecount, shouldSet){
-        def delegateExecution = new MockFor(DelegateExecution.class)
-
-        (0..variablecount).each {
-            delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        }
-
-        (0..shouldSet).each {
-            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-        }
-
-        return delegateExecution.proxyInstance()
     }
 
     @Ignore

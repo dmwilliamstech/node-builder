@@ -6,23 +6,8 @@ import node.builder.bpm.CreateJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Test
 
-class CreateJenkinsJobTaskTests {
+class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
     final shouldFail = new GroovyTestCase().&shouldFail
-
-    def mockDelegateExecutionWithVariables(variables, variablecount, shouldSet){
-        def delegateExecution = new MockFor(DelegateExecution.class)
-
-        (0..variablecount).each {
-            delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        }
-
-
-        (0..shouldSet).each {
-            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-        }
-
-        return delegateExecution.proxyInstance()
-    }
 
     void testSomething(){
         assert true
@@ -31,7 +16,7 @@ class CreateJenkinsJobTaskTests {
 
     @Test
     void connectToJenkins(){
-        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99"], 4, 0)
+        def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99"], 5, 0)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         shouldFail(Exception){
             createJenkinsJobTask.execute(delegateExecution)
@@ -43,7 +28,7 @@ class CreateJenkinsJobTaskTests {
     void createJobInJenkins(){
         def name = "test-job-" + UUID.randomUUID().toString()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:name, jenkinsJobXml:getJobXml()]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables , 5, 1)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables , 6, 1)
         def createJenkinsJobTask = new CreateJenkinsJobTask()
         createJenkinsJobTask.execute(delegateExecution)
         assert variables.result.data.jenkinsJob.displayName == name
