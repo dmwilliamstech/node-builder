@@ -67,7 +67,7 @@
                     var x2js = new X2JS();
                     var editor = ace.edit("bpmnEditor");
                     var Mode = ace.require('ace/mode/xml').Mode;
-                    var processIds = {}
+
                     editor.getSession().setMode(new Mode());
                     var textarea = $('#bpmnTextArea').hide();
 
@@ -86,16 +86,17 @@
                     function parseProcessIds(definition, current){
                         if(definition.length < 1)
                             return
-
+                        var processIds = {}
                         var json = x2js.xml_str2json( definition )
-                        if(json.definitions != null)
-                            if(json.definitions.process != null && json.definitions.process instanceof Array){
-                                $.each(json.definitions.process, function(index, process){
-                                    processIds[ process._id ] = process._id
-                                });
-                            }else if(json.definitions.process != null){
-                                processIds[ json.definitions.process._id ] = json.definitions.process._id
+                        if(json.definitions != null && json.definitions.process != null){
+                            var processes = json.definitions.process
+                            if( !(processes instanceof Array) ){
+                                processes = [processes]
                             }
+                            $.each(processes, function(index, process){
+                                processIds[ process._id ] = process._id
+                            });
+                        }
 
                         createProcessIdOptions(processIds, current)
                     }
