@@ -34,6 +34,10 @@ class Project {
             if(!value.matches(/((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\+\\u0024,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\\u0024,\w]+@)[A-Za-z0-9.-]+)((?:[\\/\:][\+~%\\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\\/\\w]*))?)/)){
                 return 'url'
             }
+
+            if(!LocationValidator.validateLocationForProjectType(value, object.projectType.name)){
+                return 'connection'
+            }
         }
     }
 

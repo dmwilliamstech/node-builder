@@ -11,7 +11,7 @@
                 <label for="name" class="control-label"><g:message code="project.name.label" default="Name" /></label>
                 <div class="controls">
                     <g:textField name="name" value="${projectInstance?.name}"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'name', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'name', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                 <label for="description" class="control-label"><g:message code="project.description.label" default="Description" /></label>
                 <div class="controls">
                     <g:textField name="description" value="${projectInstance?.description}"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'description', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'description', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 
@@ -27,7 +27,7 @@
                 <label for="location" class="control-label"><g:message code="project.location.label" default="Location" /></label>
                 <div class="controls">
                     <g:textField name="location" value="${projectInstance?.location}"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'location', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'location', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
                 <label for="processDefinitionKey" class="control-label"><g:message code="project.processDefinitionKey.label" default="Process Definition ID" /></label>
                 <div class="controls">
                     <g:textField name="processDefinitionKey" value="${projectInstance?.processDefinitionKey}"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'processDefinitionKey', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'processDefinitionKey', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
 				<label for="bpmnEditor" class="control-label"><g:message code="project.bpmn.label" default="Bpmn" /></label>
 				<div class="controls">
                     <div id="bpmnEditor" style="width:700px;height:200px"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'bpmn', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'bpmn', '<i class="icon-exclamation-sign"></i>')}</span>
 				</div>
 			</div>
             <g:textArea rows="20" class="span8" name="bpmn" value="${projectInstance?.bpmn}"/>
@@ -52,7 +52,7 @@
                 <label for="active" class="control-label"><g:message code="project.active.label" default="Active" /></label>
                 <div class="controls">
                     <g:checkBox rows="20" class="span8" name="active" value="${projectInstance?.active}"/>
-                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'active', 'error')}</span>
+                    <span class="help-inline">${hasErrors(bean: projectInstance, field: 'active', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 

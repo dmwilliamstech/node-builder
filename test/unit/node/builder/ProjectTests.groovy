@@ -17,7 +17,7 @@ class ProjectTests {
 
     @Before
     void setup(){
-        projectType = new ProjectType(name: "Some Name")
+        projectType = new ProjectType(name: "GIT Repository")
         projectType.save()
         assert projectType.errors.errorCount == 0
     }
@@ -27,7 +27,7 @@ class ProjectTests {
         def project = new Project(name:"",
                 bpmn: "<xml></xml>",
                 description: "some description",
-                location: "git@github.com:user/project.git",
+                location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
                 projectType: projectType,
                 processDefinitionKey: "somekey"
@@ -42,7 +42,7 @@ class ProjectTests {
         project = new Project(name:"Some Name",
                 bpmn: "<xml></xml>",
                 description: "some description",
-                location: "git@github.com:user/project.git",
+                location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
                 projectType: projectType,
                 processDefinitionKey: "somekey"
@@ -69,17 +69,17 @@ class ProjectTests {
 //        project.save()
         assert project.errors.errorCount == 1
 
-        project.location = "git@github.com:user/project.git"
+        project.location = "git@github.com:OpenDX/node-builder.git"
         project.save()
         assert project.errors.errorCount == 0
 
-        project.location = "https://github.com/user/project.git"
+        project.location = "https://github.com/OpenDX/node-builder.git"
         project.save()
         assert project.errors.errorCount == 0
 
         project.location = "https://192.168.1.100/user/project.git"
         project.save()
-        assert project.errors.errorCount == 0
+        assert project.errors.errorCount == 1
     }
 
     @After
