@@ -34,7 +34,10 @@
             <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'processDefinitionKey', 'error')} ">
                 <label for="processDefinitionKey" class="control-label"><g:message code="project.processDefinitionKey.label" default="Process Definition ID" /></label>
                 <div class="controls">
-                    <g:textField name="processDefinitionKey" value="${projectInstance?.processDefinitionKey}"/>
+                    <select name="processDefinitionKey" id="processDefinitionKey" value="" >
+
+                    </select>
+                    %{--<g:textField name="processDefinitionKey" value="${projectInstance?.processDefinitionKey}"/>--}%
                     <span class="help-inline">${hasErrors(bean: projectInstance, field: 'processDefinitionKey', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
@@ -46,7 +49,7 @@
                     <span class="help-inline">${hasErrors(bean: projectInstance, field: 'bpmn', '<i class="icon-exclamation-sign"></i>')}</span>
 				</div>
 			</div>
-            <g:textArea rows="20" class="span8" name="bpmn" value="${projectInstance?.bpmn}"/>
+            <g:textArea id="bpmnTextArea" rows="20" class="span8" name="bpmn" value="${projectInstance?.bpmn}"/>
 
             <div class="control-group fieldcontain ${hasErrors(bean: projectInstance, field: 'active', 'error')} ">
                 <label for="active" class="control-label"><g:message code="project.active.label" default="Active" /></label>
@@ -56,16 +59,56 @@
                 </div>
             </div>
 
+            <g:javascript library="xml2json" />
             <g:javascript library="ace" />
             <g:javascript library="mode_xml" />
             <g:javascript>
-                var editor = ace.edit("bpmnEditor");
-                var Mode = ace.require('ace/mode/xml').Mode;
-                editor.getSession().setMode(new Mode());
-                var textarea = $('textarea[name="bpmn"]').hide();
+                $(document).ready(function(){
+                    var x2js = new X2JS();
+                    var editor = ace.edit("bpmnEditor");
+                    var Mode = ace.require('ace/mode/xml').Mode;
+                    var processIds = {}
+                    editor.getSession().setMode(new Mode());
+                    var textarea = $('#bpmnTextArea').hide();
 
-                editor.getSession().setValue(textarea.val());
-                editor.getSession().on('change', function(){
-                    textarea.val(editor.getSession().getValue());
-                });
+                    parseProcessIds(textarea.val(), "${projectInstance.processDefinitionKey}")
+
+                    editor.getSession().setValue(textarea.val());
+                    editor.getSession().on('change', function(){
+                        $('#processDefinitionKey')
+                            .find('option')
+                            .remove()
+                        var value =  editor.getSession().getValue()
+                        parseProcessIds(value, "")
+                        textarea.val(value);
+                    });
+
+                    function parseProcessIds(definition, current){
+                        if(definition.length < 1)
+                            return
+
+                        var json = x2js.xml_str2json( definition )
+                        if(json.definitions != null)
+                            if(json.definitions.process != null && json.definitions.process instanceof Array){
+                                $.each(json.definitions.process, function(index, process){
+                                    processIds[ process._id ] = process._id
+                                });
+                            }else if(json.definitions.process != null){
+                                processIds[ json.definitions.process._id ] = json.definitions.process._id
+                            }
+
+                        createProcessIdOptions(processIds, current)
+                    }
+
+                    function createProcessIdOptions(processIds, current){
+                        $.each(processIds, function(key, value) {
+                            if($("#processDefinitionKey option[value='"+value+"']").length == 0){
+                                $('#processDefinitionKey')
+                                    .append($("<option "+(key == current? "selected='selected' >":">")+"></option>")
+                                            .attr("value",key)
+                                            .text(value));
+                            }
+                        });
+                    }
+                })
             </g:javascript>

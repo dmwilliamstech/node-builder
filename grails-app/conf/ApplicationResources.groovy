@@ -20,4 +20,7 @@ modules = {
     mode_xml {
         resource url: 'js/mode-xml.js'
     }
+    xml2json {
+        resource url: 'js/xml2json.js'
+    }
 }
