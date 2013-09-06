@@ -23,16 +23,18 @@ class MonitorGitJob {
     }
 
     def execute() {
+
+
         def repos
         try{
-            repos = Project.findByProjectType(ProjectType.findByName("GIT Repository"))
+            repos = Project.findAllByProjectType(ProjectType.findByName("GIT Repository"))
         }catch(e){
             log.error("Error retrieving repository data")
             return
         }
 
         repos.each{ Project repo ->
-            if(repo.active && (futures.get(repo.name) == null || futures.get(repo.name).isDone())){
+            if((repo.active) && (futures.get(repo.name) == null || futures.get(repo.name).isDone())){
             futures.remove(repo.name)
             futures.put(repo.name, pool.submit(new Callable<ProcessResult>() {
                 public ProcessResult call() {
