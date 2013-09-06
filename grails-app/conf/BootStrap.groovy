@@ -15,9 +15,8 @@ class BootStrap {
     def init = { servletContext ->
         loadConfig()
         loadSecurity()
-        loadProcessDefinitions()
         loadProjectTypes()
-
+        loadProcessDefinitions()
 
         if(Node.count.is(0)){
             log.info "Creating default Node"
@@ -106,11 +105,9 @@ class BootStrap {
         RepositoryService repositoryService = processEngine.getRepositoryService();
 
         [
-            "resources/monitor_git.bpmn20.xml",
             "resources/deprovision_instance.bpmn20.xml",
             "resources/provision_instance.bpmn20.xml",
-            "resources/create_run_jenkins.bpmn20.xml",
-            "resources/monitor_git_create_job_create_issue.bpmn20.xml"
+                "resources/monitor_git.bpmn20.xml",
         ].each{ resourceLocation ->
             org.activiti.engine.repository.Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(resourceLocation)
