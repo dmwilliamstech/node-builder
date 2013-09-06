@@ -17,7 +17,7 @@ class ProjectFilters {
             }
             after = { Map model ->
                 if(model == null){
-                    loadProcessDefinitions(params.name, params.bpmn)
+                    loadProcessDefinitions(params.name, params.bpmn, params.processDefinitionKey)
                 }
             }
             afterView = { Exception e ->
@@ -26,15 +26,19 @@ class ProjectFilters {
         }
     }
 
-    def loadProcessDefinitions(projectName, bpmn){
-        ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine("loaded")
+    def loadProcessDefinitions(projectName, String bpmn, String processDefinitionKey){
+        ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine(projectName)
         RepositoryService repositoryService = processEngine.getRepositoryService();
 
-
+        //TODO: JANKY
+        def file = File.createTempFile(processDefinitionKey.replaceAll(/\W/, '_'),".bpmn20.xml")
+        if(file.exists())
+            file.delete()
+        file.write(bpmn)
         org.activiti.engine.repository.Deployment deployment = repositoryService.createDeployment()
-                    .addString(projectName, bpmn)
+                    .addInputStream(file.path, new FileInputStream(file))
                     .deploy();
-
+        assert processEngine.repositoryService.createProcessDefinitionQuery().deploymentId(deployment.id).list().size() > 0
         log.info("Loaded process definition for project ${projectName} with id (${deployment.id})")
 
     }
