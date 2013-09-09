@@ -12,3 +12,5 @@ projectFilesBackup/
 target/
 *.db
 logs/
+.idea/
+tmp/

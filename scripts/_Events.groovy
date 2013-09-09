@@ -6,6 +6,7 @@ eventCleanStart = {
     ant.delete('dir':'logs')
     ant.delete('dir':'out')
     ant.delete('dir':'target')
+    ant.delete('dir':'tmp')
     println "| Cleaned directories"
 
     ant.delete{
