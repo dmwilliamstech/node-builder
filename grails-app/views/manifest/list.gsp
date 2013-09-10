@@ -1,5 +1,6 @@
 
 <%@ page import="grails.converters.JSON; node.builder.Instance" %>
+
 <!doctype html>
 <html>
 <head>
@@ -50,7 +51,7 @@
                 </td>
 
 				<td>
-                    <pre>${(manifest.manifest as JSON).toString(true)}</pre>
+                    <pre class="pre-scrollable">${(manifest.manifest as JSON).toString(true)}</pre>
                 </td>
                 <td class="span4">
                 <g:each in="${manifest.deployments}" var="deployment">
