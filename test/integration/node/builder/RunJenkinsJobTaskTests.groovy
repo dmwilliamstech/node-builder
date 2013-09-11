@@ -1,3 +1,4 @@
+
 package node.builder
 
 import com.offbytwo.jenkins.model.BuildResult
