@@ -3,6 +3,8 @@ package node.builder
 import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import node.builder.exceptions.NotDirectoryException
+import org.junit.Test
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
 
@@ -25,7 +27,8 @@ class InputFileChangeListenerTests {
         assert Application.count == 0
     }
 
-    void testNewFileWithSingleApplicationData() {
+    @Test
+    void shouldLoadNewFileWithSingleApplicationData() {
         def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
         nodeType.save()
 
@@ -42,7 +45,8 @@ class InputFileChangeListenerTests {
         assert ApplicationConfiguration.count == 1
     }
 
-    void testNewFileWithSingleNodeData() {
+    @Test
+    void shouldLoadNewFileWithSingleNodeData() {
         Resource resource = new ClassPathResource("resources/single_node.json")
         def file = resource.getFile()
         assert file.exists()
@@ -69,5 +73,52 @@ class InputFileChangeListenerTests {
         assert Node.first().configurations.last().value.class == java.util.ArrayList
         assert Application.last().configurations.first().name == "app_config_3"
         assert Application.last().configurations.last().value.class == java.util.ArrayList
+    }
+
+    @Test
+    void shouldUpdateExistingConfigurations(){
+        Resource resource = new ClassPathResource("resources/single_node.json")
+        def file = resource.getFile()
+        assert file.exists()
+
+        def inputFileChangeListener = new InputFileChangeListener()
+        inputFileChangeListener.onNew(resource.file)
+
+        assert Node.count == 1
+        assert Application.count == 2
+        assert ApplicationConfiguration.count == 2
+        assert NodeConfiguration.count == 2
+        assert Node.first().configurations.first().name == "config_name"
+        assert Node.first().configurations.last().value.class == java.util.ArrayList
+        assert Application.last().configurations.first().name == "app_config_3"
+        assert Application.last().configurations.last().value.class == java.util.ArrayList
+
+        resource = new ClassPathResource("resources/single_node_2.json")
+        file = resource.getFile()
+        assert file.exists()
+
+        inputFileChangeListener.onNew(resource.file)
+
+        assert Node.count == 1
+        assert Application.count == 2
+
+        ApplicationConfiguration.all.each {config ->
+            println "configs ${config.name}"
+        }
+        assert ApplicationConfiguration.count == 2
+        NodeConfiguration.all.each {config ->
+            println "configs ${config.name}"
+        }
+
+        assert NodeConfiguration.count == 2
+        assert Node.first().configurations.first().name == "config_name_5"
+        assert Node.first().configurations.first().value == "Some Node Value"
+        assert Application.last().configurations.first().name == "app_config_3"
+        assert Application.last().configurations.first().value == "Some App Value"
+    }
+
+    @Test(expected = NotDirectoryException)
+    void shouldThrowExceptionIfNotDirectory(){
+        InputFileChangeListener.getDefaultListener(File.createTempFile("not",".dir"))
     }
 }

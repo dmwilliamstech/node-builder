@@ -1,6 +1,8 @@
 package node.builder
 
+import groovy.io.FileType
 import groovy.json.JsonSlurper
+import node.builder.exceptions.NotDirectoryException
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 
 /**
@@ -14,6 +16,13 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
     static InputFileChangeListener getDefaultListener(File directory){
         if(listener == null){
             listener = new InputFileChangeListener(directory)
+            //load existing files
+
+            if(!directory.isDirectory())
+                throw new NotDirectoryException(directory.path)
+            directory.eachFileRecurse(FileType.FILES) { file ->
+                listener.loadFile(file)
+            }
         }
         return listener
     }
@@ -90,8 +99,29 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             def domain
             Node.withTransaction {
                 domain = Node.findByName(node.name)
-                if(domain == null)
+                if(domain == null){
                     domain = new Node()
+                }else{
+                    def apps = []
+                    domain.applications.each{application ->
+                        apps.add(application)
+                        application.delete()
+                    }
+                    apps.each { app ->
+                        domain.removeFromApplications(app)
+                    }
+                    assert domain.applications.size() == 0
+
+                    def configs = []
+                    domain.configurations.each{configuration ->
+                        configs.add(configuration)
+                        configuration.delete()
+                    }
+                    configs.each { config ->
+                        domain.removeFromConfigurations(config)
+                    }
+                    assert domain.configurations.size() == 0
+                }
 
                 domain.name = node.name
                 domain.description = node.description
@@ -116,8 +146,9 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
             try{
             configurationType.withTransaction{
                 def domain = configurationType.findByName(configuration.name)
-                if(domain == null)
+                if(domain == null){
                     domain = configurationType.newInstance()
+                }
 
                 domain.name = configuration.name
                 domain.value = configuration.value

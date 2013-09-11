@@ -36,6 +36,6 @@ class Node {
 	 */
 	@Override	// Override toString for a nicer / more descriptive UI
 	public String toString() {
-		return "${name}";
+		return "${name} ($description) - applications ${applications} - configurations ${configurations}";
 	}
 }
