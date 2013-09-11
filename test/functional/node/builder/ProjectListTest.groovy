@@ -20,9 +20,10 @@ import geb.junit4.GebReportingTest
 import groovy.json.JsonSlurper
 import org.junit.After
 import org.junit.Before
+import org.junit.Test
 import org.springframework.core.io.ClassPathResource
 
-class ProjectListTest extends GebReportingTest {
+class ProjectListTest extends NodeBuilderFunctionalTest{
 
     @Before
     void setup(){
@@ -40,26 +41,19 @@ class ProjectListTest extends GebReportingTest {
         assert Project.count == 1
     }
 
-    void testProjectList(){
+    @Test
+    void shouldDisplayProjectList(){
         login()
         go('project')
         assert title == "Project List"
         sleep(10000)
-        assert $('#project1').first().text() == ("Test")
+        assert $('[id^=project]').first().text() == ("Test")
         assert $('.icon-pencil') != null
     }
 
-    void login(){
-        go('login/auth')
-        assert title == "Login"
-
-        j_username = "admin"
-        j_password = "admin"
-        $('input#submit').click()
-    }
     @After
     void teardown(){
         Project.where { id > 0l }.deleteAll()
-        assert Project.all.size() == 0
+        assert Project.count == 0
     }
 }
