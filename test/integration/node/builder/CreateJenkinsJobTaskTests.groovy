@@ -4,7 +4,9 @@ import com.offbytwo.jenkins.JenkinsServer
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
+import org.junit.Ignore
 import org.junit.Test
+
 
 class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
     final shouldFail = new GroovyTestCase().&shouldFail
@@ -14,6 +16,7 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
     }
 
 
+    @Ignore
     @Test
     void connectToJenkins(){
         def delegateExecution = mockDelegateExecutionWithVariables([jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99"], 5, 0)
@@ -24,6 +27,7 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
     }
 
 
+    @Ignore
     @Test
     void createJobInJenkins(){
         def name = "test-job-" + UUID.randomUUID().toString()
@@ -34,7 +38,8 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
         assert variables.result.data.jenkinsJob.displayName == name
     }
 
-    @Test
+    @Ignore
+	@Test
     void verifyMasterComputer(){
         JenkinsServer jenkins = new JenkinsServer(new URI("http://stackbox:9999/"),
                 "admin", "foobar99")
@@ -43,7 +48,8 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
         assert computers.containsKey("master")
     }
 
-    @Test
+    @Ignore
+	@Test
     void verifyMasterLabel(){
         JenkinsServer jenkins = new JenkinsServer(new URI("http://stackbox:9999/"),
                 "admin", "foobar99")

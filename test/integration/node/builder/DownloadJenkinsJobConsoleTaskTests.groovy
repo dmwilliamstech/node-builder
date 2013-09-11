@@ -5,12 +5,14 @@ import groovy.mock.interceptor.MockFor
 import node.builder.bpm.DownloadJenkinsJobConsoleTask
 import node.builder.bpm.RunJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
+import org.junit.Ignore
 import org.junit.Test
 
 
 class DownloadJenkinsJobConsoleTaskTests extends BPMNTaskTestBase{
 
-    @Test
+    @Ignore
+	@Test
     void shouldRunTestJobAndDownloadConsole(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
@@ -28,7 +30,8 @@ class DownloadJenkinsJobConsoleTaskTests extends BPMNTaskTestBase{
         assert new File(variables.result.data.jenkinsConsoleFile).exists()
     }
 
-    @Test(expected = NullPointerException)
+    @Ignore
+	@Test(expected = NullPointerException)
     void shouldDetectMissingConsoleUrl(){
         def jenkinsTask = new DownloadJenkinsJobConsoleTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]

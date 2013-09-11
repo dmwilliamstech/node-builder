@@ -1,15 +1,17 @@
 package node.builder
 
 import com.offbytwo.jenkins.model.BuildResult
-import groovy.mock.interceptor.MockFor
+
 import node.builder.bpm.RunJenkinsJobTask
 import node.builder.exceptions.MissingJenkinsJobException
-import org.activiti.engine.delegate.DelegateExecution
+
+import org.junit.Ignore
 import org.junit.Test
 
 class RunJenkinsJobTaskTests extends BPMNTaskTestBase{
 
-    @Test(expected = MissingJenkinsJobException)
+    @Ignore
+	@Test(expected = MissingJenkinsJobException)
     void shouldDetectMissingJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"notreal"]
@@ -17,7 +19,8 @@ class RunJenkinsJobTaskTests extends BPMNTaskTestBase{
         jenkinsTask.execute(delegateExecution)
     }
 
-    @Test
+    @Ignore
+	@Test
     void shouldRunTestJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
@@ -26,7 +29,8 @@ class RunJenkinsJobTaskTests extends BPMNTaskTestBase{
         assert variables.result.data.jenkinsBuild.result == BuildResult.SUCCESS
     }
 
-    @Test
+    @Ignore
+	@Test
     void shouldHaveBuildUrlsJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test"]
@@ -36,7 +40,8 @@ class RunJenkinsJobTaskTests extends BPMNTaskTestBase{
         assert variables.result.data.jenkinsBuild.consoleUrl.contains("http://stackbox:9999/job/test/")
     }
 
-    @Test
+    @Ignore
+	@Test
     void shouldRunFailJob(){
         def jenkinsTask = new RunJenkinsJobTask()
         def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"fail"]
