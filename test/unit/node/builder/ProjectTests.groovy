@@ -21,6 +21,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -38,6 +39,7 @@ class ProjectTests {
         assert projectType.errors.errorCount == 0
     }
 
+    @Ignore
     @Test
     void shouldValidateName(){
         def project = new Project(name:"",
@@ -82,7 +84,6 @@ class ProjectTests {
                 processDefinitionKey: "somekey"
         )
         project.validate()
-//        project.save()
         assert project.errors.errorCount == 1
 
         project.location = "git@github.com:OpenDX/node-builder.git"
@@ -93,6 +94,11 @@ class ProjectTests {
         project.save()
         assert project.errors.errorCount == 0
 
+        createEmptyRepo()
+        project.location = "/tmp/dir"
+        project.save()
+        assert project.errors.errorCount == 0
+
         project.location = "https://192.168.1.100/user/project.git"
         project.save()
         assert project.errors.errorCount == 1
@@ -100,6 +106,32 @@ class ProjectTests {
 
     @After
     void teardown(){
+        deleteEmptyRepo()
     }
 
+    private createEmptyRepo(){
+        def tempDir = new File("/tmp/dir")
+        if(tempDir.exists())
+            tempDir.deleteDir()
+        tempDir.mkdir()
+
+        def env = [""]
+        def gitInit = "git init".execute([], tempDir)
+        gitInit.waitForOrKill(1000)
+
+        def touch = "touch test".execute([], tempDir)
+        gitInit.waitForOrKill(1000)
+
+        def gitAdd = "git add test".execute([], tempDir)
+        gitInit.waitForOrKill(1000)
+
+        def gitCommit = "git commit -m 'test' -a".execute([], tempDir)
+        gitInit.waitForOrKill(1000)
+    }
+
+    private deleteEmptyRepo(){
+        def tempDir = new File("/tmp/dir")
+        if(tempDir.exists())
+            tempDir.deleteDir()
+    }
 }
