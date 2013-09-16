@@ -104,8 +104,10 @@
                     function createProcessIdOptions(processIds, current){
                         $.each(processIds, function(key, value) {
                             if($("#processDefinitionKey option[value='"+value+"']").length == 0){
+
                                 $('#processDefinitionKey')
-                                    .append($("<option "+(key == current? "selected='selected' >":">")+"></option>")
+                                    .append($("<option></option>")
+                                            .attr("selected",(key == current || $("#processDefinitionKey option").length == 0 ? "selected":"selected"))
                                             .attr("value",key)
                                             .text(value));
                             }
