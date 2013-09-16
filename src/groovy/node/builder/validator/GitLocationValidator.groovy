@@ -41,9 +41,6 @@ class GitLocationValidator extends LocationValidator{
     }
 
     def processLocationString(String location){
-        if(!location.matches(/.*\.git$/)){
-            location += '.git'
-        }
         return location
     }
 }
