@@ -54,6 +54,7 @@ class BootStrap {
 
 
         try{
+            log.info "Connecting to OpenStack server"
             imageService.loadImages(OpenStackConnection.getConnection())
             instanceService.loadInstances(OpenStackConnection.getConnection())
             flavorService.loadFlavors(OpenStackConnection.getConnection())
