@@ -1,6 +1,0 @@
-<definitions>
-
-    <process id="gitChangeMonitor" name="Monitor Git Repo For Changes">
-    </process>
-
-</definitions>
