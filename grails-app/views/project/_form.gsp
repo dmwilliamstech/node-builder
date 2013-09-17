@@ -35,7 +35,7 @@
                 <label for="processDefinitionKey" class="control-label"><g:message code="project.processDefinitionKey.label" default="Process Definition ID" /></label>
                 <div class="controls">
                     <select name="processDefinitionKey" id="processDefinitionKey" value="" >
-
+                        <option id="0"><g:message code="project.processDefinitionKey.default.option" default="Please provide BPMN workflow" /></option>
                     </select>
                     %{--<g:textField name="processDefinitionKey" value="${projectInstance?.processDefinitionKey}"/>--}%
                     <span class="help-inline">${hasErrors(bean: projectInstance, field: 'processDefinitionKey', '<i class="icon-exclamation-sign"></i>')}</span>
@@ -104,7 +104,7 @@
                     function createProcessIdOptions(processIds, current){
                         $.each(processIds, function(key, value) {
                             if($("#processDefinitionKey option[value='"+value+"']").length == 0){
-
+                                $("#processDefinitionKey option[id=0]").remove()
                                 $('#processDefinitionKey')
                                     .append($("<option></option>")
                                             .attr("selected",(key == current || $("#processDefinitionKey option").length == 0 ? "selected":"selected"))
