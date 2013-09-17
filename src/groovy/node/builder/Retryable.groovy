@@ -18,14 +18,23 @@ package node.builder
 
 
 abstract class Retryable {
-    def retry(handler, clazz = Exception, retries = 1, c) {
+    def retry(Class clazz = Exception, Integer retries = 1, c) {
+        retry({}, clazz, retries, c)
+    }
+
+    def retry(handler, Class clazz = Exception, Integer retries = 1, c) {
+        retry(handler, clazz, retries, 0, c)
+    }
+
+    def retry(handler, Class clazz = Exception, Integer retries = 1, Long timeout, c) {
         try {
             return c()
         } catch(e) {
             retries -= 1
             if(e.class == clazz && retries >= 0){
                 handler(e)
-                retry(handler, retries, c)
+                sleep(timeout)
+                retry(handler, Exception, retries, timeout, c)
             }else{
                 throw e
             }
