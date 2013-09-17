@@ -23,6 +23,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
+import org.springframework.core.io.ClassPathResource
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -43,12 +44,12 @@ class ProjectTests {
     @Test
     void shouldValidateName(){
         def project = new Project(name:"",
-                bpmn: "<xml></xml>",
+                bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
                 projectType: projectType,
-                processDefinitionKey: "somekey"
+                processDefinitionKey: "gitChangeMonitor"
         )
         project.save()
         assert project.errors.errorCount == 1
@@ -58,12 +59,12 @@ class ProjectTests {
         assert project.errors.errorCount == 0
 
         project = new Project(name:"Some Name",
-                bpmn: "<xml></xml>",
+                bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
                 projectType: projectType,
-                processDefinitionKey: "somekey"
+                processDefinitionKey: "gitChangeMonitor"
         )
         project.save()
         assert project.errors.errorCount == 1
@@ -76,12 +77,12 @@ class ProjectTests {
     @Test
     void shouldValidateLocation(){
         def project = new Project(name:"Some Name",
-                bpmn: "<xml></xml>",
+                bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "not???**^^^### a url",
                 active: true,
                 projectType: projectType,
-                processDefinitionKey: "somekey"
+                processDefinitionKey: "gitChangeMonitor"
         )
         project.validate()
         assert project.errors.errorCount == 1

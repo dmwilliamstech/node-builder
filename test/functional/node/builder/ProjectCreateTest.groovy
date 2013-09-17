@@ -21,6 +21,7 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.core.io.ClassPathResource
 
+//@Mixin(Retryable)
 class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
     def tmpDir
 
@@ -31,7 +32,7 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         def project = new Project()
         project.name = "Test"
         project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/process.xml").getFile().text
+        project.bpmn = new ClassPathResource("resources/simple_process.xml").getFile().text
         project.active = false
         project.location = tmpDir.path
         project.processDefinitionKey = "gitChangeMonitor"
@@ -52,20 +53,26 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         assert title == "Create Project"
 
         name = "Test 2"
-        $('.ace_text-input').value(new ClassPathResource("resources/process.xml").getFile().text)
-        sleep(5000)
-        report("project create form")
-        assert processDefinitionKey == "gitChangeMonitor"
+
+        def lines = new ClassPathResource("resources/simple_process.xml").getFile().readLines()
+
+        $("textarea", class:'ace_text-input') << lines[0]
+        $("textarea", class:'ace_text-input') << lines[1]
+
+        sleep(500)
+        assert processDefinitionKey == "process"
         location = tmpDir.path
 
         $('#create').click()
 
         sleep(500)
 
+        assert title.contains("Show")
         assert Project.count() == 2
+
         def project2 = Project.last()
         assert project2.name == "Test 2"
-        assert project2.processDefinitionKey == "gitChangeMonitor"
+        assert project2.processDefinitionKey == "process"
         assert project2.location == tmpDir.path
     }
 

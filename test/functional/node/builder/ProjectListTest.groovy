@@ -28,7 +28,7 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
         def project = new Project()
         project.name = "Test"
         project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/process.xml").getFile().text
+        project.bpmn = new ClassPathResource("resources/simple_process.xml").getFile().text
         project.active = false
         project.location = createEmptyRepo().path
         project.processDefinitionKey = "gitChangeMonitor"
