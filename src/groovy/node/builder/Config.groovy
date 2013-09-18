@@ -16,17 +16,37 @@
 
 package node.builder
 
+import org.apache.commons.logging.LogFactory
+import org.springframework.core.io.ClassPathResource
+
 
 class Config {
-    static ConfigObject config
+    private static ConfigObject config
 
-    static ConfigObject getGlobalConfig(){
+    synchronized static ConfigObject getGlobalConfig(){
         if(config == null){
-            def configFile = new File("${System.getenv("HOME")}/.opendx/config")
-            if(!configFile.exists())
-                configFile = new File("/etc/node-builder.conf")
+            LogFactory.getLog(this).info("Loading config file")
+            def locations = ["${System.getenv("HOME")}/.opendx/node-builder.conf", "/etc/node-builder.conf"]
+            def configFile
+            locations.each{path ->
+                LogFactory.getLog(this).info("Looking for config file at $path")
+                configFile = new File(path)
+                if(configFile.exists()){
+                    LogFactory.getLog(this).info("Found config file at $path")
+                    return
+                }
+            }
+
+            if(!configFile.exists()){
+                LogFactory.getLog(this).info("Config file not found, using default")
+                LogFactory.getLog(this).info("Please update config values for your environment")
+                def conf= new ClassPathResource("resources/node-builder.conf").getFile().text
+                configFile = new File("${System.getenv("HOME")}/.opendx/node-builder.conf")
+                configFile.write(conf)
+            }
 
             config = new ConfigSlurper().parse(new URL("file://${configFile.absolutePath}")).flatten()
+            LogFactory.getLog(this).info("Completed loading config file")
         }
         return config
     }
