@@ -58,6 +58,9 @@
                     <span class="help-inline">${hasErrors(bean: projectInstance, field: 'active', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
+            <g:hiddenField name="state" value="OK"/>
+            <g:hiddenField name="message" value=""/>
+
 
             <g:javascript library="xml2json" />
             <g:javascript library="ace" />

@@ -33,7 +33,14 @@
             <tr class="prop">
                 <td valign="top" class="name"><g:message code="project.active.label" default="Active" /></td>
 
-                <td valign="top" class="value">${projectInstance.active? "Yes": "No"}</td>
+                <td valign="top" class="value"><g:formatBoolean boolean="active" false="No" true="Yes"/></td>
+
+            </tr>
+
+            <tr class="prop">
+                <td valign="top" class="name"><g:message code="project.state.label" default="Status" /></td>
+
+                <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "state")}</td>
 
             </tr>
 

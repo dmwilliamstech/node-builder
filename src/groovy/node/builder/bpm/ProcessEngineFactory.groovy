@@ -17,6 +17,7 @@
 package node.builder.bpm
 
 import node.builder.Utilities
+import org.activiti.engine.ActivitiObjectNotFoundException
 import org.activiti.engine.HistoryService
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.ProcessEngineConfiguration
@@ -66,10 +67,10 @@ class ProcessEngineFactory {
     public static def runProcessWithBusinessKeyAndVariables(ProcessEngine processEngine, String processKey, String businessKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();
         def processInstance
-        synchronized($lock) {
-            // Start a process instance
-            processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables);
-        }
+
+        // Start a process instance
+        processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables)
+
         // verify that the process is actually finished
 
         def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
@@ -78,11 +79,12 @@ class ProcessEngineFactory {
                 .processInstanceId(processInstance.getId())
                 .activityId("receiveTask")
                 .singleResult();
-        runtimeService.signal(execution.getId());
 
-        HistoryService historyService = processEngine.getHistoryService();
+        runtimeService.signal(execution.getId())
+
+        HistoryService historyService = processEngine.getHistoryService()
         HistoricProcessInstance historicProcessInstance =
-            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult()
 
         return result
     }

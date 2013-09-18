@@ -16,12 +16,43 @@
 
 package node.builder
 
+import grails.converters.JSON
+import org.apache.catalina.connector.Response
+
 /**
  * ProjectController
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
  */
 class ProjectController {
+    def springSecurityService
+    def projectService
 
+    static expose = 'project'
     static scaffold = true
 //	def index = { }
+    static allowedMethods = [run: "POST"]
+
+
+    def run(){
+        def project = Project.get(params.id)
+        response.setContentType("application/json")
+        if(project == null){
+            response.status = Response.SC_NOT_FOUND
+            render([project:[:], message:"Project with id $params.id not found"] as JSON)
+        }
+
+        if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMIN")){
+            if(project.state == ProjectState.RUNNING){
+                response.status = Response.SC_NOT_MODIFIED
+                render([project:project, message:"Project with id $params.id already running"] as JSON)
+                return true
+            }
+            def responseData = projectService.run(project)
+            response.status = project.state == ProjectState.ERROR ? Response.SC_INTERNAL_SERVER_ERROR : Response.SC_OK
+            render(responseData as JSON)
+        }else{
+            response.status = Response.SC_UNAUTHORIZED
+            render([project:[:], message:"User ${springSecurityService.currentUser} is not authorized to run project with id $params.id"] as JSON)
+        }
+    }
 }

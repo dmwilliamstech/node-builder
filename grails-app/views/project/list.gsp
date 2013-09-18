@@ -10,6 +10,12 @@
 </head>
 
 <body>
+<!-- print system messages (infos, warnings, etc) - not validation errors -->
+<div id="alert">
+    <g:if test="${flash.message && !layout_noflashmessage}">
+        <div class="alert alert-info">${flash.message}</div>
+    </g:if>
+</div>
 
 <sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="create"><i class="icon-plus-sign"></i> <b>New Project</b></g:link><br></sec:ifAnyGranted>
 <section id="list-project" class="first">
@@ -22,35 +28,46 @@
 			
 				<g:sortableColumn property="description" title="${message(code: 'project.description.label', default: 'Description')}" />
 
+                <g:sortableColumn property="state" title="${message(code: 'project.state.label', default: 'Status')}" />
+
+                <g:sortableColumn property="message" title="${message(code: 'project.message.label', default: 'Message')}" />
+
                 <g:sortableColumn property="location" title="${message(code: 'project.location.label', default: 'Location')}" />
 
                 <g:sortableColumn property="active" title="${message(code: 'project.active.label', default: 'Active')}" />
-			
+
+                <th><g:message code="project.projectType.label" default="Project Type" /></th>
+
 				<g:sortableColumn property="lastUpdated" title="${message(code: 'project.lastUpdated.label', default: 'Last Updated')}" />
-			
-				<th><g:message code="project.projectType.label" default="Project Type" /></th>
-			
+
 			</tr>
 		</thead>
 		<tbody>
 		<g:each in="${projectInstanceList}" status="i" var="projectInstance">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+			<tr id="projectEntry${projectInstance.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
 				<td>
-                    <g:link action="show" id="${projectInstance.id}" elementId="project${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link>
+                    <g:link action="show" id="${projectInstance.id}" elementId="projectShow${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link>
                     <hr>
-                    <sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="edit" id="${projectInstance.id}" elementId="edit_project${projectInstance.id}"><i class="icon-pencil"></i></g:link></sec:ifAnyGranted>
+                    <sec:ifAnyGranted roles="ROLE_ADMIN">
+                        <g:remoteLink action="run" id="${projectInstance.id}" elementId="runProject${projectInstance.id}" onFailure="runFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="runSuccess(data, ${projectInstance.id})" ><i class="icon-play-circle"></i></g:remoteLink>
+                        <g:link action="edit" id="${projectInstance.id}" elementId="editProject${projectInstance.id}"><i class="icon-pencil"></i></g:link>
+                    </sec:ifAnyGranted>
                 </td>
 			
 				<td>${fieldValue(bean: projectInstance, field: "description")}</td>
 
+                <td id="projectState${projectInstance.id}">${fieldValue(bean: projectInstance, field: "state")}</td>
+
+                <td id="projectMessage${projectInstance.id}">${fieldValue(bean: projectInstance, field: "message")}</td>
+
                 <td>${fieldValue(bean: projectInstance, field: "location")}</td>
 
                 <td><g:formatBoolean boolean="${projectInstance.active}" false="No" true="Yes"/></td>
-
-				<td><g:formatDate date="${projectInstance.lastUpdated}" /></td>
 			
 				<td>${fieldValue(bean: projectInstance, field: "projectType")}</td>
+
+                <td><g:formatDate date="${projectInstance.lastUpdated}" /></td>
 			
 			</tr>
 		</g:each>
@@ -59,6 +76,18 @@
 	<div class="pagination">
 		<bs:paginate total="${projectInstanceTotal}" />
 	</div>
+    <g:javascript>
+        function runSuccess(data, id){
+            $("#projectState" + id).html(data.project.state.name)
+            $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
+        }
+        function runFailure(XMLHttpRequest, id){
+
+            var json = JSON.parse(XMLHttpRequest.responseText)
+            $("#projectState" + id).html("ERROR")
+            $("#alert").html('<div class="alert alert-error">'+json.message+'</div>')
+        }
+    </g:javascript>
 </section>
 
 </body>

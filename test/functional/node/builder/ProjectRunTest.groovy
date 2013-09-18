@@ -21,16 +21,21 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.core.io.ClassPathResource
 
-class ProjectListTest extends NodeBuilderFunctionalTestBase{
+//@Mixin(Retryable)
+class ProjectRunTest extends NodeBuilderFunctionalTestBase {
+    def tmpDir
+    def project
 
     @Before
     void setup(){
-        def project = new Project()
+        tmpDir = createEmptyRepo()
+
+        project = new Project()
         project.name = "Test"
         project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/simple_process.xml").getFile().text
+        project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
         project.active = false
-        project.location = createEmptyRepo().path
+        project.location = tmpDir.path
         project.processDefinitionKey = "gitChangeMonitor"
         project.projectType = (ProjectType.findByName("GIT Repository"))
 
@@ -40,17 +45,22 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
     }
 
     @Test
-    void shouldDisplayProjectList(){
+    void shouldRunANewProject(){
         login()
         go('project')
         assert title == "Project List"
-        sleep(100)
-        assert $('[id^=projectShow]').first().text() == ("Test")
-        assert $('.icon-pencil') != null
+
+        $("#runProject${project.id}").click()
+        sleep(500)
+        assert $("#projectState${project.id}").text() == ProjectState.RUNNING.name()
+        assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
+        sleep(5000)
+        $("a[href\$=\"project\"]").click()
+        assert $("#projectState${project.id}").text() == ProjectState.OK.name()
     }
 
     @After
-    void teardown(){
+    void tearDown(){
         Project.where { id > 0l }.deleteAll()
         assert Project.count == 0
 

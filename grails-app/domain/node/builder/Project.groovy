@@ -37,6 +37,8 @@ class Project {
     Boolean active
     String processDefinitionKey
     String bpmn
+    ProjectState state = ProjectState.OK
+    String message = ""
 
     /* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -50,8 +52,7 @@ class Project {
         bpmn maxSize: 16000
         name blank: false
         name unique: true
-
-
+        message nullable: true
 
         processDefinitionKey validator: {value, object ->
             if(value.contains("Please provide BPMN workflow")){
