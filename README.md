@@ -25,7 +25,7 @@ Setup
 -
 
 Currently the app looks in ~/.opendx/node-builder for json files with application definitions.  An example of
-which can be found in test/unit/resources
+which can be found in src/java/resources and will be installed the first time the application is started.
 
 
 License
