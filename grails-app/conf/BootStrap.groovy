@@ -59,7 +59,7 @@ class BootStrap {
             instanceService.loadInstances(OpenStackConnection.getConnection())
             flavorService.loadFlavors(OpenStackConnection.getConnection())
         }catch(Exception e){
-            log.error "Failed to load OpenStack data - ${e}"
+            log.error "Failed to connect to and load OpenStack data"
         }
 
         log.info("Node Builder startup complete")
