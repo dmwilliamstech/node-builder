@@ -72,6 +72,7 @@ class GitMonitorTask implements JavaDelegate{
             throw new UnknownGitRepositoryException("Could not connect to remote repository $remotePath " + e.getMessage(), e)
         }
 
+        result.message = "Initial clone created, no difference detected"
         result.data.repositoryDidChange = false
         return result
     }
@@ -79,7 +80,6 @@ class GitMonitorTask implements JavaDelegate{
 
     def setResultWithPullResult(PullResult pullResult, ProcessResult result){
         def fetchResult = pullResult.fetchResult
-        result.message = fetchResult.messages.toString()
         result.data.uri = fetchResult.getURI()
 
         def mergeResult = pullResult.mergeResult
@@ -100,6 +100,10 @@ class GitMonitorTask implements JavaDelegate{
             result.data.rebaseFailingPaths = rebaseResult.failingPaths
             result.data.rebaseStatus = rebaseResult.status
         }
+
+        result.message = result.data.repositoryDidChange?
+            "Difference detected from remote repository, generated patch and merged local" :
+            "No difference detected from remote repository at this time"
     }
 
 
