@@ -90,15 +90,15 @@ class BootStrap {
     def loadConfig() {
         try{
             def config = Config.getGlobalConfig()
-            def masterName = config.get("master.name")
+            def masterName = config.get("puppet.name")
             def master = Master.findByName(masterName)
             if(master == null)
                 master = new Master()
             master.name = masterName
-            master.hostname = config.get("master.hostname")
-            master.username = config.get("master.username")
-            master.privateKey = config.get("master.privateKey")
-            master.remotePath = config.get("master.remote.path")
+            master.hostname = config.get("puppet.hostname")
+            master.username = config.get("puppet.username")
+            master.privateKey = config.get("puppet.privateKey")
+            master.remotePath = config.get("puppet.remote.path")
 
             master.save(failOnError: true)
 
