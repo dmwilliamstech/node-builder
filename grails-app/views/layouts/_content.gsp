@@ -23,9 +23,18 @@
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
-                                    <li class="${request.getServletPath().contains('manifest') ? 'active' : '' }"><a href="${request.contextPath}/manifest" >Manifests</a></li>
-                                    <li class="${request.getServletPath().contains('image') ? 'active' : '' }"><a href="${request.contextPath}/image">Images</a></li>
-                                    <li class="${request.getServletPath().contains('instance') ? 'active' : '' }"><a href="${request.contextPath}/instance">Instances</a></li>
+                                    <li class="dropdown ${request.getServletPath().contains('manifest') ? 'active' : '' }">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manifests <b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="${request.contextPath}/manifest" >Manifests</a></li>
+                                            <li><a href="${request.contextPath}/image">Images</a></li>
+                                            <li><a href="${request.contextPath}/instance">Instances</a></li>
+                                        </ul>
+                                    </li>
+                                    <g:if test="${request.getServletPath().contains('manifest') || request.getServletPath().contains('image') || request.getServletPath().contains('instance')}">
+                                        <li class="${request.getServletPath().contains('image') ? 'active' : '' }"></li>
+                                        <li class="${request.getServletPath().contains('instance') ? 'active' : '' }"></li>
+                                    </g:if>
                                 </ul>
                                 <ul class="nav pull-right">
                                     <li class="${request.getServletPath().contains('about') ? 'active' : '' }"><a href="${request.contextPath}/about" >About</a></li>
