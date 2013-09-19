@@ -29,7 +29,7 @@ import org.junit.Before
 import org.junit.Test
 
 @TestMixin(ControllerUnitTestMixin)
-class GitMonitorTaskTests {
+class GitMonitorTaskTests extends BPMNTaskTestBase {
     def localPath = File.createTempFile("local", Long.toString(System.nanoTime())).getPath()
     def remotePath = File.createTempFile("remote", Long.toString(System.nanoTime())).getPath()
     def unknownRemotePath = "git@notreal.com:notreal/notreal.git"
@@ -91,22 +91,11 @@ class GitMonitorTaskTests {
         assert result.id != null
     }
 
-    def mockDelegateExecutionWithVariables(variables, variablecount){
-        def delegateExecution = new MockFor(DelegateExecution.class)
-
-        delegateExecution.demand.getVariable(){variable -> variables[variable]}
-        delegateExecution.demand.getVariable(){variable -> variables[variable]}
-
-        (0..variablecount).each {
-            delegateExecution.demand.setVariable(){name, value -> variables[name] = value}
-        }
-        return delegateExecution.proxyInstance()
-    }
 
     def testCloneInitial(){
         def task = new GitMonitorTask()
-        def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,1))
+        def variables = [localPath: localPath, remotePath: remotePath, branch: "master", remoteBranch: "origin/master"]
+        task.execute(mockDelegateExecutionWithVariables(variables,4, 2))
 
         assert (new File(localPath)).exists()
         assert !variables.result.data.repositoryDidChange
@@ -116,8 +105,8 @@ class GitMonitorTaskTests {
         def task = new GitMonitorTask()
         setupLocalRepo(new File(localPath))
         changeRepo()
-        def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,2))
+        def variables = [localPath: localPath, remotePath: remotePath, branch: "master", remoteBranch: "origin/master"]
+        task.execute(mockDelegateExecutionWithVariables(variables,4, 2))
 
         assert variables.result.data.repositoryDidChange
         def file = new File(variables.result.data.repositoryPatchFile)
@@ -127,16 +116,16 @@ class GitMonitorTaskTests {
     def testDetectNoChange(){
         def task = new GitMonitorTask()
         setupLocalRepo(new File(localPath))
-        def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,2))
+        def variables = [localPath: localPath, remotePath: remotePath, branch: "master", remoteBranch: "origin/master"]
+        task.execute(mockDelegateExecutionWithVariables(variables,4, 2))
         assert !variables.result.data.repositoryDidChange
     }
 
     @Test(expected = UnknownGitRepositoryException)
     void shouldThrowExceptionIfRemoteRepositoryDoesNotExist(){
         def task = new GitMonitorTask()
-        def variables = [localPath: localPath, remotePath: unknownRemotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,2))
+        def variables = [localPath: localPath, remotePath: unknownRemotePath, branch: "master", remoteBranch: "origin/master"]
+        task.execute(mockDelegateExecutionWithVariables(variables,4, 2))
         assert false
     }
 

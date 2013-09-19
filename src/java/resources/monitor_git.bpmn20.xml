@@ -8,7 +8,20 @@
 
         <startEvent id="theStart" />
 
-        <sequenceFlow id='flow1' sourceRef='theStart' targetRef='gitMonitor' />
+        <sequenceFlow id='flow0' sourceRef='theStart' targetRef='gitSetup' />
+
+        <!-- git -->
+
+        <scriptTask id="gitSetup"
+                    name="setup git"
+                    scriptFormat="groovy" >
+            <script>
+                execution.setVariable("branch", "master")
+                execution.setVariable("remoteBranch", "origin/master")
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow1' sourceRef='gitSetup' targetRef='gitMonitor' />
 
         <serviceTask id="gitMonitor"
                      name="Check a Git Repo For changes"

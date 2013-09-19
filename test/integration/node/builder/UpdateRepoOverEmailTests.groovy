@@ -110,8 +110,8 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         changeRepo()
         changeRepo(true)
         changeRepo()
-        def variables = [localPath: localPath, remotePath: remotePath]
-        task.execute(mockDelegateExecutionWithVariables(variables,3,2))
+        def variables = [localPath: localPath, remotePath: remotePath, branch: "master", remoteBranch: "origin/master"]
+        task.execute(mockDelegateExecutionWithVariables(variables,5,2))
 
         assert variables.result.data.repositoryDidChange
 

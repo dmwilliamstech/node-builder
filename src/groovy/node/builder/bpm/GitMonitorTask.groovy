@@ -38,6 +38,8 @@ class GitMonitorTask implements JavaDelegate{
     void execute(DelegateExecution delegateExecution) throws Exception {
         def remotePath = delegateExecution.getVariable("remotePath")
         def localPath = delegateExecution.getVariable("localPath")
+        def branch = delegateExecution.getVariable("branch")
+        def remoteBranch = delegateExecution.getVariable("remoteBranch")
         def result = new ProcessResult()
         result.data = [:]
 
@@ -50,7 +52,7 @@ class GitMonitorTask implements JavaDelegate{
         def localRepo = new FileRepository(localPath + "/.git");
         def git = new Git(localRepo)
 
-        getDiffFromRemoteMaster(git, result)
+        getDiffFromRemoteMaster(git, result, branch, remoteBranch)
 
         def pullResult = git.pull()
                             .call()
@@ -125,16 +127,16 @@ class GitMonitorTask implements JavaDelegate{
     }
 
 
-    String getDiffFromRemoteMaster(Git git, result){
+    String getDiffFromRemoteMaster(Git git, result, branch, remoteBranch){
         def outs = []
 
         def reference = runCommand("git rev-list --max-parents=0 HEAD", git, createTempFile("output", ".txt"), createTempFile("error", ".txt"))
 
         [
             [string:"git fetch", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
-            [string:"git checkout origin/master", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
-            [string:"git format-patch master --stdout", outputFile: createTempFile("patch", ".patch"), errorFile: createTempFile("error", ".txt")],
-            [string:"git checkout master", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")]
+            [string:"git checkout $remoteBranch", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
+            [string:"git format-patch $branch --stdout", outputFile: createTempFile("patch", ".patch"), errorFile: createTempFile("error", ".txt")],
+            [string:"git checkout $branch", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")]
         ].each{ command ->
             runCommand(command.string, git, command.outputFile, command.errorFile)
             outs.add(command.outputFile)
