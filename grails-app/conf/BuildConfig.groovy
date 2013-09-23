@@ -76,7 +76,7 @@ grails.project.dependency.resolution = {
         compile 'org.tmatesoft.svnkit:svnkit:1.7.8'
         compile 'org.activiti:activiti-engine:5.13'
         compile 'org.eclipse.jgit:org.eclipse.jgit:3.0.0.201306101825-r'
-        compile 'com.offbytwo.jenkins:jenkins-client:0.1.6-SNAPSHOT'
+        compile 'com.offbytwo.jenkins:jenkins-client:0.1.6.ag-SNAPSHOT'
         compile 'com.atlassian.jira:jira-rest-java-client-core:2.0.0-m25'
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
         compile 'com.sun.mail:all:1.5.0'

@@ -20,9 +20,12 @@ import com.offbytwo.jenkins.JenkinsServer
 import com.offbytwo.jenkins.model.Build
 import com.offbytwo.jenkins.model.Job
 import com.offbytwo.jenkins.model.JobWithDetails
+import groovyx.net.http.HttpResponseException
 import node.builder.exceptions.MissingJenkinsJobException
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
+import org.apache.catalina.connector.Response
+
 
 
 class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
@@ -37,22 +40,21 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
 
         def jobName = delegateExecution.getVariable("jenkinsJobName")
 
-        def details = getJobWithName(jenkins, jobName)
+        JobWithDetails details = getJobWithName(jenkins, jobName)
 
-
-
-        delegateExecution.setVariable("result", buildJob(details, result))
+        delegateExecution.setVariable("result", buildJob(details, result, delegateExecution))
         log.info "Building Job ${details.name} finished with result ${result.data.jenkinsBuild.result}"
     }
 
-    def buildJob(job, result){
+    def buildJob(job, result, delegateExecution){
 
-        def lastBuilderNumber = ((Build)job.getLastBuild()).number
+        def lastBuilderNumber = getLastBuildNumber(job)
         def details = job.details()
 
-        job.build()
+        ((Job)job).build(["TEST":"test"])
+
         log.info "Job ${job.name} has started"
-        while(details.getLastBuild().number == lastBuilderNumber || details.getLastBuild().details().isBuilding()){
+        while(getLastBuildNumber(details) == lastBuilderNumber || details.getLastBuild()?.details().isBuilding()){
             sleep(5000)
             details = job.details()
         }
@@ -74,5 +76,13 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
         log.info "Found Job ${jobName}"
         JobWithDetails details = job.details()
         return details
+    }
+
+    def getLastBuildNumber(job){
+        try{
+            return job.getLastBuild()?.number
+        }catch(NullPointerException e){
+            return 0
+        }
     }
 }
