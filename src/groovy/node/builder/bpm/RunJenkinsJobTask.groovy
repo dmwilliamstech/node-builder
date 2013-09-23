@@ -42,16 +42,20 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
 
         JobWithDetails details = getJobWithName(jenkins, jobName)
 
-        delegateExecution.setVariable("result", buildJob(details, result, delegateExecution))
+        delegateExecution.setVariable("result", buildJob(details, result, delegateExecution.getVariable("jenkinsParameters")))
         log.info "Building Job ${details.name} finished with result ${result.data.jenkinsBuild.result}"
     }
 
-    def buildJob(job, result, delegateExecution){
+    def buildJob(job, result, parameters){
 
         def lastBuilderNumber = getLastBuildNumber(job)
         def details = job.details()
 
-        ((Job)job).build(["TEST":"test"])
+        if(parameters == null){
+            ((Job)job).build()
+        } else {
+            ((Job)job).build(parameters)
+        }
 
         log.info "Job ${job.name} has started"
         while(getLastBuildNumber(details) == lastBuilderNumber || details.getLastBuild()?.details().isBuilding()){
@@ -68,10 +72,11 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
         return result
     }
 
-    def getJobWithName(jenkins, jobName){
-        Job job = jenkins.jobs[jobName]
+    def getJobWithName(jenkins,String jobName){
+        def jobs = jenkins.jobs
+        Job job = jobs[jobName.toLowerCase()]
         if(jobName == null || job == null)
-            throw new MissingJenkinsJobException("Unable to find Jenkins job named ${jobName}", null)
+            throw new MissingJenkinsJobException("Unable to find Jenkins job named ${jobName} in ${jobs}", null)
 
         log.info "Found Job ${jobName}"
         JobWithDetails details = job.details()

@@ -16,7 +16,9 @@
 
 package node.builder.bpm
 
-abstract class JenkinsJobTask {
+import node.builder.Retryable
+
+abstract class JenkinsJobTask extends Retryable {
 
     Map getMapFromJob(job){
         Map map = [:]
