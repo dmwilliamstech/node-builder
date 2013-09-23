@@ -19,7 +19,9 @@ package node.builder
 import com.offbytwo.jenkins.JenkinsServer
 import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJenkinsJobTask
+import node.builder.bpm.DeleteJenkinsJobTask
 import org.activiti.engine.delegate.DelegateExecution
+import org.junit.After
 import org.junit.Ignore
 import org.junit.Test
 
@@ -72,6 +74,14 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
         def label = jenkins.getLabel("master")
         assert label.nodes.size() == 1
         assert label.name == "master"
+    }
+
+    @After
+    void tearDown(){
+        def jenkinsTask = new DeleteJenkinsJobTask()
+        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test\\-job\\-.*"]
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
+        jenkinsTask.execute(delegateExecution)
     }
 
     def getJobXml(){
