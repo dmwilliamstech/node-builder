@@ -131,7 +131,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 3)
         task.execute(delegateExecution)
         assert variables.result.data.emailMessage.subject == "test"
-        sleep(10000)
+        sleep(15000)
 
         //receive patch
         task = new ReadImapMessagesTask()
