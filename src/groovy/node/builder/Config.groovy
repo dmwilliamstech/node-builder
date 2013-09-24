@@ -40,6 +40,11 @@ class Config {
             if(!configFile.exists()){
                 LogFactory.getLog(this).info("Config file not found, using default")
                 LogFactory.getLog(this).info("Please update config values for your environment")
+                def homeDir = new File("${System.getenv("HOME")}/.opendx")
+                if(!homeDir.exists()){
+                    homeDir.mkdirs()
+                    LogFactory.getLog(this).info("Created ${System.getenv("HOME")}/.opendx default directory")
+                }
                 def conf= new ClassPathResource("resources/node-builder.conf").getFile().text
                 configFile = new File("${System.getenv("HOME")}/.opendx/node-builder.conf")
                 configFile.write(conf)
