@@ -28,13 +28,15 @@ class Config {
             LogFactory.getLog(this).info("Loading config file")
             def locations = ["${System.getenv("HOME")}/.opendx/node-builder.conf", "/etc/node-builder.conf"]
             def configFile
-            locations.each{path ->
+            locations.find{path ->
                 LogFactory.getLog(this).info("Looking for config file at $path")
                 configFile = new File(path)
                 if(configFile.exists()){
                     LogFactory.getLog(this).info("Found config file at $path")
-                    return
+                    return true
                 }
+
+                return false
             }
 
             if(!configFile.exists()){
