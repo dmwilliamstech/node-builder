@@ -111,11 +111,12 @@ class GitMonitorTask implements JavaDelegate{
 
     def runCommand(command, git, outputFile, errorFile){
         Process process = command.execute(new String[0] , git.repository.workTree)
-        FileOutputStream out = new FileOutputStream(outputFile), err = new FileOutputStream(errorFile)
+        FileOutputStream out = new FileOutputStream(outputFile)
+        FileOutputStream err = new FileOutputStream(errorFile)
         process.waitForProcessOutput(out, err)
 
         if(process.exitValue() > 0 ){
-            throw new RuntimeException("Failed to run git commands " + err)
+            throw new RuntimeException("Failed to run git command ${command} " + new File(errorFile).text)
         }
 
         out.close()
@@ -130,7 +131,7 @@ class GitMonitorTask implements JavaDelegate{
     String getDiffFromRemoteMaster(Git git, result, branch, remoteBranch){
         def outs = []
 
-        def reference = runCommand("git rev-list --max-parents=0 HEAD", git, createTempFile("output", ".txt"), createTempFile("error", ".txt"))
+        def reference = runCommand("git rev-parse HEAD", git, createTempFile("output", ".txt"), createTempFile("error", ".txt"))
 
         [
             [string:"git fetch", outputFile: createTempFile("output", ".txt"), errorFile: createTempFile("error", ".txt")],
