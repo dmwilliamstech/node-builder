@@ -81,6 +81,7 @@ grails.project.dependency.resolution = {
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
         compile 'com.sun.mail:all:1.5.0'
 
+        runtime "postgresql:postgresql:9.1-901.jdbc4"
     }
 
     plugins {
