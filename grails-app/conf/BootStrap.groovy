@@ -71,8 +71,8 @@ class BootStrap {
     }
 
     def loadSecurity() {
-        def userRole = SecRole.findByAuthority('ROLE_USER') ?: new SecRole(authority: 'ROLE_USER').save(failOnError: true)
-        def adminRole = SecRole.findByAuthority('ROLE_ADMIN') ?: new SecRole(authority: 'ROLE_ADMIN').save(failOnError: true)
+        def userRole = SecRole.findByAuthority('ROLE_USERS') ?: new SecRole(authority: 'ROLE_USERS').save(failOnError: true)
+        def adminRole = SecRole.findByAuthority('ROLE_ADMINS') ?: new SecRole(authority: 'ROLE_ADMINS').save(failOnError: true)
         def adminUser = SecUser.findByUsername('admin') ?: new SecUser(
                 username: 'admin',
                 password: 'admin',

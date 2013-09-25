@@ -17,7 +17,7 @@
     </g:if>
 </div>
 
-<sec:ifAnyGranted roles="ROLE_ADMIN"><g:link action="create"><i class="icon-plus-sign"></i> <b>New Project</b></g:link><br></sec:ifAnyGranted>
+<sec:ifAnyGranted roles="ROLE_ADMINS"><g:link action="create"><i class="icon-plus-sign"></i> <b>New Project</b></g:link><br></sec:ifAnyGranted>
 <section id="list-project" class="first">
 
 	<table class="table table-bordered">
@@ -49,7 +49,7 @@
 				<td>
                     <g:link action="show" id="${projectInstance.id}" elementId="projectShow${projectInstance.id}">${fieldValue(bean: projectInstance, field: "name")}</g:link>
                     <hr>
-                    <sec:ifAnyGranted roles="ROLE_ADMIN">
+                    <sec:ifAnyGranted roles="ROLE_ADMINS">
                         <g:remoteLink action="run" id="${projectInstance.id}" elementId="runProject${projectInstance.id}" onFailure="runFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="runSuccess(data, ${projectInstance.id})" ><i class="icon-play-circle"></i></g:remoteLink>
                         <g:link action="edit" id="${projectInstance.id}" elementId="editProject${projectInstance.id}"><i class="icon-pencil"></i></g:link>
                     </sec:ifAnyGranted>

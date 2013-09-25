@@ -41,7 +41,7 @@ class ProjectController {
             render([project:[:], message:"Project with id $params.id not found"] as JSON)
         }
 
-        if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMIN")){
+        if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMINS")){
             if(project.state == ProjectState.RUNNING){
                 response.status = Response.SC_NOT_MODIFIED
                 render([project:project, message:"Project with id $params.id already running"] as JSON)
