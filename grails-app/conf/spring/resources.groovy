@@ -1,3 +1,5 @@
+import node.builder.UserDetailsService
+
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -15,6 +17,22 @@
  */
 
 // Place your Spring DSL code here
+//beans = {
+//	customPropertyEditorRegistrar(CustomDateEditorRegistrar)
+//}
+
+
 beans = {
-	customPropertyEditorRegistrar(CustomDateEditorRegistrar)
+    ldapAuthenticator(org.springframework.security.ldap.authentication.BindAuthenticator, ref("contextSource")){
+        userDnPatterns = ['cn={0},ou=users,dc=airgapit,dc=com','cn={0},dc=airgapit,dc=com']
+    }
+
+//    // this overrides the default Authentication Provider with our authenticator and our user details service
+//    ldapAuthProvider(org.springframework.security.ldap.authentication.LdapAuthenticationProvider,
+//            ref("myLdapAuthenticator"),
+//            ref("userDetailsService")
+//    )
+//
+//    // defining our user details service
+//    userDetailsService(UserDetailsService)
 }

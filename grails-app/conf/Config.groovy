@@ -95,6 +95,10 @@ log4j = {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 
+    debug 'ldap.test'
+    debug 'org.codehaus.groovy.grails.plugins.springsecurity'
+    debug 'org.springframework.ldap'
+
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -116,6 +120,7 @@ log4j = {
 
 grails.config.defaults.locations = [KickstartResources]
 script.install.directory = "~/.opendx/node-builder"
+
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'node.builder.SecUser'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'node.builder.SecUserSecRole'
@@ -127,3 +132,24 @@ grails.plugins.springsecurity.interceptUrlMap = [
         '/**':                     ['ROLE_ADMIN','ROLE_USER','IS_AUTHENTICATED_FULLY']
 ]
 
+environments {
+    production {
+        grails.plugins.springsecurity.ldap.context.managerDn = 'cn=age,ou=users,dc=airgapit,dc=com'
+        grails.plugins.springsecurity.ldap.context.managerPassword = 'foobar99'
+        grails.plugins.springsecurity.ldap.context.server = 'ldap://ldap:389'
+
+        grails.plugins.springsecurity.ldap.authorities.groupSearchBase = 'ou=groups,dc=airgapit,dc=com'
+        grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = true
+        grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = false
+        grails.plugins.springsecurity.ldap.authorities.groupSearchFilter = 'uniqueMember={0}'
+
+        grails.plugins.springsecurity.ldap.search.base = 'ou=users,dc=airgapit,dc=com'
+        grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','anonymousAuthenticationProvider']
+
+        grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+        grails.plugins.springsecurity.interceptUrlMap = [
+                '/login/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+                '/**':          ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
+        ]
+    }
+}
