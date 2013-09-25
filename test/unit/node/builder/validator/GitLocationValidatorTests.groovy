@@ -36,6 +36,5 @@ class GitLocationValidatorTests {
 
         assert validator.isValid("git@github.com:OpenDX/node-builder.git")
         assert validator.isValid("https://github.com/OpenDX/node-builder.git")
-        assert validator.isValid("https://kellyp@github.com/OpenDX/node-builder")
     }
 }
