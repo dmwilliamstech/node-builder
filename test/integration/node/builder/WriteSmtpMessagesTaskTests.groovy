@@ -17,6 +17,7 @@
 package node.builder
 
 import node.builder.bpm.WriteSmtpMessagesTask
+import org.junit.Ignore
 import org.junit.Test
 
 class WriteSmtpMessagesTaskTests extends BPMNTaskTestBase{
@@ -33,6 +34,7 @@ class WriteSmtpMessagesTaskTests extends BPMNTaskTestBase{
      def files = delegateExecution.getVariable("emailFiles")
      */
 
+    @Ignore
     @Test
     void shouldSendMessages(){
         new File("target/emailAttachment.txt").write("Test test 1 2")

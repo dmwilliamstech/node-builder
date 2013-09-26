@@ -18,6 +18,7 @@ package node.builder
 
 import node.builder.bpm.ReadImapMessagesTask
 import node.builder.bpm.WriteSmtpMessagesTask
+import org.junit.Ignore
 import org.junit.Test
 
 class ReadImapMessagesTaskTests extends BPMNTaskTestBase{
@@ -30,6 +31,7 @@ class ReadImapMessagesTaskTests extends BPMNTaskTestBase{
      def password = delegateExecution.getVariable("emailPassword")
      */
 
+    @Ignore
     @Test
     void shouldGetMessages(){
         new File("target/emailAttachment.txt").write("Test test 1 2")

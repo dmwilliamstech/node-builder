@@ -102,6 +102,7 @@ class UpdateRepoOverEmailTests extends BPMNTaskTestBase{
         assert result.id != null
     }
 
+    @Ignore
     @Test()
     void shouldDetectChangeSendEmailAndApplyPatch(){
         def task = new GitMonitorTask()
