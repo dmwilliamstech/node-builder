@@ -24,7 +24,7 @@ import groovyx.net.http.RESTClient
 
 class OpenStackConnection extends Retryable {
 
-    def hostname
+    def url
     def username
     def password
     def tenantId
@@ -45,9 +45,9 @@ class OpenStackConnection extends Retryable {
 
     private static OpenStackConnection connection
 
-    static def createConnection(hostname, username, password, tenantId, keyId, defaultFlavorId){
+    static def createConnection(url, username, password, tenantId, keyId, defaultFlavorId){
         if(connection == null)
-            connection = new OpenStackConnection(hostname, username, password, tenantId, keyId, defaultFlavorId)
+            connection = new OpenStackConnection(url, username, password, tenantId, keyId, defaultFlavorId)
         assert connection != null
         return connection
     }
@@ -56,8 +56,8 @@ class OpenStackConnection extends Retryable {
         return connection
     }
 
-    private def OpenStackConnection(hostname, username, password, tenantId, keyId, defaultFlavorId){
-        this.hostname = hostname
+    private def OpenStackConnection(url, username, password, tenantId, keyId, defaultFlavorId){
+        this.url = url
         this.username = username
         this.password = password
         this.tenantId = tenantId
@@ -67,7 +67,7 @@ class OpenStackConnection extends Retryable {
     }
 
     def connect(){
-        def keystone = new RESTClient( "http://${this.hostname}:5000/v2.0/" )
+        def keystone = new RESTClient( this.url )
 
         def resp = keystone.post( path : 'tokens',
                 body : [auth:[passwordCredentials:[username: this.username, password:this.password], tenantId: this.tenantId]],
@@ -78,7 +78,7 @@ class OpenStackConnection extends Retryable {
         for (endpoint in resp.data.access.serviceCatalog) {
             if (endpoint.type == 'compute' ) {
                                                                       //make sure openstack doesn't redirect us
-                this.adminUrl = (endpoint.endpoints.adminURL[0] + "/").replaceAll("\\/\\/.*\\:", "//${hostname}:")
+                this.adminUrl = (endpoint.endpoints.adminURL[0] + "/").replaceAll("\\/\\/.*\\:", "//${new URL(this.url).host}:")
                 this.compute = new RESTClient(this.adminUrl)
             }
         }

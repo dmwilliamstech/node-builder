@@ -103,7 +103,7 @@ class BootStrap {
             master.save(failOnError: true)
 
             OpenStackConnection.createConnection(
-                config.get("openstack.hostname"),
+                config.get("openstack.url"),
                 config.get("openstack.username"),
                 config.get("openstack.password"),
                 config.get("openstack.tenant.id"),
