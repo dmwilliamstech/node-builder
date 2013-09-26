@@ -63,7 +63,7 @@ class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
             details = job.details()
         }
 
-        def build = details.builds.last().details()
+        def build = ((JobWithDetails)details).getLastBuild().details()
         result.data.jenkinsBuild = getMapFromBuild(build)
         result.data.jenkinsBuild.url = "${job.url}${build.number}"
         result.data.jenkinsBuild.consoleUrl = "${job.url}${build.number}/console"
