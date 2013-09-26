@@ -55,6 +55,9 @@ class ProjectService {
                             def variables = new HashMap();
 
                             def config =  Config.getGlobalConfig()
+                            config.each { key, value ->
+                                variables.put(key, value)
+                            }
 
                             variables.put("projectName", project.name)
                             variables.put("remotePath", project.location)
