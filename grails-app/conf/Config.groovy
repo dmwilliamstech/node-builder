@@ -126,7 +126,7 @@ environments {
     production {
         grails.plugins.springsecurity.ldap.context.managerDn = 'cn=age,ou=users,dc=airgapit,dc=com'
         grails.plugins.springsecurity.ldap.context.managerPassword = 'foobar99'
-        grails.plugins.springsecurity.ldap.context.server = 'ldap://ldap:389'
+        grails.plugins.springsecurity.ldap.context.server = 'ldaps://ldap:636'
 
         grails.plugins.springsecurity.ldap.authorities.groupSearchBase = 'ou=groups,dc=airgapit,dc=com'
         grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = true
