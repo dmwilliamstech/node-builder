@@ -17,6 +17,7 @@
 package node.builder.bpm
 
 import grails.converters.JSON
+import node.builder.Retryable
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.apache.commons.io.FilenameUtils
@@ -32,7 +33,7 @@ import javax.mail.internet.MimeMessage
 import javax.mail.internet.MimeMultipart
 import javax.mail.search.FlagTerm
 
-class WriteSmtpMessagesTask implements JavaDelegate{
+class WriteSmtpMessagesTask extends Retryable implements JavaDelegate{
     void execute(DelegateExecution delegateExecution) throws Exception {
         def host = delegateExecution.getVariable("emailSmtpHost")
         def port = delegateExecution.getVariable("emailSmtpPort")
@@ -94,9 +95,10 @@ class WriteSmtpMessagesTask implements JavaDelegate{
             // Send message
             Address [] addresses = new Address[1]
             addresses[0] = new InternetAddress(to)
-            transport.sendMessage(message, addresses);
 
-
+            retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
+                transport.sendMessage(message, addresses);
+            }
         } finally {
             if(transport) {
                 transport.close()
