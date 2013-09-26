@@ -51,7 +51,7 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         assert title == "Project List"
 
         $("#runProject${project.id}").click()
-        sleep(500)
+        sleep(1000)
         assert $("#projectState${project.id}").text() == ProjectState.RUNNING.name()
         assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
         sleep(5000)
