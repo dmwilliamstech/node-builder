@@ -59,6 +59,9 @@ class ManifestListTest extends GebReportingTest {
         j_username = "admin"
         j_password = "admin"
         $('input#submit').click()
+
+        $('.dropdown-toggle').click()
+        $('a[href$="manifest"]').click()
     }
     @After
     void teardown(){
