@@ -76,13 +76,13 @@ class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
         assert label.name == "master"
     }
 
-    @After
-    void tearDown(){
-        def jenkinsTask = new DeleteJenkinsJobTask()
-        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test\\-job\\-.*"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
-        jenkinsTask.execute(delegateExecution)
-    }
+//    @After
+//    void tearDown(){
+//        def jenkinsTask = new DeleteJenkinsJobTask()
+//        def variables = [jenkinsUrl: "http://stackbox:9999/", jenkinsUser:"admin", jenkinsPassword:"foobar99", jenkinsJobName:"test\\-job\\-.*"]
+//        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
+//        jenkinsTask.execute(delegateExecution)
+//    }
 
     def getJobXml(){
         return """\
