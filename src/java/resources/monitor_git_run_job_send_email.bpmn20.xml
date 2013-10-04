@@ -44,7 +44,6 @@
             <script>
                 println("Change detected in repository ${projectName}, running Jenkins Job")
                 execution.setVariable("jenkinsJobName", "test".toLowerCase())
-                //execution.setVariable("jenkinsJobXml", "")
             </script>
         </scriptTask>
         <scriptTask id="noChangeTask"
@@ -62,11 +61,10 @@
         <!-- end git -->
         <!-- jenkins -->
 
-
-
         <serviceTask id="runJobTask"
                      name="run a job"
-                     activiti:class="node.builder.bpm.RunJenkinsJobTask" />
+                     activiti:class="node.builder.bpm.RunJenkinsJobTask" >
+        </serviceTask>
 
         <sequenceFlow id='flow6' sourceRef='runJobTask' targetRef='downloadJobConsoleTask' />
 
@@ -90,10 +88,15 @@
 
                 def emailBody = """\
 
+
                 Build
+                Jenkins Job ${jenkinsJobName} resulted in status ${result.data.jenkinsBuild.result.toString()}
+
+                You can view the job here:
                 ${result.data.jenkinsBuild.url}
 
                 Console
+                You can view the results of the build here:
                 ${result.data.jenkinsBuild.consoleUrl}
                 """
 
@@ -104,7 +107,7 @@
                     emailPassword: Config.config.get("email.smtp.password"),
                     emailFrom: Config.config.get("email.smtp.from"),
                     emailTo: "kwplummer@radiantblue.com",
-                    emailSubject:"Change Detected in GIT repository",
+                    emailSubject:"${result.data.jenkinsBuild.result.toString()}: Change Detected in GIT repository, Jenkins build finished",
                     emailText:emailBody,
                     emailFiles:[result.data.repositoryPatchFile, result.data.jenkinsConsoleFile]
                 ]
