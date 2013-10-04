@@ -47,18 +47,19 @@ class WriteSmtpMessagesTask extends Retryable implements JavaDelegate{
 
         def result = delegateExecution.getVariable("result")?: new ProcessResult()
 
-        log.info "Sending new mail message"
+        log.info "Sending new mail message with smtp "
         log.info "Connecting to smtp server"
 
         Properties props = new Properties()
         props.setProperty("mail.smtp.host", host)
         props.setProperty("mail.smtp.port", port.toString())
         props.put("mail.smtp.starttls.enable","true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.debug", "true");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
-        def session = Session.getDefaultInstance(props, null)
+        props.put("mail.smtp.auth", "true")
+        props.put("mail.smtp.debug", "true")
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+        props.put("mail.smtp.socketFactory.fallback", "false")
+
+        def session = Session.getInstance(props, null)
         def transport = session.getTransport("smtp")
         transport.connect(host, port, username, password)
 
@@ -97,6 +98,7 @@ class WriteSmtpMessagesTask extends Retryable implements JavaDelegate{
             addresses[0] = new InternetAddress(to)
 
             retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
+                log.info "Sending email message to smtp"
                 transport.sendMessage(message, addresses);
             }
         } finally {
