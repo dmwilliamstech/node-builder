@@ -4,6 +4,12 @@
 
 		</div>
 
-		<p class="pull-right"><a href="#">Back to top</a></p>
+        <p class="pull-left">
+
+            <sec:loggedInUserInfo field="organizations" />
+
+        </p>
+
+        <p class="pull-right"><a href="#">Back to top</a></p>
 	</div>
 </footer>

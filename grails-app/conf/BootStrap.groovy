@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+
+import grails.util.Environment
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
+import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
 
 class BootStrap {
     def grailsApplication
@@ -30,7 +33,8 @@ class BootStrap {
 
     def init = { servletContext ->
         loadConfig()
-        loadSecurity()
+        if(Environment.currentEnvironment != Environment.PRODUCTION)
+            loadSecurity()
         loadProjectTypes()
         loadProcessDefinitions()
 
@@ -71,6 +75,9 @@ class BootStrap {
     }
 
     def loadSecurity() {
+        log.info "Loading jdbc based security"
+
+
         def userRole = SecRole.findByAuthority('ROLE_USERS') ?: new SecRole(authority: 'ROLE_USERS').save(failOnError: true)
         def adminRole = SecRole.findByAuthority('ROLE_ADMINS') ?: new SecRole(authority: 'ROLE_ADMINS').save(failOnError: true)
         def adminUser = SecUser.findByUsername('admin') ?: new SecUser(
@@ -81,7 +88,6 @@ class BootStrap {
         if (!adminUser.authorities.contains(adminRole)) {
             SecUserSecRole.create adminUser, adminRole
         }
-
     }
 
     def destroy = {

@@ -1,4 +1,6 @@
 import grails.util.Environment
+import node.builder.CustomUserDetailsContextMapper
+import node.builder.CustomUserDetailsService
 
 /**
  * Copyright 2013 AirGap, LLC.
@@ -16,11 +18,6 @@ import grails.util.Environment
  * limitations under the License.
  */
 
-// Place your Spring DSL code here
-//beans = {
-//	customPropertyEditorRegistrar(CustomDateEditorRegistrar)
-//}
-
 
 beans = {
     Environment.executeForCurrentEnvironment {
@@ -31,13 +28,11 @@ beans = {
         }
     }
 
+    ldapUserDetailsMapper(CustomUserDetailsContextMapper) {
+    }
 
-//    // this overrides the default Authentication Provider with our authenticator and our user details service
-//    ldapAuthProvider(org.springframework.security.ldap.authentication.LdapAuthenticationProvider,
-//            ref("myLdapAuthenticator"),
-//            ref("userDetailsService")
-//    )
-//
-//    // defining our user details service
-//    userDetailsService(UserDetailsService)
+    if(Environment.currentEnvironment != Environment.PRODUCTION){
+        userDetailsService(CustomUserDetailsService){
+        }
+    }
 }

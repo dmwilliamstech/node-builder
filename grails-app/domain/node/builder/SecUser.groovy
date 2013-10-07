@@ -26,10 +26,12 @@ class SecUser {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+    String organizations
 
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false
+        organizations nullable: true
 	}
 
 	static mapping = {
