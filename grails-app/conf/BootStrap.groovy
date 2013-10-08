@@ -77,16 +77,35 @@ class BootStrap {
     def loadSecurity() {
         log.info "Loading jdbc based security"
 
+        def muppets = "muppets"
+        def fraggles = "fraggles"
 
         def userRole = SecRole.findByAuthority('ROLE_USERS') ?: new SecRole(authority: 'ROLE_USERS').save(failOnError: true)
         def adminRole = SecRole.findByAuthority('ROLE_ADMINS') ?: new SecRole(authority: 'ROLE_ADMINS').save(failOnError: true)
         def adminUser = SecUser.findByUsername('admin') ?: new SecUser(
                 username: 'admin',
                 password: 'admin',
-                enabled: true).save(failOnError: true)
+                enabled: true)
+
+        adminUser.addToOrganizations(muppets)
+        adminUser.save(failOnError: true)
 
         if (!adminUser.authorities.contains(adminRole)) {
             SecUserSecRole.create adminUser, adminRole
+        }
+
+        ["gobo", "mokey"].each { username ->
+            def gogoUser = SecUser.findByUsername(username) ?: new SecUser(
+                    username: username,
+                    password: username,
+                    enabled: true)
+
+            gogoUser.addToOrganizations(fraggles)
+            gogoUser.save(failOnError: true)
+
+            if (!gogoUser.authorities.contains(adminRole)) {
+                SecUserSecRole.create gogoUser, adminRole
+            }
         }
     }
 
