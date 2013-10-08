@@ -34,28 +34,33 @@ class CustomUserDetailsService implements GrailsUserDetailsService{
 
     @Override
     UserDetails loadUserByUsername(String s, boolean loadRoles) throws UsernameNotFoundException, DataAccessException {
-        def user = SecUser.findByUsername(s)
-        def authorities = new ArrayList<GrantedAuthority>()
-        def secRoles = SecUserSecRole.findAllBySecUser(user)
-        log.error secRoles
+        SecUser.withTransaction {
+            def user = SecUser.findByUsername(s)
+            def authorities = new ArrayList<GrantedAuthority>()
+            def secRoles = SecUserSecRole.findAllBySecUser(user)
 
-        secRoles.each {userRole ->
-            log.error userRole
+            secRoles.each {userRole ->
                 authorities.addAll(AuthorityUtils.createAuthorityList(userRole.secRole.authority))
+            }
+
+
+            def details = new CustomUserDetails(
+                user.username,
+                user.password,
+                    user.enabled,
+                    !user.accountExpired,
+                    true,
+                    !user.accountLocked,
+                    authorities
+            )
+
+            def orgs = []
+            user.organizations.each { org ->
+                orgs << org
+            }
+            details.organizations = orgs
+            return details
         }
-
-
-        def details = new CustomUserDetails(
-            user.username,
-            user.password,
-                user.enabled,
-                !user.accountExpired,
-                true,
-                !user.accountLocked,
-                authorities
-        )
-
-        return details
     }
 
     @Override
