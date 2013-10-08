@@ -26,12 +26,13 @@ class SecUser {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
-    String organizations
+    Set<String> organizations
+    static hasMany = [organizations:String]
 
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false
-        organizations nullable: true
+        organizations lazy: false
 	}
 
 	static mapping = {

@@ -36,6 +36,28 @@ class ProjectService {
     static Map futures = [:]
 
 
+    def createWithoutSaving(params, organizations){
+        def projectInstance = new Project(params)
+
+        projectInstance.organizations = organizations
+        return projectInstance
+    }
+
+
+    def findAllByOrganizations(organizations, params){
+        def projects = Project.executeQuery(
+                'from Project p where :organizations in elements(p.organizations)',
+                [organizations: organizations], params)
+        return projects
+    }
+
+    def getByOrganizations(id, organizations){
+        def project = Project.executeQuery(
+                'from Project p where p.id=:id and :organizations in elements(p.organizations)',
+                [id: Long.parseLong(id), organizations: organizations])
+
+        return project.empty ? null : project.first()
+    }
 
     def run(project) {
         def message = ""

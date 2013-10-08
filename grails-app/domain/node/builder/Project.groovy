@@ -40,6 +40,8 @@ class Project {
     ProjectState state = ProjectState.OK
     String message = ""
 
+    static hasMany = [organizations:String]
+
     /* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated
