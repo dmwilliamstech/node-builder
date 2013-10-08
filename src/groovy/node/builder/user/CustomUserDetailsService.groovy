@@ -1,6 +1,8 @@
-package node.builder
+package node.builder.user
 
 import grails.plugins.springsecurity.SpringSecurityService
+import node.builder.SecUser
+import node.builder.SecUserSecRole
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserDetailsService
 import org.springframework.dao.DataAccessException
 import org.springframework.security.core.GrantedAuthority

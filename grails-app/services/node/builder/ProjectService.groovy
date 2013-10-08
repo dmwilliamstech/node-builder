@@ -45,6 +45,8 @@ class ProjectService {
 
 
     def findAllByOrganizations(organizations, params){
+        if(organizations == null || organizations.empty)
+            return []
         def projects = Project.executeQuery(
                 'from Project p where :organizations in elements(p.organizations)',
                 [organizations: organizations], params)
@@ -52,6 +54,8 @@ class ProjectService {
     }
 
     def getByOrganizations(id, organizations){
+        if(organizations == null || organizations.empty)
+            return null
         def project = Project.executeQuery(
                 'from Project p where p.id=:id and :organizations in elements(p.organizations)',
                 [id: Long.parseLong(id), organizations: organizations])

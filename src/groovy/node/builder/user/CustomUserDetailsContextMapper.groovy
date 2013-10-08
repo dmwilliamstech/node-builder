@@ -1,4 +1,4 @@
-package node.builder
+package node.builder.user
 
 import org.springframework.ldap.core.DirContextAdapter
 import org.springframework.ldap.core.DirContextOperations
@@ -21,12 +21,15 @@ import org.springframework.security.ldap.userdetails.UserDetailsContextMapper
  * limitations under the License.
  */
 class CustomUserDetailsContextMapper  implements UserDetailsContextMapper {
+    private static final String DEFAULT_ORGANIZATION= "default"
 
     UserDetails mapUserFromContext(DirContextOperations dirContextOperations, String username, Collection authorities) {
         def user = new CustomUserDetails(username, "", true, true, true, true,
                 authorities)
 
         def organizations = dirContextOperations.getAttributeSortedStringSet("o")
+        if(organizations == null || organizations.empty)
+            organizations = [DEFAULT_ORGANIZATION]
         organizations?.each{ organization ->
             user.addOrganization(organization)
         }

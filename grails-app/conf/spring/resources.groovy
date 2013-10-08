@@ -1,6 +1,6 @@
 import grails.util.Environment
-import node.builder.CustomUserDetailsContextMapper
-import node.builder.CustomUserDetailsService
+import node.builder.user.CustomUserDetailsContextMapper
+import node.builder.user.CustomUserDetailsService
 
 /**
  * Copyright 2013 AirGap, LLC.

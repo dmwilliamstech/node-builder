@@ -1,4 +1,4 @@
-package node.builder
+package node.builder.user
 
 /**
  * Copyright 2013 AirGap, LLC.
