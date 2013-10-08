@@ -114,6 +114,6 @@ grails.project.dependency.resolution = {
 
 grails.project.dependency.distribution = {
     localRepository = "~/.m2"
-    remoteRepository(id:"codiceSnapshots", url:"http://artifacts.codice.org/content/repositories/snapshots/")
-    remoteRepository(id:"codiceReleases", url:"http://artifacts.codice.org/content/repositories/releases/")
+    remoteRepository(id:"airgapSnapshots", url:"http://rizzo/nexus/content/repositories/snapshots/")
+    remoteRepository(id:"airgapReleases", url:"http://rizzo/nexus/content/repositories/releases/")
 }
