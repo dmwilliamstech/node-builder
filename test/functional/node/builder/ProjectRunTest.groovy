@@ -16,32 +16,28 @@
 
 package node.builder
 
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 
 //@Mixin(Retryable)
 class ProjectRunTest extends NodeBuilderFunctionalTestBase {
-    def tmpDir
-    def project
 
     @Before
     void setup(){
-        tmpDir = createEmptyRepo()
-
-        project = new Project()
-        project.name = "Test"
-        project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
-        project.active = false
-        project.location = tmpDir.path
-        project.processDefinitionKey = "gitChangeMonitor"
-        project.projectType = (ProjectType.findByName("GIT Repository"))
-
-        project.save(failOnError: true)
-
+        assert Project.count == 0
+        (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
+        def project = Project.first()
+        project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
+        project.processDefinitionKey = "gitChangeMonitor"
+        project.save(flush: true)
+
     }
 
     @Test
@@ -49,6 +45,7 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         login()
         go('project')
         assert title == "Project List"
+        def project = Project.first()
 
         $("#runProject${project.id}").click()
         sleep(1000)
@@ -61,9 +58,13 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
 
     @After
     void tearDown(){
-        Project.where { id > 0l }.deleteAll()
-        assert Project.count == 0
+        ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
+        SessionFactory sessionFactory = context.getBean('sessionFactory')
 
+        Project.all.each{project ->
+            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        }
+        Project.where {id>0l}.deleteAll()
         deleteEmptyRepo()
     }
 }

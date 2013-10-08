@@ -19,12 +19,12 @@ import geb.junit4.GebReportingTest
  */
 class NodeBuilderFunctionalTestBase extends GebReportingTest{
 
-    void login(){
+    void login(username = 'admin', password = 'admin'){
         go('login/auth')
         assert title == "Login"
 
-        j_username = "admin"
-        j_password = "admin"
+        j_username = username
+        j_password = password
         $('input#submit').click()
     }
 

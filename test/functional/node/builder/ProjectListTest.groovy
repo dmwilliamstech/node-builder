@@ -16,27 +16,20 @@
 
 package node.builder
 
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 
 class ProjectListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
-        def project = new Project()
-        project.name = "Test"
-        project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/simple_process.xml").getFile().text
-        project.active = false
-        project.location = createEmptyRepo().path
-        project.processDefinitionKey = "gitChangeMonitor"
-        project.projectType = (ProjectType.findByName("GIT Repository"))
-
-        project.save(failOnError: true)
-
-        assert Project.count == 1
+        (new ProjectCreateTest()).shouldCreateANewProject()
     }
 
     @Test
@@ -51,9 +44,13 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
 
     @After
     void teardown(){
-        Project.where { id > 0l }.deleteAll()
-        assert Project.count == 0
+        ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
+        SessionFactory sessionFactory = context.getBean('sessionFactory')
 
+        Project.all.each{project ->
+            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        }
+        Project.where {id>0l}.deleteAll()
         deleteEmptyRepo()
     }
 }

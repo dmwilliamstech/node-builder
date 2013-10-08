@@ -16,35 +16,33 @@
 
 package node.builder
 
+
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+
+import org.hibernate.SessionFactory
+
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
+
 
 //@Mixin(Retryable)
 class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
     def tmpDir
 
+
     @Before
     void setup(){
-        tmpDir = createEmptyRepo()
-
-        def project = new Project()
-        project.name = "Test"
-        project.description = "Test"
-        project.bpmn = new ClassPathResource("resources/simple_process.xml").getFile().text
-        project.active = false
-        project.location = tmpDir.path
-        project.processDefinitionKey = "gitChangeMonitor"
-        project.projectType = (ProjectType.findByName("GIT Repository"))
-
-        project.save(failOnError: true)
-
-        assert Project.count == 1
+        assert Project.count == 0
     }
 
     @Test
     void shouldCreateANewProject(){
+        tmpDir = createEmptyRepo()
+
         login()
         go('project')
         assert title == "Project List"
@@ -52,7 +50,7 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         $('.icon-plus-sign').click()
         assert title == "Create Project"
 
-        name = "Test 2"
+        name = "Test"
 
         def lines = new ClassPathResource("resources/simple_process.xml").getFile().readLines()
 
@@ -68,18 +66,30 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         sleep(500)
 
         assert title.contains("Show")
-        assert Project.count() == 2
+        assert Project.count() == 1
 
         def project2 = Project.last()
-        assert project2.name == "Test 2"
+        assert project2.name == "Test"
         assert project2.processDefinitionKey == "process"
         assert project2.location == tmpDir.path
+
+
+        $("a[href\$=\"logout/index\"]").click()
+        login("gobo", "gobo")
+        assert $("#runProject${project2.id}").empty
+
+        $("a[href\$=\"logout/index\"]").click()
     }
 
     @After
     void tearDown(){
-        Project.where { id > 0l }.deleteAll()
-        assert Project.count == 0
+        ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
+        SessionFactory sessionFactory = context.getBean('sessionFactory')
+
+        Project.all.each{project ->
+            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        }
+        Project.where {id>0l}.deleteAll()
 
         deleteEmptyRepo()
     }
