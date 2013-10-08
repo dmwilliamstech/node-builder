@@ -22,10 +22,13 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class CustomUserDetails extends User {
     def organizations = []
+    def id
 
     CustomUserDetails(User details){
         super(details.username, details.password, details.enabled, details.accountNonExpired, details.credentialsNonExpired,
                 details.accountNonLocked, details.authorities)
+
+        id = details.username
     }
 
     CustomUserDetails(String username, String password, boolean enabled, boolean accountNonExpired,
