@@ -15,19 +15,19 @@
  */
 
 import grails.plugins.springsecurity.SecurityConfigType
+import grails.util.Environment
+
 
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
-
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if (System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
+if(Environment.currentEnvironment == Environment.PRODUCTION){
+        grails.config.locations = [
+            "file:${userHome}/.opendx/node-builder-datasource.groovy",
+            "file:${userHome}/.opendx/node-builder-ldap.groovy",
+            "file:/etc/node-builder-datasource.groovy",
+            "file:/etc/node-builder-ldap.groovy"]
+}
 
 grails.project.groupId = "org.codice.opendx" // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -123,26 +123,6 @@ grails.config.defaults.locations = [KickstartResources]
 script.install.directory = "~/.opendx/node-builder"
 
 environments {
-    production {
-        grails.plugins.springsecurity.ldap.context.managerDn = 'cn=age,ou=users,dc=airgapit,dc=com'
-        grails.plugins.springsecurity.ldap.context.managerPassword = 'foobar99'
-        grails.plugins.springsecurity.ldap.context.server = 'ldaps://ldap:636'
-
-        grails.plugins.springsecurity.ldap.authorities.groupSearchBase = 'ou=groups,dc=airgapit,dc=com'
-        grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = true
-        grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = false
-        grails.plugins.springsecurity.ldap.authorities.groupSearchFilter = 'uniqueMember={0}'
-
-        grails.plugins.springsecurity.ldap.search.base = 'ou=users,dc=airgapit,dc=com'
-        grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','anonymousAuthenticationProvider']
-
-        grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
-        grails.plugins.springsecurity.interceptUrlMap = [
-                '/login/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
-                '/**':          ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
-        ]
-    }
-
     test {
         // Added by the Spring Security Core plugin:
         grails.plugins.springsecurity.userLookup.userDomainClassName = 'node.builder.SecUser'
@@ -169,4 +149,25 @@ environments {
                 '/**':                     ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
         ]
     }
+
+//    production {
+//
+//grails.plugins.springsecurity.ldap.context.managerDn = 'cn=age,ou=users,dc=airgapit,dc=com'
+//grails.plugins.springsecurity.ldap.context.managerPassword = 'foobar99'
+//grails.plugins.springsecurity.ldap.context.server = 'ldaps://ldap:636'
+//
+//grails.plugins.springsecurity.ldap.authorities.groupSearchBase = 'ou=groups,dc=airgapit,dc=com'
+//grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = true
+//grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = false
+//grails.plugins.springsecurity.ldap.authorities.groupSearchFilter = 'uniqueMember={0}'
+//
+//grails.plugins.springsecurity.ldap.search.base = 'ou=users,dc=airgapit,dc=com'
+//grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','anonymousAuthenticationProvider']
+//
+//grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+//grails.plugins.springsecurity.interceptUrlMap = [
+//        '/login/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+//        '/**':          ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
+//]
+//    }
 }

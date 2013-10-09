@@ -39,25 +39,26 @@ environments {
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
         }
     }
-    production {
-        dataSource {
-            dbCreate = "update"
-            url = "jdbc:postgresql://localhost:5432/nodebuilder"
-            pooled = true
-            driverClassName = "org.postgresql.Driver"
-            dialect = org.hibernate.dialect.PostgreSQLDialect
-            username = "tomcat"
-            password = "t0mc4t"
-            properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="SELECT 1"
-            }
-        }
-    }
+//    production {
+//        dataSource {
+//            dbCreate = "update"
+//            url = "jdbc:postgresql://localhost:5432/nodebuilder"
+//            pooled = true
+//            driverClassName = "org.postgresql.Driver"
+//            dialect = org.hibernate.dialect.PostgreSQLDialect
+//            username = "tomcat"
+//            password = "t0mc4t"
+//            properties {
+//                maxActive = -1
+//                minEvictableIdleTimeMillis=1800000
+//                timeBetweenEvictionRunsMillis=1800000
+//                numTestsPerEvictionRun=3
+//                testOnBorrow=true
+//                testWhileIdle=true
+//                testOnReturn=true
+//                validationQuery="SELECT 1"
+//            }
+//        }
+//
+//    }
 }
