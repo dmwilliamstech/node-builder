@@ -18,6 +18,7 @@ package node.builder
 
 import grails.converters.JSON
 import groovy.transform.Synchronized
+
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 
@@ -33,8 +34,9 @@ class OpenStackConnection extends Retryable {
     def token
     def defaultFlavorId
     String adminUrl
-    def handler = {exception ->
+    def handler = {groovyx.net.http.HttpResponseException exception ->
         log.warn "Failed to connect to OpenStack"
+        log.error exception.getResponse().getData().toString()
         if(exception.getResponse().getStatus() == 401){
             log.warn "Authentication failed, let's reconnect and try again"
             this.disconnect()
@@ -68,20 +70,26 @@ class OpenStackConnection extends Retryable {
 
     def connect(){
         def keystone = new RESTClient( this.url )
+        def url = new URL(this.url)
+        log.info "Sending credentials to keystone"
 
-        def resp = keystone.post( path : 'tokens',
+        def resp = keystone.post( path : "${url.path}/tokens",
                 body : [auth:[passwordCredentials:[username: this.username, password:this.password], tenantId: this.tenantId]],
                 contentType : 'application/json' )
 
         this.token = resp.data.access.token.id
 
+        log.info "Successfully retrieved token from keystone, setting nova url"
         for (endpoint in resp.data.access.serviceCatalog) {
             if (endpoint.type == 'compute' ) {
-                                                                      //make sure openstack doesn't redirect us
+                //make sure openstack doesn't redirect us
                 this.adminUrl = (endpoint.endpoints.adminURL[0] + "/").replaceAll("\\/\\/.*\\:", "//${new URL(this.url).host}:")
                 this.compute = new RESTClient(this.adminUrl)
+                log.info "Successfully retrieved nova url"
             }
         }
+
+        log.info "Login complete"
     }
 
     def disconnect(){
