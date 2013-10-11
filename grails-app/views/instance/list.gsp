@@ -49,7 +49,7 @@
                     ${instanceInstance.flavor?.name}
                 </td>
 
-                <td>${instanceInstance.image.name}</td>
+                <td>${instanceInstance.image?.name}</td>
 			
 				<td>${instanceInstance.deployment?.manifest?.name}</td>
 			

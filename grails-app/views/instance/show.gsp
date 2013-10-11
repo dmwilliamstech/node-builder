@@ -41,7 +41,7 @@
             <tr class="prop">
                 <td valign="top" class="name"><g:message code="instance.image.label" default="Image ID" /></td>
 
-                <td valign="top" class="value">${instanceInstance.image.imageId}</td>
+                <td valign="top" class="value">${instanceInstance.image?.imageId}</td>
 
             </tr>
 
