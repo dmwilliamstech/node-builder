@@ -95,9 +95,10 @@ log4j = {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 
-    debug 'ldap.test'
     debug 'org.codehaus.groovy.grails.plugins.springsecurity'
     debug 'org.springframework.ldap'
+
+    all  'groovyx.net'
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -149,25 +150,4 @@ environments {
                 '/**':                     ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
         ]
     }
-
-//    production {
-//
-//grails.plugins.springsecurity.ldap.context.managerDn = 'cn=age,ou=users,dc=airgapit,dc=com'
-//grails.plugins.springsecurity.ldap.context.managerPassword = 'foobar99'
-//grails.plugins.springsecurity.ldap.context.server = 'ldaps://ldap:636'
-//
-//grails.plugins.springsecurity.ldap.authorities.groupSearchBase = 'ou=groups,dc=airgapit,dc=com'
-//grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = true
-//grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = false
-//grails.plugins.springsecurity.ldap.authorities.groupSearchFilter = 'uniqueMember={0}'
-//
-//grails.plugins.springsecurity.ldap.search.base = 'ou=users,dc=airgapit,dc=com'
-//grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','anonymousAuthenticationProvider']
-//
-//grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
-//grails.plugins.springsecurity.interceptUrlMap = [
-//        '/login/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
-//        '/**':          ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
-//]
-//    }
 }
