@@ -64,8 +64,7 @@ class BootStrap {
             imageService.loadImages(OpenStackConnection.getConnection())
             instanceService.loadInstances(OpenStackConnection.getConnection())
         }catch(Exception e){
-            log.error "Failed to connect to and load OpenStack data"
-            StackTraceUtils.extractRootCause(e).printStackTrace()
+            log.error "Failed to connect to and load OpenStack data ${StackTraceUtils.extractRootCause(e).getMessage()}"
         }
 
         log.info("Node Builder startup complete")
