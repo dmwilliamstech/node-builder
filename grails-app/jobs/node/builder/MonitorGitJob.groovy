@@ -29,7 +29,7 @@ class MonitorGitJob {
     def projectService
 
     static triggers = {
-      simple repeatInterval: (30l * 1000l) // execute job once in 5 minutes
+      simple repeatInterval: (300l * 1000l) // execute job once in 5 minutes
     }
 
     def execute() {
