@@ -22,6 +22,7 @@ import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
+import org.codehaus.groovy.runtime.StackTraceUtils
 
 class BootStrap {
     def grailsApplication
@@ -64,7 +65,7 @@ class BootStrap {
             instanceService.loadInstances(OpenStackConnection.getConnection())
         }catch(Exception e){
             log.error "Failed to connect to and load OpenStack data"
-            e.printStackTrace()
+            StackTraceUtils.extractRootCause(e).printStackTrace()
         }
 
         log.info("Node Builder startup complete")

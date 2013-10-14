@@ -34,13 +34,13 @@ class OpenStackConnection extends Retryable {
     def token
     def defaultFlavorId
     String adminUrl
-    def handler = {groovyx.net.http.HttpResponseException exception ->
+    def handler = { groovyx.net.http.HttpResponseException exception ->
         log.warn "Failed to connect to OpenStack"
         log.error exception.getResponse().getData().toString()
         if(exception.getResponse().getStatus() == 401){
             log.warn "Authentication failed, let's reconnect and try again"
-            this.disconnect()
-            this.connect()
+            disconnect()
+            connect()
         }
     }
 
@@ -93,8 +93,8 @@ class OpenStackConnection extends Retryable {
     }
 
     def disconnect(){
-        this.compute.shutdown()
-        this.compute = null
+        compute?.shutdown()
+        compute = null
     }
 
     def images(){
