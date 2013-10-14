@@ -106,7 +106,7 @@
                     emailUsername: Config.config.get("email.smtp.username"),
                     emailPassword: Config.config.get("email.smtp.password"),
                     emailFrom: Config.config.get("email.smtp.from"),
-                    emailTo: "kwplummer@radiantblue.com",
+                    emailTo: "user@hostname",
                     emailSubject:"${result.data.jenkinsBuild.result.toString()}: Change Detected in GIT repository, Jenkins build finished",
                     emailText:emailBody,
                     emailFiles:[result.data.repositoryPatchFile, result.data.jenkinsConsoleFile]
