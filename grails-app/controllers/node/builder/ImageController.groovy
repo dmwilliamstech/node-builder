@@ -16,6 +16,7 @@
 
 package node.builder
 
+import node.builder.virt.OpenStackConnection
 import org.springframework.dao.DataIntegrityViolationException
 
 /**

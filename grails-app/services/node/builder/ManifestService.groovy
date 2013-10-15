@@ -40,6 +40,8 @@ class ManifestService {
             variables.put("master", utilities.serializeDomain(masterInstance))
             return ProcessEngineFactory.runProcessWithVariables(ProcessEngineFactory.defaultProcessEngine("provision"), "provisionInstance", variables)
         }catch (e){
+            log.error e
+            e.printStackTrace()
             return [error: [message: e.getMessage()]]
         }
 
@@ -72,7 +74,8 @@ class ManifestService {
             def instanceGraph = [name: instance.name]
             instanceGraph.children = (generateNodesGraph(instance))
             instanceGraph.children += (generateAppGraph(instance))
-            instanceGraph.children += [[name: Flavor.get(instance.flavorId).name, size: 1]]
+            log.error instance
+            instanceGraph.children += [[name: Flavor.findByName(instance.flavorId).name, size: 1]]
             graph.children.add(instanceGraph)
         }
         return graph

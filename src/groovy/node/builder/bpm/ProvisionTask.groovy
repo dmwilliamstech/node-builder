@@ -18,6 +18,8 @@ package node.builder.bpm
 
 import grails.converters.JSON
 import node.builder.*
+import node.builder.virt.OpenStackConnection
+import node.builder.virt.OpenStackFlavors
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
@@ -29,10 +31,7 @@ public class ProvisionTask implements JavaDelegate{
         def names = []
         manifest.manifest.instances.each{instance -> names.add(instance.name)}
 
-        def criteria = Instance.createCriteria()
-        def instanceDomains = criteria.list {
-            'in'("name", names)
-        }
+        def instanceDomains = Instance.findAllByNameInList(names)
 
         Deployment deployment
         if(!instanceDomains.empty){
@@ -46,7 +45,7 @@ public class ProvisionTask implements JavaDelegate{
             if(!instanceDomains.find { Instance id ->  (instanceName == id.name) }){
                 def instanceData
                 try{
-                    instanceData = OpenStackConnection.connection.launch(instance.flavorId, manifest.manifest.imageId, instanceName)
+                    instanceData = OpenStackConnection.connection.launch(OpenStackFlavors.flavorForName(instance.flavorId), manifest.manifest.imageId, instanceName)
                 }catch(e){
                     println(e.message)
                     e.printStackTrace()
@@ -89,12 +88,13 @@ public class ProvisionTask implements JavaDelegate{
     def addInstancesToDeploymentAndManifest(deployment, instances, manifest){
         if(deployment == null){
             deployment = new Deployment(manifest: manifest, instances: instances)
-            deployment.save(failOnError: true)
+            deployment.save(failOnError: true, flush: true)
 
         }else{
             deployment.instances.addAll(instances)
-            deployment.save(failOnError: true)
+            deployment.save(failOnError: true, flush: true)
         }
+
 
         instances.each{instance ->
             instance.deployment = deployment

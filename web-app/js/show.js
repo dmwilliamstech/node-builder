@@ -3,6 +3,15 @@ var newInstance = {nodes:{},applications:{}};
 var configurations = {nodes: {},applications:{}};
 var nodes;
 
+
+var OpenStackFlavors = {
+    tiny: {name:"TINY", lower: "tiny", id:1, openstack:"m1.tiny", nebula: function(){return this.openstack.replace(/m1/, 'n1')}},
+    small: {name:"SMALL", lower: "small", id:2, openstack:"m1.small", nebula: function(){return this.openstack.replace(/m1/, 'n1')}},
+    medium: {name:"MEDIUM", lower: "medium", id:3, openstack:"m1.medium", nebula: function(){return this.openstack.replace(/m1/, 'n1')}},
+    large: {name:"LARGE", lower: "large", id:4, openstack:"m1.large", nebula: function(){return this.openstack.replace(/m1/, 'n1')}},
+    xlarge: {name:"XLARGE", lower: "xlarge", id:5, openstack:"m1.xlarge", nebula: function(){return this.openstack.replace(/m1/, 'n1')}}
+}
+
 $(document).ready(function() {
     $.getJSON(location.pathname.replace(/manifest.*/,'api/node'), function(json) {
         nodes = json
@@ -171,24 +180,33 @@ function handleSaveNewInstance(button){
 }
 
 function getFlavorIdForInstance(instance){
-    var flavorId = 1
+    var flavorId = OpenStackFlavors.tiny.lower
+
+    console.log(flavorId)
+    console.log(instance.nodes)
     $.each(instance.nodes, function(ii, node){
-        if(node.flavorId > flavorId)
+        if(node.flavorId && OpenStackFlavors[node.flavorId].id > OpenStackFlavors[flavorId].id)
             flavorId = node.flavorId
     })
 
+    console.log("app")
+    console.log(instance.applications)
     $.each(instance.applications, function(ii, application){
-        if(application.flavorId > flavorId)
+        console.log(application.flavorId)
+        console.log(OpenStackFlavors[application.flavorId])
+        console.log(OpenStackFlavors[flavorId])
+        if(application.flavorId && OpenStackFlavors[application.flavorId].id > OpenStackFlavors[flavorId].id)
             flavorId = application.flavorId
     })
 
-    return flavorId
+    return OpenStackFlavors[flavorId].nebula()
 }
 
 function getFlavorName(flavorId){
+    console.log(flavorId)
     var name = "Unknown Flavor"
     $.each(flavors, function(ii, flavor){
-        if(flavorId == flavor.flavorId)
+        if(flavorId == flavor.name)
             name = flavor.name
     })
     return name

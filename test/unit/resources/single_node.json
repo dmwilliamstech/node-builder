@@ -13,7 +13,7 @@
                     "value" : ["Some Values","Some More Values"]
                 }
             ],
-            "flavorId": "2",
+            "flavorId": "small",
             "applications": [
                 {
                     "priority": 10,
@@ -21,7 +21,7 @@
                     "description": "awesome",
                     "configurations": [
                     ],
-                    "flavorId" : 3
+                    "flavorId" : "medium"
                 },
                 {
                     "priority": 1,
@@ -37,7 +37,7 @@
                             "value" : ["Some Values","Some More Values"]
                         }
                     ],
-                    "flavorId": "1"
+                    "flavorId": "tiny"
                 }
             ]
         }

@@ -17,6 +17,7 @@
 package node.builder
 
 import grails.converters.JSON
+import node.builder.virt.OpenStackConnection
 import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 import org.springframework.dao.DataIntegrityViolationException
 

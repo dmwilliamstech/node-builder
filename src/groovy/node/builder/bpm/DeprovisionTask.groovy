@@ -18,7 +18,7 @@ package node.builder.bpm
 
 
 import node.builder.Manifest
-import node.builder.OpenStackConnection
+import node.builder.virt.OpenStackConnection
 import node.builder.Utilities
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate

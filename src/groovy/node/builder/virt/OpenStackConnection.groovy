@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.virt
 
-import grails.converters.JSON
 import groovy.transform.Synchronized
 
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
+import node.builder.Retryable
 
 
 class OpenStackConnection extends Retryable {
@@ -32,11 +32,11 @@ class OpenStackConnection extends Retryable {
     def keyId
     RESTClient compute
     def token
-    def defaultFlavorId
+    OpenStackFlavors defaultFlavorId
     String adminUrl
+
     def handler = { groovyx.net.http.HttpResponseException exception ->
         log.warn "Failed to connect to OpenStack"
-        log.error exception.getResponse().getData().toString()
         if(exception.getResponse().getStatus() == 401){
             log.warn "Authentication failed, let's reconnect and try again"
             disconnect()
@@ -64,8 +64,8 @@ class OpenStackConnection extends Retryable {
         this.password = password
         this.tenantId = tenantId
         this.keyId = keyId
-        this.defaultFlavorId = defaultFlavorId
 
+        this.defaultFlavorId = OpenStackFlavors.flavorForName(defaultFlavorId)
     }
 
     def connect(){
@@ -132,16 +132,18 @@ class OpenStackConnection extends Retryable {
     }
 
     @Synchronized
-    def launch(flavor, image, instanceName){
+    def launch(OpenStackFlavors flavor, image, instanceName){
         if(this.compute == null)
             this.connect()
 
         def resp
         try {
             retry(handler, groovyx.net.http.HttpResponseException, 1){
+
+                log.error "flavor : ${ ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId).nebula() }"
                 resp = compute.post( path : 'servers',
                                  contentType : 'application/json',
-                                 body :  [server: [flavorRef: ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId), imageRef: image, key_name: this.keyId, name: instanceName]] ,
+                                 body :  [server: [flavorRef: ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId).nebula(), imageRef: image, key_name: this.keyId, name: instanceName]],
                                  headers : ['X-Auth-Token' : token])
             }
         } catch (groovyx.net.http.HttpResponseException e) {
@@ -157,6 +159,9 @@ class OpenStackConnection extends Retryable {
                 log.error("Instance Launch failed ${error.error.message}")
                 return error
             }
+            throw e
+        } catch(e){
+            e.printStackTrace()
             throw e
         }
 

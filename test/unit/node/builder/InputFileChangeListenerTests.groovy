@@ -72,14 +72,14 @@ class InputFileChangeListenerTests {
 
         assert Node.count == 1
         assert Node.first().name == "class::name"
-        assert Node.first().flavorId == "2"
+        assert Node.first().flavorId == "small"
 
         assert Application.count == 2
         assert Application.first().name == "class::app_1"
-        assert Application.first().flavorId == "3"
+        assert Application.first().flavorId == "medium"
         assert Application.first().priority == 10
         assert Application.last().name == "class::app_2"
-        assert Application.last().flavorId == "1"
+        assert Application.last().flavorId == "tiny"
         assert Application.last().priority == 1
 
         assert ApplicationConfiguration.count == 2
