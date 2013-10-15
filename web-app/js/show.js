@@ -182,19 +182,13 @@ function handleSaveNewInstance(button){
 function getFlavorIdForInstance(instance){
     var flavorId = OpenStackFlavors.tiny.lower
 
-    console.log(flavorId)
-    console.log(instance.nodes)
     $.each(instance.nodes, function(ii, node){
         if(node.flavorId && OpenStackFlavors[node.flavorId].id > OpenStackFlavors[flavorId].id)
             flavorId = node.flavorId
     })
 
-    console.log("app")
-    console.log(instance.applications)
+
     $.each(instance.applications, function(ii, application){
-        console.log(application.flavorId)
-        console.log(OpenStackFlavors[application.flavorId])
-        console.log(OpenStackFlavors[flavorId])
         if(application.flavorId && OpenStackFlavors[application.flavorId].id > OpenStackFlavors[flavorId].id)
             flavorId = application.flavorId
     })
@@ -203,7 +197,6 @@ function getFlavorIdForInstance(instance){
 }
 
 function getFlavorName(flavorId){
-    console.log(flavorId)
     var name = "Unknown Flavor"
     $.each(flavors, function(ii, flavor){
         if(flavorId == flavor.name)
