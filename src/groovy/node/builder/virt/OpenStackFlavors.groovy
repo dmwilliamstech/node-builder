@@ -35,6 +35,10 @@ public enum OpenStackFlavors {
     }
 
     static OpenStackFlavors flavorForName(String name){
-        OpenStackFlavors.valueOf(name.replaceAll(/\w1\./, '').toUpperCase())
+        try{
+            OpenStackFlavors.valueOf(name.replaceAll(/\w1\./, '').toUpperCase())
+        } catch (java.lang.IllegalArgumentException e){
+            return TINY
+        }
     }
 }
