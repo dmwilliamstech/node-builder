@@ -7,7 +7,7 @@
     "instances": [
         {
             "id": 1,
-            "flavorId": 2,
+            "flavorId": "small",
             "nodes": {"2": {
                 "id": "2",
                 "flavorId": null,
@@ -18,7 +18,7 @@
             "applications": {
                 "2": {
                     "id": "2",
-                    "flavorId": 2,
+                    "flavorId": "small",
                     "priority": 10,
                     "name": "ddf",
                     "configurations": [
@@ -207,7 +207,7 @@
                 },
                 "1": {
                     "id": "1",
-                    "flavorId": null,
+                    "flavorId": "tiny",
                     "priority": 1,
                     "name": "oraclejdk",
                     "configurations": []
@@ -216,10 +216,10 @@
         },
         {
             "id": 2,
-            "flavorId": 2,
+            "flavorId": "small",
             "nodes": {"2": {
                 "id": "2",
-                "flavorId": null,
+                "flavorId": "tiny",
                 "name": "plain ddf",
                 "configurations": []
             }},
@@ -227,7 +227,7 @@
             "applications": {
                 "2": {
                     "id": "2",
-                    "flavorId": 2,
+                    "flavorId": "small",
                     "priority": 10,
                     "name": "ddf",
                     "configurations": [
@@ -416,7 +416,7 @@
                 },
                 "1": {
                     "id": "1",
-                    "flavorId": null,
+                    "flavorId": "tiny",
                     "priority": 1,
                     "name": "oraclejdk",
                     "configurations": []

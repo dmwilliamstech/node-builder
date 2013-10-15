@@ -67,5 +67,9 @@ class ManifestListTest extends GebReportingTest {
     void teardown(){
         Manifest.where { id > 0l }.deleteAll()
         assert Manifest.all.size() == 0
+        ApplicationConfiguration.where { id > 0l }.deleteAll()
+        NodeConfiguration.where { id > 0l }.deleteAll()
+        Application.where { id > 0l }.deleteAll()
+        Node.where { id > 1l }.deleteAll()
     }
 }

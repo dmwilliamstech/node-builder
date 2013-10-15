@@ -95,6 +95,7 @@ class ManifestShowTest extends GebReportingTest {
 
         assert $(node).size() == 1
         $(node).click()
+
         $('button.btn-primary').click()
     }
 
