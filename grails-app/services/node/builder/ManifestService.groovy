@@ -74,7 +74,6 @@ class ManifestService {
             def instanceGraph = [name: instance.name]
             instanceGraph.children = (generateNodesGraph(instance))
             instanceGraph.children += (generateAppGraph(instance))
-            log.error instance
             instanceGraph.children += [[name: Flavor.findByName(instance.flavorId).name, size: 1]]
             graph.children.add(instanceGraph)
         }
