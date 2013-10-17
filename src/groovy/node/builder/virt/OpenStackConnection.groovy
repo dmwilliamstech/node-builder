@@ -140,7 +140,6 @@ class OpenStackConnection extends Retryable {
         try {
             retry(handler, groovyx.net.http.HttpResponseException, 1){
 
-                log.error "flavor : ${ ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId).nebula() }"
                 resp = compute.post( path : 'servers',
                                  contentType : 'application/json',
                                  body :  [server: [flavorRef: ((flavor && flavor >= defaultFlavorId) ? flavor : defaultFlavorId).nebula(), imageRef: image, key_name: this.keyId, name: instanceName]],
