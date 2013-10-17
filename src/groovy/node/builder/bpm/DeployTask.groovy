@@ -23,9 +23,9 @@ import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 import org.apache.commons.io.IOUtils
 
-class DeployTask implements JavaDelegate{
+class DeployTask extends MetricsTask{
 
-    public void execute(DelegateExecution delegateExecution) throws Exception {
+    public void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def master = delegateExecution.getVariable("master")
         def manifest = delegateExecution.getVariable("manifest")
         def scpFileCopier = new SCPFileCopier()

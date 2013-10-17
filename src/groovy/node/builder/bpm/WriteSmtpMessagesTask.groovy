@@ -33,8 +33,9 @@ import javax.mail.internet.MimeMessage
 import javax.mail.internet.MimeMultipart
 import javax.mail.search.FlagTerm
 
-class WriteSmtpMessagesTask extends Retryable implements JavaDelegate{
-    void execute(DelegateExecution delegateExecution) throws Exception {
+
+class WriteSmtpMessagesTask extends MetricsTask{
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def host = delegateExecution.getVariable("emailSmtpHost")
         def port = delegateExecution.getVariable("emailSmtpPort")
         def username = delegateExecution.getVariable("emailUsername")
@@ -97,9 +98,11 @@ class WriteSmtpMessagesTask extends Retryable implements JavaDelegate{
             Address [] addresses = new Address[1]
             addresses[0] = new InternetAddress(to)
 
-            retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
-                log.info "Sending email message to smtp"
-                transport.sendMessage(message, addresses);
+            use(Retryable){
+                retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
+                    log.info "Sending email message to smtp"
+                    transport.sendMessage(message, addresses);
+                }
             }
         } finally {
             if(transport) {

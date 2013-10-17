@@ -22,9 +22,9 @@ import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
 
-class UnDeployTask implements JavaDelegate{
+class UnDeployTask extends MetricsTask{
 
-    void execute(DelegateExecution delegateExecution) throws Exception {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def deployment = delegateExecution.getVariable("deployment")
         for(instance in deployment.instances){
             try{

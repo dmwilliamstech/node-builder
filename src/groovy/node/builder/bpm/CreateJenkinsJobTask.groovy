@@ -23,7 +23,7 @@ import org.activiti.engine.delegate.JavaDelegate
 
 
 class CreateJenkinsJobTask extends JenkinsJobTask implements JavaDelegate {
-    void execute(DelegateExecution delegateExecution) throws Exception {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
 
         JenkinsServer jenkins = new JenkinsServer(new URI(delegateExecution.getVariable("jenkinsUrl")),

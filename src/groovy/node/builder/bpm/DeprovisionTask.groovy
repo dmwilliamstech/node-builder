@@ -24,9 +24,9 @@ import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
 
-class DeprovisionTask implements JavaDelegate{
+class DeprovisionTask extends MetricsTask{
 
-    void execute(DelegateExecution delegateExecution) throws Exception {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
 
         def manifest = Manifest.findByName(delegateExecution.getVariable("manifest").name)
         def deployment = delegateExecution.getVariable("deployment")

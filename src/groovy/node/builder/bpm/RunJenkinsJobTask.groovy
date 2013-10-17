@@ -28,8 +28,8 @@ import org.apache.catalina.connector.Response
 
 
 
-class RunJenkinsJobTask extends JenkinsJobTask implements JavaDelegate{
-    void execute(DelegateExecution delegateExecution) throws Exception {
+class RunJenkinsJobTask extends JenkinsJobTask {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         log.info "Starting Jenkins build"
         ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
         def jenkinsUrl = delegateExecution.getVariable("jenkinsUrl")

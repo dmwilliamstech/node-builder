@@ -33,9 +33,9 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser
 import javax.management.RuntimeErrorException
 
 
-class GitMonitorTask implements JavaDelegate{
+class GitMonitorTask extends MetricsTask{
 
-    void execute(DelegateExecution delegateExecution) throws Exception {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def remotePath = delegateExecution.getVariable("remotePath")
         def localPath = delegateExecution.getVariable("localPath")
         def branch = delegateExecution.getVariable("branch")

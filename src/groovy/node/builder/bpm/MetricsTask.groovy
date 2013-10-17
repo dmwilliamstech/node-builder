@@ -27,11 +27,16 @@ abstract class MetricsTask implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution){
-        log.metric(MetricEvents.START, MetricGroups.TASK, "Starting task")
+        if(org.apache.commons.logging.impl.SLF4JLog.respondsTo("metric")){
+            log.metric(MetricEvents.START, MetricGroups.TASK, "Starting task")
 
-        this.executeWithMetrics(execution)
+            this.executeWithMetrics(execution)
 
-        def message = execution.getVariable("result").message ? execution.getVariable("result").message : "Message not set by task"
-        log.metric(MetricEvents.FINISH, MetricGroups.TASK, message )
+            def message = execution.getVariable("result").message ? execution.getVariable("result").message : "Message not set by task"
+            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message )
+        } else {
+            log.warn "Metrics was not initialized successfully, skipping log"
+            this.executeWithMetrics(execution)
+        }
     }
 }

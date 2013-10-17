@@ -29,8 +29,8 @@ import javax.mail.Session
 import javax.mail.search.FlagTerm
 
 
-class ReadImapMessagesTask extends Retryable implements JavaDelegate{
-    void execute(DelegateExecution delegateExecution) throws Exception {
+class ReadImapMessagesTask extends  MetricsTask{
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def host = delegateExecution.getVariable("emailImapHost")
         def port = delegateExecution.getVariable("emailImapPort")
         def username = delegateExecution.getVariable("emailUsername")
@@ -48,11 +48,12 @@ class ReadImapMessagesTask extends Retryable implements JavaDelegate{
         def newMessages = []
 
         try {
-            retry({log.warn "Connecting to IMAP server... failed retrying"}, java.io.IOException, 5 ){
-                log.info "Connecting to IMAP server..."
-                store.connect(host, username, password)
+            use(Retryable){
+                retry({log.warn "Connecting to IMAP server... failed retrying"}, java.io.IOException, 5 ){
+                    log.info "Connecting to IMAP server..."
+                    store.connect(host, username, password)
+                }
             }
-
             log.info "Connected to IMAP server"
             inbox = store.getFolder("INBOX")
             if(!inbox.isOpen()){

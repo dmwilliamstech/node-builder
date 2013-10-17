@@ -20,8 +20,8 @@ import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
 
-class DownloadJenkinsJobConsoleTask implements JavaDelegate{
-    void execute(DelegateExecution delegateExecution) throws Exception {
+class DownloadJenkinsJobConsoleTask extends MetricsTask{
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def result = delegateExecution.getVariable("result")
         def remoteUrl = result?.data.jenkinsBuild.consoleUrl
 

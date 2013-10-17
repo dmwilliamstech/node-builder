@@ -27,8 +27,8 @@ import com.atlassian.util.concurrent.Promise
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
-class CreateJiraIssueTask extends JenkinsJobTask implements JavaDelegate{
-    void execute(DelegateExecution delegateExecution) throws Exception {
+class CreateJiraIssueTask extends JenkinsJobTask {
+    void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         log.info "Starting Jira issue creation"
         ProcessResult result = delegateExecution.getVariable("result")?: new ProcessResult()
         def jiraUrl = delegateExecution.getVariable("jiraUrl")
