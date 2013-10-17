@@ -98,8 +98,6 @@ log4j = {
     debug 'org.codehaus.groovy.grails.plugins.springsecurity'
     debug 'org.springframework.ldap'
 
-    all  'groovyx.net'
-
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
