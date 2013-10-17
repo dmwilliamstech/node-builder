@@ -98,12 +98,12 @@ class WriteSmtpMessagesTask extends MetricsTask{
             Address [] addresses = new Address[1]
             addresses[0] = new InternetAddress(to)
 
-            use(Retryable){
-                retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
-                    log.info "Sending email message to smtp"
-                    transport.sendMessage(message, addresses);
-                }
+
+            retry({log.warning "Failed to send message to server"}, java.net.SocketException.class, 5, 1000){
+                log.info "Sending email message to smtp"
+                transport.sendMessage(message, addresses);
             }
+
         } finally {
             if(transport) {
                 transport.close()

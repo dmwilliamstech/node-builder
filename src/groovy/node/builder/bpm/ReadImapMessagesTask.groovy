@@ -48,12 +48,11 @@ class ReadImapMessagesTask extends  MetricsTask{
         def newMessages = []
 
         try {
-            use(Retryable){
-                retry({log.warn "Connecting to IMAP server... failed retrying"}, java.io.IOException, 5 ){
-                    log.info "Connecting to IMAP server..."
-                    store.connect(host, username, password)
-                }
+            retry({log.warn "Connecting to IMAP server... failed retrying"}, java.io.IOException, 5 ){
+                log.info "Connecting to IMAP server..."
+                store.connect(host, username, password)
             }
+
             log.info "Connected to IMAP server"
             inbox = store.getFolder("INBOX")
             if(!inbox.isOpen()){

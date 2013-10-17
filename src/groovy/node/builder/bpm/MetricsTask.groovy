@@ -1,6 +1,7 @@
 package node.builder.bpm
 
 import node.builder.Config
+import node.builder.Retryable
 import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.delegate.DelegateExecution
@@ -22,7 +23,7 @@ import org.activiti.engine.delegate.JavaDelegate
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-abstract class MetricsTask implements JavaDelegate{
+abstract class MetricsTask extends Retryable implements JavaDelegate  {
     abstract public void executeWithMetrics(DelegateExecution execution)
 
     @Override
