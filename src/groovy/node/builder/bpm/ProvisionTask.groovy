@@ -23,8 +23,8 @@ import node.builder.virt.OpenStackFlavors
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 
-public class ProvisionTask implements JavaDelegate{
-    public void execute(DelegateExecution delegateExecution) throws Exception {
+public class ProvisionTask extends MetricsTask{
+    public void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {
         def manifest = Manifest.findByName(delegateExecution.getVariable("manifest").name)
         def instances = []
 

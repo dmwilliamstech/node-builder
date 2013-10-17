@@ -53,7 +53,8 @@ class ManifestController {
 
         instance.manifest = jsonObject
         instance.save()
-
+        if(instance.hasErrors())
+            log.error instance.errors
         render(instance as JSON)
     }
 

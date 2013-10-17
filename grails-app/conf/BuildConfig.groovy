@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -80,7 +82,7 @@ grails.project.dependency.resolution = {
         compile 'com.atlassian.jira:jira-rest-java-client-core:2.0.0-m25'
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
         compile 'com.sun.mail:all:1.5.0'
-
+        compile 'org.mongodb:mongo-java-driver:2.11.3'
         runtime "postgresql:postgresql:9.1-901.jdbc4"
     }
 

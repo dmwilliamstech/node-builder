@@ -18,6 +18,9 @@
 import grails.util.Environment
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
+import node.builder.metrics.MetricEvents
+import node.builder.metrics.MetricGroups
+import node.builder.metrics.Metrics
 import node.builder.virt.OpenStackConnection
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
@@ -34,9 +37,11 @@ class BootStrap {
     FlavorService flavorService
 
     def init = { servletContext ->
+        Metrics.initialize()
         loadConfig()
-        if(Environment.currentEnvironment != Environment.PRODUCTION)
+        if(Environment.currentEnvironment != Environment.PRODUCTION){
             loadSecurity()
+        }
         loadProjectTypes()
         loadProcessDefinitions()
 
@@ -68,6 +73,7 @@ class BootStrap {
             log.error "Failed to connect to and load OpenStack data ${StackTraceUtils.extractRootCause(e).getMessage()}"
         }
 
+        log.metric(MetricEvents.START, MetricGroups.UP_TIME, "startup complete")
         log.info("Node Builder startup complete")
     }
 
