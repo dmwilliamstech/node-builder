@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.bpm
 
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
-import groovy.mock.interceptor.MockFor
-import groovy.mock.interceptor.StubFor
-import node.builder.bpm.GitApplyPatchTask
-import node.builder.bpm.GitMonitorTask
-import org.activiti.engine.delegate.DelegateExecution
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.junit.After

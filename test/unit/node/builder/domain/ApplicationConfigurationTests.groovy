@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.domain
 
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import node.builder.Application
+import node.builder.ApplicationConfiguration
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions

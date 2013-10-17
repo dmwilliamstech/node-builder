@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.domain
 
 import com.sun.jna.platform.win32.SetupApi
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import node.builder.Project
+import node.builder.ProjectType
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore

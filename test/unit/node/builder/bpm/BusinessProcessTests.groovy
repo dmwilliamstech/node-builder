@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.bpm
 
 import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.*

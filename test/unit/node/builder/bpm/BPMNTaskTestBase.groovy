@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.bpm
 
 import groovy.mock.interceptor.StubFor
 import org.activiti.engine.delegate.DelegateExecution

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import node.builder.Project
+import node.builder.ProjectType
 import org.junit.Test
 
 /**

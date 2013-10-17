@@ -74,12 +74,15 @@
 */
 
 
-package node.builder
+package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import node.builder.Image
+import node.builder.Instance
+import node.builder.Manifest
 import org.junit.Test
 
 /**

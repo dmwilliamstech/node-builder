@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.domain
 
 import grails.test.mixin.TestFor
+import node.builder.Deployment
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Application)
-class ApplicationTests {
+@TestFor(Deployment)
+class DeploymentTests {
 
-    void testDefaultNodeType() {
-        def application = new Application(name: "Some Application", description: "Some Description")
-       assert application.node == null
+    void testSomething() {
+
     }
-
 }

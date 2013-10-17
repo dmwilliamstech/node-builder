@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.domain
 
 import grails.test.mixin.TestFor
+import node.builder.Image
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Master)
-class MasterTests {
+@TestFor(Image)
+class ImageTests {
 
     void testSomething() {
-
+       assert true
     }
 }
