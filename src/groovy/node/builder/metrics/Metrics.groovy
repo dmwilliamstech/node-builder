@@ -1,6 +1,7 @@
 package node.builder.metrics
 
 import grails.util.Environment
+import node.builder.Config
 import org.codehaus.groovy.reflection.ReflectionUtils
 
 /**
@@ -19,15 +20,24 @@ import org.codehaus.groovy.reflection.ReflectionUtils
  * limitations under the License.
  */
 class Metrics {
-
-    def metric = { event, group, message  ->
+    def metricWithEventGroupMessageEventIdGroupIdParentId = { event, group, message, eventId, groupId, parentId, eventData ->
         if(Environment.current == Environment.PRODUCTION){
             try{
                 def clazz = ReflectionUtils.getCallingClass(3)
                 clazz = clazz.getCanonicalName().find(/[\w]*\.[\w\$]*$/)
                 def thread = Thread.currentThread().name
-                def metric = new Metric(clazz: clazz, thread: thread, group: group.title, message: message, event: event.title)
+                def metric = new Metric(clazz: clazz,
+                        thread: thread,
+                        group: group.title,
+                        message: message,
+                        event: event.title,
+                        eventId: eventId,
+                        groupId: groupId,
+                        parentId: parentId,
+                        eventData: eventData
+                )
                 metric.save()
+                log.info "Logged metric $metric.id"
             }catch (e){
                 log.warn "Unable to log metric $e.message"
             }
@@ -35,14 +45,25 @@ class Metrics {
     }
 
 
+    def metricWithEventGroupMessageEventIdGroupId = { event, group, message, eventId, groupId   ->
+        log.metric(event, group, message, eventId, groupId, "", [:])
+    }
+
+    def metricWithEventGroupMessage = { event, group, message  ->
+        log.metric(event, group, message, "", "", "", [:])
+    }
 
     private Metrics(){
         log.info "Initializing Metrics system"
-        org.apache.commons.logging.impl.SLF4JLog.metaClass.metric = metric
-        log.metaClass.metric = metric
+        def metrics = [metricWithEventGroupMessage, metricWithEventGroupMessageEventIdGroupId, metricWithEventGroupMessageEventIdGroupIdParentId]
+        metrics.each{metric ->
+            org.apache.commons.logging.impl.SLF4JLog.metaClass.metric << metric
+            log.metaClass.metric << metric
+        }
     }
 
     static initialize(){
         new Metrics()
+        Config.globalConfig.put("metrics.initialized", true)
     }
 }

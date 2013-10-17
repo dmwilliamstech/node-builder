@@ -1,6 +1,6 @@
 package node.builder.bpm
 
-
+import node.builder.Config
 import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.delegate.DelegateExecution
@@ -27,13 +27,13 @@ abstract class MetricsTask implements JavaDelegate{
 
     @Override
     public void execute(DelegateExecution execution){
-        if(org.apache.commons.logging.impl.SLF4JLog.respondsTo("metric")){
+        if(Config.globalConfig.get("metrics.initialized")){
             log.metric(MetricEvents.START, MetricGroups.TASK, "Starting task")
 
             this.executeWithMetrics(execution)
 
-            def message = execution.getVariable("result").message ? execution.getVariable("result").message : "Message not set by task"
-            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message )
+            def message = execution.getVariable("result")?.message ? execution.getVariable("result").message : "Message not set by task"
+            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message, "", "", "",  execution.getVariable("result"))
         } else {
             log.warn "Metrics was not initialized successfully, skipping log"
             this.executeWithMetrics(execution)
