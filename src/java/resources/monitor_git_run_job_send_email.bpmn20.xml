@@ -42,7 +42,6 @@
                     name="log change"
                     scriptFormat="groovy" >
             <script>
-                println("Change detected in repository ${projectName}, running Jenkins Job")
                 execution.setVariable("jenkinsJobName", "test".toLowerCase())
             </script>
         </scriptTask>
