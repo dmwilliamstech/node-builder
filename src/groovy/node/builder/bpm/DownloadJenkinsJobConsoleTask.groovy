@@ -17,8 +17,6 @@
 package node.builder.bpm
 
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
-
 
 class DownloadJenkinsJobConsoleTask extends MetricsTask{
     void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

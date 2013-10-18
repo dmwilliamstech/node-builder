@@ -16,11 +16,7 @@
 
 package node.builder
 
-import com.offbytwo.jenkins.model.BuildResult
-import node.builder.bpm.DownloadJenkinsJobConsoleTask
 import node.builder.bpm.DownloadSonarIssuesTask
-import node.builder.bpm.RunJenkinsJobTask
-import org.junit.Ignore
 import org.junit.Test
 
 class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{

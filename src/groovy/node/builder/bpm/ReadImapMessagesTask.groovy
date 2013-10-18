@@ -16,18 +16,10 @@
 
 package node.builder.bpm
 
-import node.builder.Retryable
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
 
-import javax.mail.BodyPart
-import javax.mail.Flags
-import javax.mail.Folder
-import javax.mail.Message
-import javax.mail.Multipart
-import javax.mail.Session
+import javax.mail.*
 import javax.mail.search.FlagTerm
-
 
 class ReadImapMessagesTask extends  MetricsTask{
     void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

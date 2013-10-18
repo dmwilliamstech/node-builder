@@ -17,14 +17,9 @@
 package node.builder
 
 import com.offbytwo.jenkins.JenkinsServer
-import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJenkinsJobTask
-import node.builder.bpm.DeleteJenkinsJobTask
-import org.activiti.engine.delegate.DelegateExecution
-import org.junit.After
 import org.junit.Ignore
 import org.junit.Test
-
 
 class CreateJenkinsJobTaskTests extends BPMNTaskTestBase{
     final shouldFail = new GroovyTestCase().&shouldFail

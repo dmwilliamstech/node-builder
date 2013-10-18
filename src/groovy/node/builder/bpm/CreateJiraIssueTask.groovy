@@ -22,10 +22,8 @@ import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
-import com.atlassian.util.concurrent.Function
 import com.atlassian.util.concurrent.Promise
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
 
 class CreateJiraIssueTask extends JenkinsJobTask {
     void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

@@ -17,8 +17,6 @@
 package node.builder.bpm
 
 import com.offbytwo.jenkins.JenkinsServer
-import com.offbytwo.jenkins.model.Job
-import node.builder.Retryable
 import org.activiti.engine.delegate.DelegateExecution
 import org.activiti.engine.delegate.JavaDelegate
 

@@ -1,5 +1,3 @@
-import grails.util.Environment
-
 /**
  * Copyright 2013 AirGap, LLC.
  *

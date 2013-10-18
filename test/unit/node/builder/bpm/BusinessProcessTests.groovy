@@ -16,12 +16,10 @@
 
 package node.builder.bpm
 
-import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.*
 import org.activiti.engine.history.HistoricProcessInstance
-import org.activiti.engine.task.Task
 import org.activiti.engine.repository.Deployment
-
+import org.activiti.engine.task.Task
 
 class BusinessProcessTests {
 

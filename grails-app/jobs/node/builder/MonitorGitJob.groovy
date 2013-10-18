@@ -16,15 +16,6 @@
 
 package node.builder
 
-import node.builder.bpm.ProcessEngineFactory
-import node.builder.bpm.ProcessResult
-
-
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-
-
-
 class MonitorGitJob {
     def projectService
 

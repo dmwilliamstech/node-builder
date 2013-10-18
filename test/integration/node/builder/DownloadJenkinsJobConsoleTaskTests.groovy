@@ -17,13 +17,10 @@
 package node.builder
 
 import com.offbytwo.jenkins.model.BuildResult
-import groovy.mock.interceptor.MockFor
 import node.builder.bpm.DownloadJenkinsJobConsoleTask
 import node.builder.bpm.RunJenkinsJobTask
-import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Ignore
 import org.junit.Test
-
 
 class DownloadJenkinsJobConsoleTaskTests extends BPMNTaskTestBase{
 

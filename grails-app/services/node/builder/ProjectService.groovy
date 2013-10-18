@@ -16,7 +16,6 @@
 
 package node.builder
 
-import grails.converters.JSON
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
 import org.activiti.engine.ActivitiObjectNotFoundException

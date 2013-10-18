@@ -21,7 +21,6 @@ import node.builder.*
 import node.builder.virt.OpenStackConnection
 import node.builder.virt.OpenStackFlavors
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
 
 public class ProvisionTask extends MetricsTask{
     public void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

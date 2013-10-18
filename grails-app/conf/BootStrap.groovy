@@ -15,6 +15,7 @@
  */
 
 
+
 import grails.util.Environment
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
@@ -25,7 +26,6 @@ import node.builder.virt.OpenStackConnection
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
-import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class BootStrap {

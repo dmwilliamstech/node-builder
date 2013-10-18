@@ -20,7 +20,6 @@ import grails.converters.JSON
 import groovy.text.SimpleTemplateEngine
 import node.builder.SCPFileCopier
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
 import org.apache.commons.io.IOUtils
 
 class DeployTask extends MetricsTask{

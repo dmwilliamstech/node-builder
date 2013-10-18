@@ -16,13 +16,10 @@
 
 package node.builder.bpm
 
-
 import node.builder.Manifest
-import node.builder.virt.OpenStackConnection
 import node.builder.Utilities
+import node.builder.virt.OpenStackConnection
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
-
 
 class DeprovisionTask extends MetricsTask{
 

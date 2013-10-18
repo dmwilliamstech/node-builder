@@ -17,16 +17,10 @@
 package node.builder.bpm
 
 import com.offbytwo.jenkins.JenkinsServer
-import com.offbytwo.jenkins.model.Build
 import com.offbytwo.jenkins.model.Job
 import com.offbytwo.jenkins.model.JobWithDetails
-import groovyx.net.http.HttpResponseException
 import node.builder.exceptions.MissingJenkinsJobException
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
-import org.apache.catalina.connector.Response
-
-
 
 class RunJenkinsJobTask extends JenkinsJobTask {
     void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

@@ -17,11 +17,9 @@
 package node.builder.virt
 
 import groovy.transform.Synchronized
-
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 import node.builder.Retryable
-
 
 class OpenStackConnection extends Retryable {
 

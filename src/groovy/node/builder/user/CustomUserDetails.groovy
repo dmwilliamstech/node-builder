@@ -1,5 +1,7 @@
 package node.builder.user
 
+import org.springframework.security.core.GrantedAuthority
+
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -15,10 +17,7 @@ package node.builder.user
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
 
 class CustomUserDetails extends User {
     def organizations = []

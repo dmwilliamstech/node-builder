@@ -2,10 +2,8 @@
 package node.builder
 
 import com.offbytwo.jenkins.model.BuildResult
-import node.builder.bpm.DeleteJenkinsJobTask
 import node.builder.bpm.RunJenkinsJobTask
 import node.builder.exceptions.MissingJenkinsJobException
-import org.junit.After
 import org.junit.Ignore
 import org.junit.Test
 

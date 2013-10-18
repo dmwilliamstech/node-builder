@@ -16,7 +16,6 @@
 
 package node.builder
 
-import groovy.mock.interceptor.MockFor
 import groovy.mock.interceptor.StubFor
 import org.activiti.engine.delegate.DelegateExecution
 

@@ -17,10 +17,7 @@
 package node.builder
 
 import geb.junit4.GebReportingTest
-import groovy.json.JsonSlurper
-import org.junit.After
 import org.junit.Before
-import org.springframework.core.io.ClassPathResource
 
 class AboutIndexTest extends GebReportingTest {
     def version

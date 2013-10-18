@@ -16,10 +16,7 @@
 
 package node.builder.bpm
 
-import grails.converters.JSON
-import node.builder.Retryable
 import org.activiti.engine.delegate.DelegateExecution
-import org.activiti.engine.delegate.JavaDelegate
 import org.apache.commons.io.FilenameUtils
 import org.joda.time.DateTime
 
@@ -31,8 +28,6 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
 import javax.mail.internet.MimeMultipart
-import javax.mail.search.FlagTerm
-
 
 class WriteSmtpMessagesTask extends MetricsTask{
     void executeWithMetrics(DelegateExecution delegateExecution) throws Exception {

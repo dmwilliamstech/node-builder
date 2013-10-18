@@ -16,12 +16,9 @@
 
 package node.builder
 
-import groovy.mock.interceptor.MockFor
 import node.builder.bpm.CreateJiraIssueTask
-import org.activiti.engine.delegate.DelegateExecution
 import org.junit.Before
 import org.junit.Ignore
-
 
 class CreateJiraIssueTaskTests extends BPMNTaskTestBase{
     final shouldFail = new GroovyTestCase().&shouldFail
