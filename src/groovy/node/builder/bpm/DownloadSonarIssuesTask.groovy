@@ -17,7 +17,9 @@
 package node.builder.bpm
 
 import com.mongodb.util.JSON
+import groovy.text.SimpleTemplateEngine
 import org.activiti.engine.delegate.DelegateExecution
+import org.apache.commons.io.IOUtils
 
 class DownloadSonarIssuesTask extends MetricsTask{
     private static final SONAR_ISSUES_URL_VAR = 'sonarIssuesUrl'
@@ -40,7 +42,25 @@ class DownloadSonarIssuesTask extends MetricsTask{
 
         result.data.sonarIssuesFile = issuesFile.path
         result.data.sonarIssues = JSON.parse(issuesFile.text)
+        if(delegateExecution.getVariable("sonarPrettyPrintIssues")){
+            def prettyPrintFile = File.createTempFile("issues", ".html")
+            def template = this.class.classLoader.getResourceAsStream("/templates/sonar_issues.html.gsp")
+            if(template == null){
+                template = this.class.classLoader.getResourceAsStream("resources/sonar_issues.html.gsp")
+            }
+            prettyPrintFile.write(processTemplate((List)result.data.sonarIssues.issues, template))
+            result.data.sonarIssuesPrettyPrintFile = prettyPrintFile.path
+        }
+
         delegateExecution.setVariable(SONAR_ISSUES_URL_VAR, remoteUrl.URL.toString())
         delegateExecution.setVariable("result", result)
+    }
+
+
+    def processTemplate(issues, template){
+        def output = new StringWriter()
+        def templateText = IOUtils.toString(template, "UTF-8")
+        (new SimpleTemplateEngine()).createTemplate(templateText).make([issues: issues]).writeTo(output)
+        return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
     }
 }

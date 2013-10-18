@@ -28,7 +28,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDownloadSonarIssues(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
         sonarTask.execute(delegateExecution)
 
         assert variables.result.data.sonarIssuesFile != null
@@ -44,7 +44,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDetectBadIssuesUrl(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://broken:9000/api/issues/search?componentRoots=com.airgap:age"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 2, 1)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 3, 1)
         sonarTask.execute(delegateExecution)
     }
 
@@ -53,7 +53,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDownloadAllIssues(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age&pageSize=10"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 4, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
         sonarTask.execute(delegateExecution)
 
         assert variables.result.data.sonarIssuesFile != null
@@ -63,6 +63,26 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
 
         files <<  variables.result.data.sonarIssuesFile
 
+    }
+
+    @Test
+    void shouldPrettyPrintRawIssues(){
+        def sonarTask = new DownloadSonarIssuesTask()
+        def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age",
+            sonarPrettyPrintIssues: true
+        ]
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
+        sonarTask.execute(delegateExecution)
+
+        assert variables.result.data.sonarIssuesFile != null
+        assert new File(variables.result.data.sonarIssuesFile).exists()
+        assert variables.result.data.sonarIssuesPrettyPrintFile != null
+        assert new File(variables.result.data.sonarIssuesPrettyPrintFile ).exists()
+        assert !variables.result.data.sonarIssues.isEmpty()
+        assert variables.result.data.sonarIssues.maxResultsReached == false
+        assert variables.sonarIssuesUrl == "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age&pageSize=-1&format=json"
+        files <<  variables.result.data.sonarIssuesFile
+        files <<  variables.result.data.sonarIssuesPrettyPrintFile
     }
 
     @After
