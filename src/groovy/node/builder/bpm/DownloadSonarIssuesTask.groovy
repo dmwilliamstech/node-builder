@@ -30,6 +30,7 @@ class DownloadSonarIssuesTask extends MetricsTask{
             throw new NullPointerException("Sonar Issues Url missing from variables object")
         }
 
+        remoteUrl = remoteUrl.replaceAll(/\&?pageSize\=[\-\d]+/,'') + '&pageSize=-1'
         remoteUrl = new URL(remoteUrl + "&format=json").openConnection()
 
         def issuesFile = File.createTempFile("issues", ".json")
@@ -39,6 +40,7 @@ class DownloadSonarIssuesTask extends MetricsTask{
 
         result.data.sonarIssuesFile = issuesFile.path
         result.data.sonarIssues = JSON.parse(issuesFile.text)
+        delegateExecution.setVariable(SONAR_ISSUES_URL_VAR, remoteUrl.URL.toString())
         delegateExecution.setVariable("result", result)
     }
 }
