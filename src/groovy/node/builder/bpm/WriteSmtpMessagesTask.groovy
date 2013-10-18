@@ -138,7 +138,7 @@ class WriteSmtpMessagesTask extends MetricsTask{
                 case "flags":
                     break
                 default:
-                    map[entry.key] = entry.value
+                    map[entry.key] = entry.value.toString()
                     break
             }
 
