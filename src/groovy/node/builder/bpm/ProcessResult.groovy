@@ -42,7 +42,7 @@ class ProcessResult extends HashMap{
         this.message = message ?: ""
         this.data = data ?: [:]
         this.error = error ?: new ProcessResultError(null, null)
-        log.info "created ${this.data} ${this.error} ${this.message}"
+        log.debug "created ${this.data} ${this.error} ${this.message}"
     }
 
     public class ProcessResultError extends HashMap{
