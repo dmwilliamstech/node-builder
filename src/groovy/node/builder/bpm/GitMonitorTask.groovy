@@ -86,21 +86,21 @@ class GitMonitorTask extends MetricsTask{
 
         def mergeResult = pullResult.mergeResult
         if(mergeResult){
-            result.data.mergeBase = mergeResult.base
-            result.data.mergeCheckoutConflicts = mergeResult.checkoutConflicts
-            result.data.mergeConflicts = mergeResult.conflicts
-            result.data.mergeFailingPaths = mergeResult.failingPaths
-            result.data.mergedCommits = mergeResult.mergedCommits
-            result.data.mergeStatus = mergeResult.mergeStatus
-            result.data.mergeNewHead = mergeResult.newHead
+            result.data.mergeBase = mergeResult.base.toObjectId().toString()
+            result.data.mergeCheckoutConflicts = mergeResult.checkoutConflicts.toString()
+            result.data.mergeConflicts = mergeResult.conflicts.toString()
+            result.data.mergeFailingPaths = mergeResult.failingPaths.toString()
+            result.data.mergedCommits = mergeResult.mergedCommits.toString()
+            result.data.mergeStatus = mergeResult.mergeStatus.toString()
+            result.data.mergeNewHead = mergeResult.newHead.toObjectId().toString()
         }
 
         def rebaseResult = pullResult.rebaseResult
         if(rebaseResult){
-            result.data.rebaseConflicts = rebaseResult.conflicts
-            result.data.rebaseCurrentCommit = rebaseResult.currentCommit
-            result.data.rebaseFailingPaths = rebaseResult.failingPaths
-            result.data.rebaseStatus = rebaseResult.status
+            result.data.rebaseConflicts = rebaseResult.conflicts.toString()
+            result.data.rebaseCurrentCommit = rebaseResult.currentCommit.toObjectId().toString()
+            result.data.rebaseFailingPaths = rebaseResult.failingPaths.toString()
+            result.data.rebaseStatus = rebaseResult.status.toString()
         }
 
         result.message = result.data.repositoryDidChange?
