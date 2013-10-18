@@ -50,8 +50,7 @@
                     name="log no change"
                     scriptFormat="groovy" >
             <script>
-                println("No change detected in repository ${projectName}, repository at ${result.data.reference}")
-                println(result.data.diff)
+            //noop
             </script>
         </scriptTask>
 
