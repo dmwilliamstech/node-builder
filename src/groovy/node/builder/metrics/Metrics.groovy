@@ -1,8 +1,11 @@
 package node.builder.metrics
 
+import grails.converters.JSON
 import grails.util.Environment
+import groovy.json.JsonOutput
 import node.builder.Config
 import org.codehaus.groovy.reflection.ReflectionUtils
+import org.json.JSONObject
 
 /**
  * Copyright 2013 AirGap, LLC.
@@ -34,7 +37,7 @@ class Metrics {
                         eventId: eventId,
                         groupId: groupId,
                         parentId: parentId,
-                        eventData: eventData
+                        eventData: JSON.parse(JsonOutput.toJson(eventData))
                 )
                 metric.save()
                 log.info "Logged metric $metric.id"
