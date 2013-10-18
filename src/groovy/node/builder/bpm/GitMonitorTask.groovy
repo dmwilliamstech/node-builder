@@ -82,7 +82,7 @@ class GitMonitorTask extends MetricsTask{
 
     def setResultWithPullResult(PullResult pullResult, ProcessResult result){
         def fetchResult = pullResult.fetchResult
-        result.data.uri = fetchResult.getURI()
+        result.data.uri = fetchResult.getURI().toString()
 
         def mergeResult = pullResult.mergeResult
         if(mergeResult){
