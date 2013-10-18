@@ -50,7 +50,7 @@ abstract class JenkinsJobTask extends MetricsTask {
 		map.fullDisplayName = build.fullDisplayName
 		map.id = build.id
 		map.timestamp = build.timestamp
-		map.result = build.result
+		map.result = build.result.toString()
         return map
     }
 
