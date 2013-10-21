@@ -62,7 +62,6 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
         assert variables.sonarIssuesUrl == "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age&pageSize=-1&format=json"
 
         files <<  variables.result.data.sonarIssuesFile
-
     }
 
     @Test
@@ -78,11 +77,15 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
         assert new File(variables.result.data.sonarIssuesFile).exists()
         assert variables.result.data.sonarIssuesPrettyPrintFile != null
         assert new File(variables.result.data.sonarIssuesPrettyPrintFile ).exists()
+        assert new File(variables.result.data.sonarIssuesPrettyPrintPdfFile ).exists()
         assert !variables.result.data.sonarIssues.isEmpty()
         assert variables.result.data.sonarIssues.maxResultsReached == false
         assert variables.sonarIssuesUrl == "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age&pageSize=-1&format=json"
+
+
         files <<  variables.result.data.sonarIssuesFile
         files <<  variables.result.data.sonarIssuesPrettyPrintFile
+        files << variables.result.data.sonarIssuesPrettyPrintFile
     }
 
     @After

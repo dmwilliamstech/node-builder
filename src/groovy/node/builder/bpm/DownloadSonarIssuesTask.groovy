@@ -20,6 +20,7 @@ import com.mongodb.util.JSON
 import groovy.text.SimpleTemplateEngine
 import org.activiti.engine.delegate.DelegateExecution
 import org.apache.commons.io.IOUtils
+import org.xhtmlrenderer.pdf.ITextRenderer
 
 class DownloadSonarIssuesTask extends MetricsTask{
     private static final SONAR_ISSUES_URL_VAR = 'sonarIssuesUrl'
@@ -49,18 +50,35 @@ class DownloadSonarIssuesTask extends MetricsTask{
                 template = this.class.classLoader.getResourceAsStream("resources/sonar_issues.html.gsp")
             }
             prettyPrintFile.write(processTemplate((List)result.data.sonarIssues.issues, template))
+
+            def prettyPrintPdfFile = File.createTempFile("issues", ".pdf")
+            processPdf(prettyPrintFile, prettyPrintPdfFile)
+
             result.data.sonarIssuesPrettyPrintFile = prettyPrintFile.path
+            result.data.sonarIssuesPrettyPrintPdfFile = prettyPrintPdfFile.path
         }
 
         delegateExecution.setVariable(SONAR_ISSUES_URL_VAR, remoteUrl.URL.toString())
         delegateExecution.setVariable("result", result)
     }
 
-
     def processTemplate(issues, template){
         def output = new StringWriter()
         def templateText = IOUtils.toString(template, "UTF-8")
         (new SimpleTemplateEngine()).createTemplate(templateText).make([issues: issues]).writeTo(output)
         return output.getBuffer().toString().replaceAll("\\-\\>\\s+\\}", "\n}")
+    }
+
+    def processPdf(inputFile, outputFile) {
+        ITextRenderer iTextRenderer = new ITextRenderer();
+
+        iTextRenderer.setDocument(inputFile.path);
+        iTextRenderer.layout();
+
+        final FileOutputStream fileOutputStream =
+            new FileOutputStream(new File(outputFile.path));
+
+        iTextRenderer.createPDF(fileOutputStream);
+        fileOutputStream.close();
     }
 }
