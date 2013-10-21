@@ -81,7 +81,11 @@ grails.project.dependency.resolution = {
         compile 'com.atlassian.jira:jira-rest-java-client-api:2.0.0-m25'
         compile 'com.sun.mail:all:1.5.0'
         compile 'org.mongodb:mongo-java-driver:2.11.3'
-        runtime "postgresql:postgresql:9.1-901.jdbc4"
+
+        compile 'com.itextpdf:itextpdf:5.4.4'
+        compile 'org.xhtmlrenderer:flying-saucer-pdf-itext5:9.0.3'
+
+        runtime 'postgresql:postgresql:9.1-901.jdbc4'
     }
 
     plugins {
@@ -103,12 +107,12 @@ grails.project.dependency.resolution = {
 //        cacheDir()
         test ":geb:0.9.0"
 
-        compile ":maven-publisher:0.8.1"
+        compile ':maven-publisher:0.8.1'
         compile ':cache:1.0.1'
         compile 'org.grails.plugins:json-rest-api:1.0.11'
-        compile ":quartz:1.0-RC9"
+        compile ':quartz:1.0-RC9'
         compile ':spring-security-core:1.2.7.3'
-        compile ":spring-security-ldap:1.0.6"
+        compile ':spring-security-ldap:1.0.6'
     }
 }
 
