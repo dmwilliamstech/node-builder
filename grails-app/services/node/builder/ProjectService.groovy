@@ -18,6 +18,8 @@ package node.builder
 
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
+import node.builder.metrics.MetricEvents
+import node.builder.metrics.MetricGroups
 import org.activiti.engine.ActivitiObjectNotFoundException
 
 import java.util.concurrent.Callable
@@ -74,8 +76,12 @@ class ProjectService {
             futures.remove(project.name)
             futures.put(project.name, pool.submit(new Callable<ProcessResult>() {
                     public ProcessResult call() {
+                        def businessKey = "${project.name}-${java.util.UUID.randomUUID()}"
+                        def result
                         try{
                             def processEngine = ProcessEngineFactory.defaultProcessEngine(project.name)
+
+                            log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "", null)
 
                             def variables = new HashMap();
 
@@ -97,10 +103,11 @@ class ProjectService {
                             variables.put("jiraPassword", config.get("jira.password"))
                             variables.put("jiraProject", config.get("jira.project"))
                             variables.put("jiraIssueType", config.get("jira.issueType"))
+                            variables.put("businessKey", businessKey)
+                            variables.put("projectName",  project.name)
 
-                            def businessKey = "${project.name}-${java.util.UUID.randomUUID()}"
                             log.info "Running process ${project.processDefinitionKey} on project ${project.name}"
-                            def result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, project.processDefinitionKey, businessKey, variables)
+                            result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, project.processDefinitionKey, businessKey, variables)
                             log.info "Process ${project.processDefinitionKey} on project ${project.name} finished"
 
                             project.state = ProjectState.OK
@@ -116,6 +123,7 @@ class ProjectService {
                             project.state = ProjectState.ERROR
                             project.message = e.getMessage()
                         }finally{
+                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result)
                             log.info("Saving project object with state $project.state")
                             project.save(validate: false)
                         }
