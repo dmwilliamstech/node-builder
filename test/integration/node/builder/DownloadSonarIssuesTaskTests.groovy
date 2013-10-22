@@ -28,7 +28,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDownloadSonarIssues(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 2)
         sonarTask.execute(delegateExecution)
 
         assert variables.result.data.sonarIssuesFile != null
@@ -44,7 +44,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDetectBadIssuesUrl(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://broken:9000/api/issues/search?componentRoots=com.airgap:age"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 3, 1)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 6, 1)
         sonarTask.execute(delegateExecution)
     }
 
@@ -53,7 +53,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
     void shouldDownloadAllIssues(){
         def sonarTask = new DownloadSonarIssuesTask()
         def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age&pageSize=10"]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 2)
         sonarTask.execute(delegateExecution)
 
         assert variables.result.data.sonarIssuesFile != null
@@ -70,7 +70,7 @@ class DownloadSonarIssuesTaskTests extends BPMNTaskTestBase{
         def variables = [sonarIssuesUrl: "http://beaker:9000/api/issues/search?componentRoots=com.airgap:age",
             sonarPrettyPrintIssues: true
         ]
-        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 2)
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 10, 2)
         sonarTask.execute(delegateExecution)
 
         assert variables.result.data.sonarIssuesFile != null
