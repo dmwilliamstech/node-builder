@@ -60,7 +60,10 @@ class MetricService {
         sortOrder.put('$sort', new BasicDBObject('lastUpdated',
                 -1))
 
-        def results = collection.aggregate(neQuery, regexQuery, sortOrder)
+        BasicDBObject limit = new BasicDBObject()
+        limit.put('$limit', 100)
+
+        def results = collection.aggregate(neQuery, regexQuery, sortOrder, limit)
         def averages = collection.aggregate(regexQuery, neQuery, groupGroup)
         if(!results.collect().empty && averages.results().iterator().hasNext()){
             def average = averages.results()?.first()
