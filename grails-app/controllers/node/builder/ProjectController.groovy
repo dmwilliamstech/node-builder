@@ -27,7 +27,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class ProjectController {
     def springSecurityService
     def projectService
-
+    def metricService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", run: "POST"]
 
@@ -147,5 +147,29 @@ class ProjectController {
             response.status = Response.SC_UNAUTHORIZED
             render([project:[:], message:"User ${springSecurityService.currentUser} is not authorized to run project with id $params.id"] as JSON)
         }
+    }
+
+    def history(){
+        def projectInstance = projectService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations))
+        if (!projectInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
+            redirect(action: "list")
+            return
+        }
+
+        def metrics = metricService.metricsForProject(projectInstance.name)
+        render(view: "history", model: [projectInstance: projectInstance, metrics: metrics])
+    }
+
+    def artifact(){
+        def file = new File(java.net.URLDecoder.decode(params.id, "UTF-8"))
+        if(!file.exists() || !file.file){
+            response.status = Response.SC_NOT_FOUND
+            render([project:[:], message:"File with id $params.id not found"] as JSON)
+        }
+
+        response.setHeader("Content-Type", "text/plain")
+        response.setHeader("Content-disposition", "attachment;filename=${file.name}")
+        response.outputStream << file.newInputStream()
     }
 }
