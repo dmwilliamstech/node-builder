@@ -58,7 +58,7 @@ class Manifest {
     static transients = ['manifest']
 
     static constraints = {
-        manifestAsJSON(maxSize: 20000)
+        manifestAsJSON(maxSize: 200000)
         description(nullable: true)
     }
 
