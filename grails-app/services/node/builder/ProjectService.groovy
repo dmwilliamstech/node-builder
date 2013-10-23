@@ -16,6 +16,7 @@
 
 package node.builder
 
+import groovy.time.TimeCategory
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
 import node.builder.metrics.MetricEvents
@@ -64,6 +65,23 @@ class ProjectService {
         return project.empty ? null : project.first()
     }
 
+    def filesFromResult(ProcessResult result){
+        try{
+            def files = []
+            if(result?.data == null)
+                return files
+
+            result.data.each{ key, value ->
+                if(key.toString().toLowerCase().contains('file'))
+                    files << [path: value, name: new File(value).name]
+            }
+
+            return files
+        }catch(e){
+            e.printStackTrace()
+        }
+    }
+
     def run(project) {
         def message = ""
 
@@ -77,11 +95,12 @@ class ProjectService {
             futures.put(project.name, pool.submit(new Callable<ProcessResult>() {
                     public ProcessResult call() {
                         def businessKey = "${project.name}-${java.util.UUID.randomUUID()}"
+                        def start = System.currentTimeMillis()
                         def result
                         try{
                             def processEngine = ProcessEngineFactory.defaultProcessEngine(project.name)
 
-                            log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "", null)
+                            log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "")
 
                             def variables = new HashMap();
 
@@ -117,13 +136,18 @@ class ProjectService {
                             e.printStackTrace()
                             project.state = ProjectState.WARNING
                             project.message = "Unable to detect state of project, please add a receive task to your workflow"
+                            result = new ProcessResult(project.message, [:])
                         }catch(e){
                             log.error(e.getMessage())
                             e.printStackTrace()
                             project.state = ProjectState.ERROR
                             project.message = e.getMessage()
+                            result = new ProcessResult(project.message, [:])
                         }finally{
-                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result)
+                            result?.data?.status = project?.state
+                            result?.data?.artifactFiles = filesFromResult(result)
+                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result, (System.currentTimeMillis() - start))
+
                             log.info("Saving project object with state $project.state")
                             project.save(validate: false)
                         }
@@ -133,4 +157,6 @@ class ProjectService {
             ));
         return [message: project.message, project: project]
     }
+
+
 }

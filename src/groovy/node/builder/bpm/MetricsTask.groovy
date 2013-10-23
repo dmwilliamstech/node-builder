@@ -30,12 +30,17 @@ abstract class MetricsTask extends Retryable implements JavaDelegate  {
     public void execute(DelegateExecution execution){
         if(Config.globalConfig.get("metrics.initialized")){
             def taskKey = "${this.class.name.toLowerCase()}-${java.util.UUID.randomUUID()}"
-            log.metric(MetricEvents.START, MetricGroups.TASK, "", taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"),  execution.getVariable("result"))
+            def start = System.currentTimeMillis()
+            log.metric(MetricEvents.START, MetricGroups.TASK, "", taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"),  execution.getVariable("result"), -1)
 
             this.executeWithMetrics(execution)
 
             def message = execution.getVariable("result")?.message ? execution.getVariable("result").message : "Message not set by task"
-            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message, taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"), execution.getVariable("result"))
+
+            def duration = System.currentTimeMillis() - start
+            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message, taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"), execution.getVariable("result"), duration)
+
+
         } else {
             log.warn "Metrics was not initialized successfully, skipping log"
             this.executeWithMetrics(execution)

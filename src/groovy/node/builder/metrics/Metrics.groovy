@@ -23,8 +23,8 @@ import org.json.JSONObject
  * limitations under the License.
  */
 class Metrics {
-    def metricWithEventGroupMessageEventIdGroupIdParentId = { event, group, message, eventId, groupId, parentId, eventData ->
-        if(Environment.current == Environment.PRODUCTION){
+    def metricWithEventGroupMessageEventIdGroupIdParentId = { event, group, message, eventId, groupId, parentId, eventData, duration ->
+        if(Environment.current == Environment.PRODUCTION || Metric.connected){
             try{
                 def clazz = ReflectionUtils.getCallingClass(3)
                 clazz = clazz.getCanonicalName().find(/[\w]*\.[\w\$]*$/)
@@ -37,7 +37,8 @@ class Metrics {
                         eventId: eventId,
                         groupId: groupId,
                         parentId: parentId,
-                        eventData: JSON.parse(JsonOutput.toJson(eventData))
+                        eventData: JSON.parse(JsonOutput.toJson(eventData)),
+                        duration: duration
                 )
                 metric.save()
                 log.info "Logged metric $metric.id"
@@ -48,12 +49,12 @@ class Metrics {
     }
 
 
-    def metricWithEventGroupMessageEventIdGroupId = { event, group, message, eventId, groupId   ->
-        log.metric(event, group, message, eventId, groupId, "", [:])
+    def metricWithEventGroupMessageEventIdGroupId = { event, group, message, eventId, groupId, parentId   ->
+        log.metric(event, group, message, eventId, groupId, parentId, [:], -1)
     }
 
     def metricWithEventGroupMessage = { event, group, message  ->
-        log.metric(event, group, message, "", "", "", [:])
+        log.metric(event, group, message, "", "", "", [:], -1)
     }
 
     private Metrics(){
@@ -63,6 +64,15 @@ class Metrics {
             org.apache.commons.logging.impl.SLF4JLog.metaClass.metric << metric
             log.metaClass.metric << metric
         }
+    }
+
+    static def timeStringFromMilliseconds(millis) {
+        int second = (millis / 1000d)
+        int minute = (millis / (1000d * 60d)) % 60d
+        int hour = (millis / (1000d * 60d * 60d)) % 24d
+        millis = (millis / 1000 - second) * 1000
+        def averageDuration = String.format("%02d:%02d:%02d.%d", hour, minute, second, (int)millis)
+        averageDuration
     }
 
     static initialize(){

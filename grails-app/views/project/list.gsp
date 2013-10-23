@@ -53,6 +53,7 @@
                         <g:remoteLink action="run" id="${projectInstance.id}" elementId="runProject${projectInstance.id}" onFailure="runFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="runSuccess(data, ${projectInstance.id})" ><i class="icon-play-circle"></i></g:remoteLink>
                         <g:link action="edit" id="${projectInstance.id}" elementId="editProject${projectInstance.id}"><i class="icon-pencil"></i></g:link>
                     </sec:ifAnyGranted>
+                    <g:link action="history" id="${projectInstance.id}" elementId="historyProject${projectInstance.id}"><i class="icon-info-sign"></i></g:link>
                 </td>
 			
 				<td>${fieldValue(bean: projectInstance, field: "description")}</td>

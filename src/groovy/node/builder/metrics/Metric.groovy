@@ -13,10 +13,17 @@ import org.bson.types.ObjectId
 class Metric {
     //use the mongo driver for this domain
     static DB db
-    static def PROPERTY_LIST = ['clazz','thread','message','group','event', 'parentId','groupId','eventId', 'eventData','dateCreated','lastUpdated']
+    static Boolean connected
+    static final def PROPERTY_LIST = ['clazz','thread','message','group','event', 'parentId','groupId','eventId', 'eventData','dateCreated','lastUpdated','duration']
+    static final def METRIC_COLLECTION_NAME = 'metric'
+    static final def METRIC_ID_FIELD = '_id'
     static {
         MongoClient mongoClient = new MongoClient( Config.globalConfig.get("mongo.hostname") , Config.globalConfig.get("mongo.port"))
         db = mongoClient.getDB(Config.globalConfig.get("mongo.databaseName"))
+        if(db){
+            println '| Connected to mongo for logging'
+            connected = true
+        }
     }
 
     ObjectId  id
@@ -33,6 +40,7 @@ class Metric {
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated
+    Double  duration
 
     def save(){
         dateCreated = Date.newInstance()
@@ -42,7 +50,11 @@ class Metric {
             object.append(propertyName, this.properties[propertyName])
         }
 
-        db.getCollection("metric").insert(object)
-        id = object.get("_id")
+        db.getCollection(METRIC_COLLECTION_NAME).insert(object)
+        id = object.get(METRIC_ID_FIELD)
+    }
+
+    static def metricCollection(){
+        return db.getCollection(METRIC_COLLECTION_NAME)
     }
 }
