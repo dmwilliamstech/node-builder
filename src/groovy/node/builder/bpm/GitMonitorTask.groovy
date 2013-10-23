@@ -137,8 +137,15 @@ class GitMonitorTask extends MetricsTask{
             runCommand(command.string, git, command.outputFile, command.errorFile)
             outs.add(command.outputFile)
         }
-        result.data.repositoryPatchFile = outs[2]
-        result.data.repositoryDidChange = new File(outs[2]).size() > 0
+
+        def file = new File(outs[2])
+        result.data.repositoryDidChange = file.size() > 0
+        if(result.data.repositoryDidChange){
+            result.data.repositoryPatchFile = outs[2]
+        }else{
+            file.delete()
+        }
+
 
     }
 
