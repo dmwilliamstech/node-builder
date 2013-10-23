@@ -24,7 +24,7 @@
                                 <ul class="nav">
                                     <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
                                     <li class="dropdown ${request.getServletPath().contains('manifest') ? 'active' : '' }">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manifests <b class="caret"></b></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sandboxes <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="${request.contextPath}/manifest" >Manifests</a></li>
                                             <li><a href="${request.contextPath}/image">Images</a></li>
