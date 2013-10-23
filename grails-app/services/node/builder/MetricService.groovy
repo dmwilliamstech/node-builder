@@ -42,7 +42,7 @@ class MetricService {
         //match by project name
         BasicDBObject regexQuery = new BasicDBObject()
         regexQuery.put('$match', new BasicDBObject('eventId',
-                new BasicDBObject('$regex', "$projectName.*".toString())
+                new BasicDBObject('$regex', "^$projectName\\-.*".toString())
                         .append('$options', 'i')))
 
         //only get the entries that have a duration
@@ -66,6 +66,7 @@ class MetricService {
         def results = collection.aggregate(neQuery, regexQuery, sortOrder, limit)
         def averages = collection.aggregate(regexQuery, neQuery, groupGroup)
         if(!results.collect().empty && averages.results().iterator().hasNext()){
+            log.info averages
             def average = averages.results()?.first()
             def millis = Double.valueOf(average.averageDuration)
 
