@@ -27,7 +27,7 @@ class AdministrationController {
 
 
     def metric(){
-
+         [metrics: metricService.metricsForApplication()]
     }
 
     def config(){

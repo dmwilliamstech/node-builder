@@ -22,6 +22,7 @@ import com.mongodb.BasicDBObject
 import com.mongodb.DBCollection
 import com.mongodb.DBCursor
 import com.mongodb.DBObject
+import groovy.time.TimeCategory
 import node.builder.metrics.Metric
 import node.builder.metrics.Metrics
 
@@ -79,5 +80,33 @@ class MetricService {
         return metrics
     }
 
+    def metricsForApplication() {
+        def metrics = [:]
+        metrics.upTime = upTime()
 
+        return metrics
+    }
+
+    def upTime() {
+        DBCollection collection = Metric.metricCollection()
+
+        //match by group name
+        BasicDBObject regexQuery = new BasicDBObject()
+        regexQuery.put('$match', new BasicDBObject('group',
+                new BasicDBObject('$regex', "up\\_time".toString())
+                        .append('$options', 'i')))
+
+        //sort by dateCreated
+        BasicDBObject sortOrder = new BasicDBObject()
+        sortOrder.put('$sort', new BasicDBObject('lastUpdated',
+                -1))
+
+        BasicDBObject limit = new BasicDBObject()
+        limit.put('$limit', 1)
+
+        def results = collection.aggregate(regexQuery, sortOrder, limit)
+        use(TimeCategory) {
+            return new Date() - results.results().first().lastUpdated
+        }
+    }
 }
