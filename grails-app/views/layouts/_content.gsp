@@ -35,6 +35,16 @@
                                         <li class="${request.getServletPath().contains('image') ? 'active' : '' }"></li>
                                         <li class="${request.getServletPath().contains('instance') ? 'active' : '' }"></li>
                                     </g:if>
+                                    <sec:ifAllGranted roles="ROLE_NBADMINS">
+                                        <li class="dropdown ${request.getServletPath().contains('administration') ? 'active' : '' }">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrations <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="${request.contextPath}/administration/config" >Configurations</a></li>
+                                                <li><a href="${request.contextPath}/administration/metric">Metrics</a></li>
+                                                <li><a href="${request.contextPath}/administration/something">Something to make it 3</a></li>
+                                            </ul>
+                                        </li>
+                                    </sec:ifAllGranted>
                                 </ul>
                                 <ul class="nav pull-right">
                                     <li class="${request.getServletPath().contains('about') ? 'active' : '' }"><a href="${request.contextPath}/about" >About</a></li>

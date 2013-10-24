@@ -90,6 +90,7 @@ class BootStrap {
 
         def userRole = SecRole.findByAuthority('ROLE_USERS') ?: new SecRole(authority: 'ROLE_USERS').save(failOnError: true)
         def adminRole = SecRole.findByAuthority('ROLE_ADMINS') ?: new SecRole(authority: 'ROLE_ADMINS').save(failOnError: true)
+        def nbAdminRole = SecRole.findByAuthority('ROLE_NBADMINS') ?: new SecRole(authority: 'ROLE_NBADMINS').save(failOnError: true)
         def adminUser = SecUser.findByUsername('admin') ?: new SecUser(
                 username: 'admin',
                 password: 'admin',
@@ -100,6 +101,7 @@ class BootStrap {
 
         if (!adminUser.authorities.contains(adminRole)) {
             SecUserSecRole.create adminUser, adminRole
+            SecUserSecRole.create adminUser, nbAdminRole
         }
 
         ["gobo", "mokey"].each { username ->

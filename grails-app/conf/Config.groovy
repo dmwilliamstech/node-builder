@@ -133,7 +133,9 @@ environments {
         grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
         grails.plugins.springsecurity.interceptUrlMap = [
                 '/login/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+                '/administration/**':      ['ROLE_NBADMINS'],
                 '/**':                     ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
+
         ]
 
     }
@@ -147,6 +149,7 @@ environments {
         grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
         grails.plugins.springsecurity.interceptUrlMap = [
                 '/login/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+                '/administration/**':      ['ROLE_NBADMINS'],
                 '/**':                     ['ROLE_ADMINS','ROLE_USERS','IS_AUTHENTICATED_FULLY']
         ]
     }
