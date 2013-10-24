@@ -20,7 +20,7 @@
 	<r:require modules="jquery"/>
 	<r:require modules="bootstrap"/>
 	<r:require modules="bootstrap_utils"/>
-
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'application.css')}" type="text/css">
 	<r:layoutResources />
 	<g:layoutHead />
 

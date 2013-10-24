@@ -58,7 +58,7 @@
 			
 				<td>${fieldValue(bean: projectInstance, field: "description")}</td>
 
-                <td id="projectState${projectInstance.id}">${fieldValue(bean: projectInstance, field: "state")}</td>
+                <td id="projectState${projectInstance.id}"><h2><i class="center ${projectInstance.state.color} ${projectInstance.state.icon}"></i></h2></td>
 
                 <td id="projectMessage${projectInstance.id}">${fieldValue(bean: projectInstance, field: "message")}</td>
 
@@ -79,7 +79,7 @@
 	</div>
     <g:javascript>
         function runSuccess(data, id){
-            $("#projectState" + id).html(data.project.state.name)
+            $("#projectState" + id).html('<h2><i class="icon-refresh"></i></h2>')
             $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
         }
         function runFailure(XMLHttpRequest, id){

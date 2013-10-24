@@ -40,7 +40,7 @@
             <tr class="prop">
                 <td valign="top" class="name"><g:message code="project.state.label" default="Status" /></td>
 
-                <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "state")}</td>
+                <td valign="top" class="value"><h2><i class="center ${projectInstance.state.color} ${projectInstance.state.icon}"></i></h2></td>
 
             </tr>
 

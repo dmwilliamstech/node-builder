@@ -1,5 +1,5 @@
 
-<%@ page import="node.builder.metrics.Metrics; node.builder.Project" %>
+<%@ page import="node.builder.ProjectState; node.builder.metrics.Metrics; node.builder.Project" %>
 <!doctype html>
 <html>
 
@@ -38,7 +38,7 @@
 
                 <tr class="prop">
                     <td valign="top" class="name"><g:message code="project.name.label" default="Resulting Status" /></td>
-                    <td valign="top" class="value">${workflow.eventData.data.status}</td>
+                    <td valign="top" class="value"><h2><i class="${ProjectState.valueOf(ProjectState, workflow.eventData.data.status).color} ${ProjectState.valueOf(ProjectState, workflow.eventData.data.status).icon}"></i></h2></td>
                 </tr>
                 <tr class="prop">
                     <td valign="top" class="name"><g:message code="project.name.label" default="Time" /></td>
