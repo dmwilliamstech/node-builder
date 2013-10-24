@@ -79,7 +79,7 @@
 	</div>
     <g:javascript>
         function runSuccess(data, id){
-            $("#projectState" + id).html('<h2><i class="icon-refresh"></i></h2>')
+            $("#projectState" + id).html('<h2><i class="black icon-refresh"></i></h2>')
             $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
         }
         function runFailure(XMLHttpRequest, id){
