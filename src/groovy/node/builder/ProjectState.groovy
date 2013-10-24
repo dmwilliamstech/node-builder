@@ -17,8 +17,16 @@ package node.builder
  */
 
 public enum ProjectState {
-    RUNNING,
-    OK,
-    WARNING,
-    ERROR
+    RUNNING('icon-refresh', 'black'),
+    OK('icon-ok-sign', 'green'),
+    WARNING('icon-warning-sign', 'yellow'),
+    ERROR('icon-remove-sign', 'red')
+
+
+    def icon
+    def color
+    ProjectState(icon, color){
+        this.icon = icon
+        this.color = color
+    }
 }
