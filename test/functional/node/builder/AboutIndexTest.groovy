@@ -44,7 +44,7 @@ class AboutIndexTest extends GebReportingTest {
         go('about')
 
         assert title == 'About'
-        assert $('#application-name').text() == 'node-builder'
+        assert $('#application-name').text() == Config.applicationName
         assert $('#application-version').text().contains(version)
         assert $('#application-reference').text().replaceAll(/Reference\s/, "") == reference
 

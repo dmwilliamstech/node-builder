@@ -57,4 +57,8 @@ class Config {
         }
         return config
     }
+
+    static def getApplicationName(){
+        config.get("application.name")?: "NodeBuilder"
+    }
 }

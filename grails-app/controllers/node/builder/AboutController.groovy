@@ -30,7 +30,7 @@ class AboutController {
             dependencies: new XmlSlurper().parseText(this.class.classLoader.getResourceAsStream("dependency-report.xml").text),
             version: grailsApplication.metadata.'app.version',
             reference: this.class.classLoader.getResourceAsStream("reference.txt").text,
-            name: grailsApplication.metadata.'app.name',
+            name: Config.getApplicationName(),
             dropFolder: [location: InputFileChangeListener.listener.directory.path]
         ]
     }

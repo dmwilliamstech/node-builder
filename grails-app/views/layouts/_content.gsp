@@ -19,7 +19,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </a>
-                            <a class="brand" href="${request.contextPath}" title="OpenDX">OpenDX</a>
+                            <a class="brand" href="${request.contextPath}" title="${node.builder.Config.getApplicationName()}">${node.builder.Config.getApplicationName()}</a>
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
