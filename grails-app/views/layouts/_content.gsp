@@ -24,7 +24,7 @@
                                 <ul class="nav">
                                     <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
                                     <li class="dropdown ${request.getServletPath().contains('manifest') ? 'active' : '' }">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sandboxes <b class="caret"></b></a>
+                                        <a href="#"  id="dropdownSandbox" class="dropdown-toggle" data-toggle="dropdown">Sandboxes <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="${request.contextPath}/manifest" >Manifests</a></li>
                                             <li><a href="${request.contextPath}/image">Images</a></li>
@@ -37,10 +37,10 @@
                                     </g:if>
                                     <sec:ifAllGranted roles="ROLE_NBADMINS">
                                         <li class="dropdown ${request.getServletPath().contains('administration') ? 'active' : '' }">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrations <b class="caret"></b></a>
+                                            <a href="#" id="dropdownAdmin" class="dropdown-toggle" data-toggle="dropdown">Administrations <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="${request.contextPath}/administration/config" >Configurations</a></li>
-                                                <li><a href="${request.contextPath}/administration/metric">Metrics</a></li>
+                                                <li><a id="linkAdminConfig" href="${request.contextPath}/administration/config" >Configurations</a></li>
+                                                <li><a id="linkAdminMetric" href="${request.contextPath}/administration/metric">Metrics</a></li>
                                                 <li><a href="${request.contextPath}/administration/something">Something to make it 3</a></li>
                                             </ul>
                                         </li>

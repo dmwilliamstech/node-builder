@@ -8,7 +8,7 @@
 </head>
 <body>
         <h4>Metrics</h4>
-        <div class="panel panel-default">
+        <div id='upTimePanel' class="panel panel-default">
             <div class="panel-heading">
                 Up Time
             </div>
