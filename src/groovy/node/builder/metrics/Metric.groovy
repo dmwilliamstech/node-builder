@@ -3,6 +3,7 @@ package node.builder.metrics
 import com.mongodb.BasicDBObject
 import com.mongodb.DB
 import com.mongodb.MongoClient
+import grails.util.Environment
 import node.builder.Config
 import org.apache.commons.logging.impl.LogFactoryImpl
 import org.bson.types.ObjectId
@@ -16,7 +17,7 @@ class Metric {
     static DB db
     static Boolean connected = false
     static final def PROPERTY_LIST = ['clazz','thread','message','group','event', 'parentId','groupId','eventId', 'eventData','dateCreated','lastUpdated','duration']
-    static final def METRIC_COLLECTION_NAME = 'metric'
+    static final def METRIC_COLLECTION_NAME = 'metric_' + Environment.current.name.toLowerCase()
     static final def METRIC_ID_FIELD = '_id'
     static {
         if(Config.globalConfig.get("mongo.hostname") != null && Config.globalConfig.get("mongo.port") != null){
@@ -26,6 +27,9 @@ class Metric {
                 if(db){
                     println '| Connected to mongo for logging'
                     connected = true
+                }
+                if(Environment.current == Environment.TEST){
+                    db.getCollection(METRIC_COLLECTION_NAME).drop()
                 }
             }catch(e){
                 LogFactoryImpl.getLog(this).warn("Unable to connect to mongod server")
