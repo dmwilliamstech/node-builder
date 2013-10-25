@@ -16,7 +16,6 @@
 
 package node.builder
 
-import groovy.time.TimeCategory
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
 import node.builder.metrics.MetricEvents
@@ -146,7 +145,13 @@ class ProjectService {
                         }finally{
                             result?.data?.status = project?.state
                             result?.data?.artifactFiles = filesFromResult(result)
-                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result, (System.currentTimeMillis() - start))
+
+                            def duration = -1
+                            if(result?.data?.repositoryDidChange){
+                                duration = (System.currentTimeMillis() - start)
+                            }
+
+                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result, duration)
 
                             log.info("Saving project object with state $project.state")
                             project.save(validate: false)
