@@ -28,6 +28,10 @@ class NodeBuilderFunctionalTestBase extends GebReportingTest{
         $('input#submit').click()
     }
 
+    void logout(){
+        $("a[href\$=\"logout/index\"]").click()
+    }
+
     def createEmptyRepo(){
         def tempDir = new File("/tmp/dir")
         if(tempDir.exists())
