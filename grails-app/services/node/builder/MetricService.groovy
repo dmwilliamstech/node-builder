@@ -35,8 +35,6 @@ import java.text.SimpleDateFormat
  */
 class MetricService {
 
-    static transactional = true
-
     def metricsForProject(projectName) {
         DBCollection collection = Metric.metricCollection()
         def metrics = [:]
@@ -67,14 +65,12 @@ class MetricService {
         def results = collection.aggregate(neQuery, regexQuery, sortOrder, limit)
         def averages = collection.aggregate(regexQuery, neQuery, groupGroup)
         if(!results.collect().empty && averages.results().iterator().hasNext()){
-            log.info averages
             def average = averages.results()?.first()
             def millis = Double.valueOf(average.averageDuration)
 
             def averageDuration = Metrics.timeStringFromMilliseconds(millis)
 
-            def workflows = results
-            metrics.workflows = workflows.results()
+            metrics.workflows = results.results()
             metrics.averageDuration = averageDuration
         }
         return metrics
