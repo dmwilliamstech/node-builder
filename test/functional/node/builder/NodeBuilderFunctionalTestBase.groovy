@@ -55,4 +55,44 @@ class NodeBuilderFunctionalTestBase extends GebReportingTest{
         if(tempDir.exists())
             tempDir.deleteDir()
     }
+
+    @Override
+    def waitFor(Closure condition) {
+        waitFor(null, condition)
+    }
+
+    @Override
+    def waitFor(Double timeoutSecs, Closure condition) {
+        waitFor(timeoutSecs, null, condition)
+    }
+
+    @Override
+    def waitFor(Double timeoutSecs, Double intervalSecs, Closure condition) {
+        timeoutSecs = timeoutSecs ?: 5
+        intervalSecs = intervalSecs ?: 0.5
+        def loops = Math.ceil(timeoutSecs / intervalSecs)
+
+        def assertionError = doClosure(condition)
+        def i = 0
+        while (assertionError != null && i++ < loops) {
+            sleep((intervalSecs * 1000) as long)
+            assertionError = doClosure(condition)
+        }
+        if (assertionError != null) {
+            throw assertionError
+        }
+        true
+    }
+
+
+    def doClosure(Closure closure){
+        try{
+            closure()
+            return null
+        } catch (Exception e){
+            return e
+        } catch (Error e){
+            return e
+        }
+    }
 }

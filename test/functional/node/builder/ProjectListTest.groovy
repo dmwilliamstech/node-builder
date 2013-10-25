@@ -36,9 +36,10 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
         login()
         go('project')
         assert title == "Project List"
-        sleep(100)
-        assert $('[id^=projectShow]').first().text() == ("Test")
-        assert $('.icon-pencil') != null
+        waitFor(0.1){
+            assert $('[id^=projectShow]').first().text() == ("Test")
+            assert $('.icon-pencil') != null
+        }
     }
 
     @After

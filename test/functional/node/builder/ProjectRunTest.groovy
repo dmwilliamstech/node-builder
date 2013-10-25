@@ -48,16 +48,17 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         def project = Project.first()
 
         $("#runProject${project.id}").click()
-        sleep(1000)
-        assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
-        assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
-        assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
-        sleep(20000)
+        this.waitFor(10,1){
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
+            assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
+        }
 
-        $("a[href\$=\"project\"]").click()
-        assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.color)
-        assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.icon)
-
+        this.waitFor(20, 1){
+            $("a[href\$=\"project\"]").click()
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.icon)
+        }
     }
 
     @After

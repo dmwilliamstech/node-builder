@@ -53,17 +53,16 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         $("textarea", class:'ace_text-input') << lines[0]
         $("textarea", class:'ace_text-input') << lines[1]
 
-        sleep(500)
         assert processDefinitionKey == "process"
         location = tmpDir.path
 
         $('#create').click()
 
-        sleep(500)
 
-        assert title.contains("Show")
-        assert Project.count() == 1
-
+        waitFor(0.5){
+            assert title.contains("Show")
+            assert Project.count() == 1
+        }
         def project2 = Project.last()
         assert project2.name == "Test"
         assert project2.processDefinitionKey == "process"

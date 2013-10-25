@@ -24,7 +24,7 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
 
 
-class ManifestShowTest extends GebReportingTest {
+class ManifestShowTest extends NodeBuilderFunctionalTestBase {
     @BeforeClass
     static void cleanData(){
 //        Manifest.where { id > 0l }.deleteAll()
@@ -82,8 +82,9 @@ class ManifestShowTest extends GebReportingTest {
         assert ($('#input_0_1_2_0').value() == "Some Values" || $('#input_1_1_2_0').value() == "Some Values" )
 
         $('#saveManifestButton').click()
-        sleep(5000)
-        assert Manifest.count == 1
+        this.waitFor(5){
+            assert Manifest.count == 1
+        }
 
     }
 
