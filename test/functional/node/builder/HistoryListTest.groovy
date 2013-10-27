@@ -30,13 +30,16 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
-        def process = "git clone https://github.com/kellyp/testy.git /tmp/history_testy".execute()
+        def process = "git clone https://github.com/kellyp/testy.git history_testy".execute()
         assert process.waitFor() == 0
 
-        process = "git clone /tmp/history_testy history_testy".execute()
+        process = "mkdir -p /tmp/history_testy/.git".execute()
         assert process.waitFor() == 0
 
-        process = "git clone /tmp/history_testy history_testy2".execute()
+        process = "git --bare init".execute(new String[0], new File("/tmp/history_testy/.git"))
+        assert process.waitFor() == 0
+
+        process = "git remote set-url origin /tmp/history_testy".execute(new String[0], new File("history_testy/"))
         assert process.waitFor() == 0
 
         assert Project.count == 0
@@ -56,7 +59,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
 
 
-        def process = "history_testy2/update_me.sh".execute()
+        def process = "history_testy/update_me.sh".execute()
         assert process.waitFor() == 0
 
         (new ProjectRunTest()).shouldRunANewProject()
@@ -73,7 +76,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         workflows = metrics.workflows
         assert workflows.iterator().size() == 1
 
-        process = "history_testy2/update_me.sh".execute()
+        process = "history_testy/update_me.sh".execute()
         assert process.waitFor() == 0
 
         logout()
