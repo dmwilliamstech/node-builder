@@ -42,6 +42,12 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         process = "git remote set-url origin /tmp/history_testy".execute(new String[0], new File("history_testy/"))
         assert process.waitFor() == 0
 
+        process = "update_me.sh".execute(new String[0], new File("history_testy/"))
+        assert process.waitFor() == 0
+
+        process = "git clone /tmp/history_testy history_testy2".execute()
+        assert process.waitFor() == 0
+
         assert Project.count == 0
         (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
