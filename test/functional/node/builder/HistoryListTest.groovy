@@ -39,8 +39,8 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         project = Project.first()
         project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
         project.processDefinitionKey = "gitChangeMonitor"
-        project.location = "/tmp/history_test"
-        project.save(flush: true)
+        project.location = "/tmp/history_testy"
+        project.save(flush: true, failOnError: true)
     }
 
 
