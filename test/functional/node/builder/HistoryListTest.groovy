@@ -36,6 +36,9 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         process = "git clone /tmp/history_testy history_testy".execute()
         assert process.waitFor() == 0
 
+        process = "git clone /tmp/history_testy history_testy2".execute()
+        assert process.waitFor() == 0
+
         assert Project.count == 0
         (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
@@ -53,7 +56,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
 
 
-        def process = "history_testy/update_me.sh".execute()
+        def process = "history_testy2/update_me.sh".execute()
         assert process.waitFor() == 0
 
         (new ProjectRunTest()).shouldRunANewProject()
@@ -70,7 +73,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         workflows = metrics.workflows
         assert workflows.iterator().size() == 1
 
-        process = "history_testy/update_me.sh".execute()
+        process = "history_testy2/update_me.sh".execute()
         assert process.waitFor() == 0
 
         logout()
