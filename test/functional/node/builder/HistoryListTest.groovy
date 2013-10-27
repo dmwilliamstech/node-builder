@@ -65,7 +65,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
 
 
-        def process = "history_testy/update_me.sh".execute()
+        def process = "history_testy2/update_me.sh".execute()
         assert process.waitFor() == 0
 
         (new ProjectRunTest()).shouldRunANewProject()
@@ -82,7 +82,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         workflows = metrics.workflows
         assert workflows.iterator().size() == 1
 
-        process = "history_testy/update_me.sh".execute()
+        process = "history_testy2/update_me.sh".execute()
         assert process.waitFor() == 0
 
         logout()
