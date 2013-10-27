@@ -33,13 +33,16 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         def process = "git clone https://github.com/kellyp/testy.git /tmp/history_testy".execute()
         assert process.waitFor() == 0
 
+        process = "git clone /tmp/history_testy history_testy".execute()
+        assert process.waitFor() == 0
+
         assert Project.count == 0
         (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
         project = Project.first()
         project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
         project.processDefinitionKey = "gitChangeMonitor"
-        project.location = "/tmp/history_testy"
+        project.location = "history_testy"
         project.save(flush: true, failOnError: true)
     }
 
@@ -48,10 +51,9 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
     void shouldDisplayAListOfResults(){
 
 
-        def process = "git clone /tmp/history_testy history_testy".execute()
-        assert process.waitFor() == 0
 
-        process = "history_testy/update_me.sh".execute()
+
+        def process = "history_testy/update_me.sh".execute()
         assert process.waitFor() == 0
 
         (new ProjectRunTest()).shouldRunANewProject()
@@ -89,8 +91,8 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
             sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
         }
         Project.where {id>0l}.deleteAll()
-        "rm -rf /tmp/history_testy".execute()
-        "rm -rf history_testy".execute()
+//        "rm -rf /tmp/history_testy".execute()
+//        "rm -rf history_testy".execute()
         deleteEmptyRepo()
     }
 }
