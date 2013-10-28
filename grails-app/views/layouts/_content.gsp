@@ -39,9 +39,8 @@
                                         <li class="dropdown ${request.getServletPath().contains('administration') ? 'active' : '' }">
                                             <a href="#" id="dropdownAdmin" class="dropdown-toggle" data-toggle="dropdown">Administrations <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a id="linkAdminConfig" href="${request.contextPath}/administration/config" >Configurations</a></li>
                                                 <li><a id="linkAdminMetric" href="${request.contextPath}/administration/metric">Metrics</a></li>
-                                                <li><a href="${request.contextPath}/administration/something">Something to make it 3</a></li>
+                                                <li><a id="linkAdminConfig" href="${request.contextPath}/administration/config" >Configurations</a></li>
                                             </ul>
                                         </li>
                                     </sec:ifAllGranted>
