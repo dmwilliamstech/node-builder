@@ -1,5 +1,8 @@
 package node.builder
 
+import node.builder.metrics.MetricsTestHelper
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -18,6 +21,12 @@ import org.junit.Test
  * limitations under the License.
  */
 class MetricListTest extends NodeBuilderFunctionalTestBase{
+    @Before
+    void setUp(){
+        MetricsTestHelper.resetMetrics()
+        MetricsTestHelper.seedTestData()
+    }
+
 
     @Test
     void shouldNotAllowNonAdminsToView(){
@@ -36,4 +45,8 @@ class MetricListTest extends NodeBuilderFunctionalTestBase{
         }
     }
 
+    @After
+    void tearDown(){
+        MetricsTestHelper.resetMetrics()
+    }
 }
