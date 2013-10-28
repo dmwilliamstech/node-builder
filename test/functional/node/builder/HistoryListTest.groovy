@@ -30,42 +30,22 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
-        def process = "git clone https://github.com/kellyp/testy.git history_testy".execute()
-        assert process.waitFor() == 0
-
-        process = "mkdir -p /tmp/history_testy/.git".execute()
-        assert process.waitFor() == 0
-
-        process = "git --bare init".execute(new String[0], new File("/tmp/history_testy/.git"))
-        assert process.waitFor() == 0
-
-        process = "git remote set-url origin /tmp/history_testy".execute(new String[0], new File("history_testy/"))
-        assert process.waitFor() == 0
-
-        process = "update_me.sh".execute(new String[0], new File("history_testy/"))
-        assert process.waitFor() == 0
-
-        process = "git clone /tmp/history_testy history_testy2".execute()
-        assert process.waitFor() == 0
-
         assert Project.count == 0
         (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
         project = Project.first()
         project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
         project.processDefinitionKey = "gitChangeMonitor"
-        project.location = "history_testy"
-        project.save(flush: true, failOnError: true)
+        project.location = "https://github.com/kellyp/testy.git"
+        project.save(flush: true)
     }
 
 
     @Test
     void shouldDisplayAListOfResults(){
-
-
-
-
-        def process = "history_testy2/update_me.sh".execute()
+        def process = "git clone https://github.com/kellyp/testy.git /tmp/history_test".execute()
+        process.waitFor()
+        process = "update_me.sh".execute(new String[0], new File('/tmp/history_test'))
         assert process.waitFor() == 0
 
         (new ProjectRunTest()).shouldRunANewProject()
@@ -82,7 +62,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         workflows = metrics.workflows
         assert workflows.iterator().size() == 1
 
-        process = "history_testy2/update_me.sh".execute()
+        process = "update_me.sh".execute(new String[0], new File('/tmp/history_test'))
         assert process.waitFor() == 0
 
         logout()
@@ -103,8 +83,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
             sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
         }
         Project.where {id>0l}.deleteAll()
-//        "rm -rf /tmp/history_testy".execute()
-//        "rm -rf history_testy".execute()
+        "rm -rf /tmp/history_test".execute()
         deleteEmptyRepo()
     }
 }
