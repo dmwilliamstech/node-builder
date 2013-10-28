@@ -6,6 +6,7 @@ import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
@@ -40,7 +41,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         project.save(flush: true)
     }
 
-
+    @Ignore
     @Test
     void shouldDisplayAListOfResults(){
         def process = "git clone https://github.com/kellyp/testy.git /tmp/history_test".execute()
