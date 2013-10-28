@@ -31,8 +31,9 @@ class MetricListTest extends NodeBuilderFunctionalTestBase{
         login()
         $('#dropdownAdmin').click()
         $('#linkAdminMetric').click()
-
-        assert $('#upTimePanel div.panel-body').text().contains('seconds')
+        waitFor(10, 1){
+            assert $('#upTimePanel div.panel-body').text().contains('seconds')
+        }
     }
 
 }
