@@ -35,44 +35,40 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         (new ProjectCreateTest()).shouldCreateANewProject()
         assert Project.count == 1
         project = Project.first()
-        project.bpmn = new ClassPathResource("resources/monitor_git.bpmn20.xml").getFile().text
+        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
         project.processDefinitionKey = "gitChangeMonitor"
         project.location = "https://github.com/kellyp/testy.git"
         project.save(flush: true)
     }
 
-    @Ignore
     @Test
     void shouldDisplayAListOfResults(){
-        def process = "git clone https://github.com/kellyp/testy.git /tmp/history_test".execute()
-        process.waitFor()
-        process = "update_me.sh".execute(new String[0], new File('/tmp/history_test'))
-        assert process.waitFor() == 0
-
         (new ProjectRunTest()).shouldRunANewProject()
 
-        def metrics = (new MetricService()).metricsForProject(project.name)
-        Iterable<DBObject> workflows = metrics.workflows
-        assert workflows.iterator().size() == 1
+        $("a[href\$=\"project/history/${project.id}\"]").click()
+        assert $("table").size() == 2 //1 + the summary table
+
+        project = Project.first()
+        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text.replaceAll('true', 'false')
+        project.save()
 
         logout()
 
         (new ProjectRunTest()).shouldRunANewProject()
 
-        metrics = (new MetricService()).metricsForProject(project.name)
-        workflows = metrics.workflows
-        assert workflows.iterator().size() == 1
+        $("a[href\$=\"project/history/${project.id}\"]").click()
+        assert $("table").size() == 2 //1 + the summary table
 
-        process = "update_me.sh".execute(new String[0], new File('/tmp/history_test'))
-        assert process.waitFor() == 0
+        project = Project.first()
+        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
+        project.save()
 
         logout()
 
         (new ProjectRunTest()).shouldRunANewProject()
 
-        metrics = (new MetricService()).metricsForProject(project.name)
-        workflows = metrics.workflows
-        assert workflows.iterator().size() == 2
+        $("a[href\$=\"project/history/${project.id}\"]").click()
+        assert $("table").size() == 3 //2 + the summary table
     }
 
     @After
@@ -84,7 +80,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
             sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
         }
         Project.where {id>0l}.deleteAll()
-        "rm -rf /tmp/history_test".execute()
+//        "rm -rf /tmp/history_test".execute()
         deleteEmptyRepo()
     }
 }
