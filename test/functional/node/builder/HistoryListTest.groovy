@@ -1,6 +1,6 @@
 package node.builder
 
-import node.builder.metrics.Metric
+import node.builder.metrics.MetricsTestHelper
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.hibernate.SessionFactory
@@ -30,7 +30,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
-        Metric.resetMetrics()
+        MetricsTestHelper.resetMetrics()
 
         assert Project.count == 0
         (new ProjectCreateTest()).shouldCreateANewProject()

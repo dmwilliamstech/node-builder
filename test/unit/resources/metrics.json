@@ -1,0 +1,253 @@
+[
+    {
+        "_id": "526eb0f994363cf3de830a84",
+        "clazz": "util.Environment",
+        "thread": "main",
+        "message": "startup complete",
+        "group": "up_time",
+        "event": "start",
+        "parentId": "",
+        "groupId": "",
+        "eventId": "",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:46:17.645Z",
+        "lastUpdated": "2013-10-28T18:46:17.645Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb10f94363cf3de830a85",
+        "clazz": "util.Environment",
+        "thread": "localhost-startStop-1",
+        "message": "startup complete",
+        "group": "up_time",
+        "event": "start",
+        "parentId": "",
+        "groupId": "",
+        "eventId": "",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:46:39.748Z",
+        "lastUpdated": "2013-10-28T18:46:39.748Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb12494363cf3de830a86",
+        "clazz": "builder.ProjectService$1",
+        "thread": "pool-10-thread-1",
+        "message": "",
+        "group": "workflow",
+        "event": "start",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-18132a88-32f5-466c-8b02-2bee98c14e76",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:47:00.054Z",
+        "lastUpdated": "2013-10-28T18:47:00.054Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb12494363cf3de830a87",
+        "clazz": "FutureTask.Sync",
+        "thread": "pool-10-thread-1",
+        "message": "Process gitChangeMonitor on project Test finished - It's groovy man",
+        "group": "workflow",
+        "event": "finish",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-18132a88-32f5-466c-8b02-2bee98c14e76",
+        "eventData": {
+            "message": "It's groovy man",
+            "error": {
+                "message": "",
+                "data": {}
+            },
+            "data": {
+                "artifactFiles": [],
+                "status": "OK",
+                "repositoryDidChange": true
+            }
+        },
+        "dateCreated": "2013-10-28T18:47:00.233Z",
+        "lastUpdated": "2013-10-28T18:47:00.233Z",
+        "duration": 170
+    },
+    {
+        "_id": "526eb12894363cf3de830a88",
+        "clazz": "builder.ProjectService$1",
+        "thread": "pool-10-thread-1",
+        "message": "",
+        "group": "workflow",
+        "event": "start",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-8d9386ec-68b9-4b50-8ff3-aa9973819028",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:47:04.609Z",
+        "lastUpdated": "2013-10-28T18:47:04.609Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb12894363cf3de830a89",
+        "clazz": "FutureTask.Sync",
+        "thread": "pool-10-thread-1",
+        "message": "Process gitChangeMonitor on project Test finished - It's groovy man",
+        "group": "workflow",
+        "event": "finish",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-8d9386ec-68b9-4b50-8ff3-aa9973819028",
+        "eventData": {
+            "message": "It's groovy man",
+            "error": {
+                "message": "",
+                "data": {}
+            },
+            "data": {
+                "artifactFiles": [],
+                "status": "OK",
+                "repositoryDidChange": false
+            }
+        },
+        "dateCreated": "2013-10-28T18:47:04.769Z",
+        "lastUpdated": "2013-10-28T18:47:04.769Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb12b94363cf3de830a8a",
+        "clazz": "builder.ProjectService$1",
+        "thread": "pool-10-thread-1",
+        "message": "",
+        "group": "workflow",
+        "event": "start",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-1cd3a47a-01d8-4b96-9396-7efec602cfe8",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:47:07.690Z",
+        "lastUpdated": "2013-10-28T18:47:07.690Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb12b94363cf3de830a8b",
+        "clazz": "FutureTask.Sync",
+        "thread": "pool-10-thread-1",
+        "message": "Process gitChangeMonitor on project Test finished - It's groovy man",
+        "group": "workflow",
+        "event": "finish",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-1cd3a47a-01d8-4b96-9396-7efec602cfe8",
+        "eventData": {
+            "message": "It's groovy man",
+            "error": {
+                "message": "",
+                "data": {}
+            },
+            "data": {
+                "artifactFiles": [],
+                "status": "OK",
+                "repositoryDidChange": true
+            }
+        },
+        "dateCreated": "2013-10-28T18:47:07.822Z",
+        "lastUpdated": "2013-10-28T18:47:07.822Z",
+        "duration": 132
+    },
+    {
+        "_id": "526eb14194363cf3de830a8c",
+        "clazz": "builder.ProjectService$1",
+        "thread": "pool-10-thread-1",
+        "message": "",
+        "group": "workflow",
+        "event": "start",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-4a557f45-7cc5-41c9-aca9-cbecc5729af3",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:47:29.120Z",
+        "lastUpdated": "2013-10-28T18:47:29.120Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb14194363cf3de830a8d",
+        "clazz": "delegate.DelegateInvocation",
+        "thread": "pool-10-thread-1",
+        "message": "",
+        "group": "task",
+        "event": "start",
+        "parentId": "Test",
+        "groupId": "Test-4a557f45-7cc5-41c9-aca9-cbecc5729af3",
+        "eventId": "node.builder.bpm.gitmonitortask-a9bbd372-3fa5-4ba7-b33f-fad925522bad",
+        "eventData": {},
+        "dateCreated": "2013-10-28T18:47:29.144Z",
+        "lastUpdated": "2013-10-28T18:47:29.144Z",
+        "duration": -1
+    },
+    {
+        "_id": "526eb14494363cf3de830a8e",
+        "clazz": "delegate.DelegateInvocation",
+        "thread": "pool-10-thread-1",
+        "message": "No difference detected from remote repository at this time",
+        "group": "task",
+        "event": "finish",
+        "parentId": "Test",
+        "groupId": "Test-4a557f45-7cc5-41c9-aca9-cbecc5729af3",
+        "eventId": "node.builder.bpm.gitmonitortask-a9bbd372-3fa5-4ba7-b33f-fad925522bad",
+        "eventData": {
+            "message": "No difference detected from remote repository at this time",
+            "error": {
+                "message": "",
+                "data": {}
+            },
+            "data": {
+                "mergeStatus": "Already-up-to-date",
+                "mergeNewHead": "commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp",
+                "mergeBase": "commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp",
+                "mergedCommits": "[commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp, commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp]",
+                "mergeFailingPaths": "null",
+                "uri": "https://github.com/kellyp/testy.git",
+                "repositoryDidChange": false,
+                "mergeConflicts": "null",
+                "mergeCheckoutConflicts": "null",
+                "reference": "03c429360f5c2a6e77929368ad51e3f58848eb16"
+            }
+        },
+        "dateCreated": "2013-10-28T18:47:32.706Z",
+        "lastUpdated": "2013-10-28T18:47:32.706Z",
+        "duration": 3565
+    },
+    {
+        "_id": "526eb14494363cf3de830a8f",
+        "clazz": "FutureTask.Sync",
+        "thread": "pool-10-thread-1",
+        "message": "Process gitChangeMonitor on project Test finished - No difference detected from remote repository at this time",
+        "group": "workflow",
+        "event": "finish",
+        "parentId": "",
+        "groupId": "Test",
+        "eventId": "Test-4a557f45-7cc5-41c9-aca9-cbecc5729af3",
+        "eventData": {
+            "message": "No difference detected from remote repository at this time",
+            "error": {
+                "message": "",
+                "data": {}
+            },
+            "data": {
+                "mergeStatus": "Already-up-to-date",
+                "artifactFiles": [],
+                "status": "OK",
+                "mergeNewHead": "commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp",
+                "mergeBase": "commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp",
+                "mergedCommits": "[commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp, commit 03c429360f5c2a6e77929368ad51e3f58848eb16 1382975737 -tr-sp]",
+                "mergeFailingPaths": "null",
+                "uri": "https://github.com/kellyp/testy.git",
+                "repositoryDidChange": false,
+                "mergeConflicts": "null",
+                "mergeCheckoutConflicts": "null",
+                "reference": "03c429360f5c2a6e77929368ad51e3f58848eb16"
+            }
+        },
+        "dateCreated": "2013-10-28T18:47:32.806Z",
+        "lastUpdated": "2013-10-28T18:47:32.806Z",
+        "duration": -1
+    }
+]

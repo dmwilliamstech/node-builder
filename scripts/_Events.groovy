@@ -49,9 +49,15 @@ eventCleanStart = {
 }
 
 eventCompileStart = { kind ->
+    projectCompiler.srcDirectories << "$basedir/test/groovy"
+    println "| Added test/groovy to Source Directories"
     def reference = "git rev-parse HEAD".execute().text
     new File("grails-app/conf/reference.txt").write(reference)
     println "| Current git reference is ${reference}"
     "grails refresh-dependencies grails-app/conf/dependency-report.xml".execute()
     println "| Created dependency report"
+}
+eventAllTestsStart = {
+    classLoader.addURL(new File("$basedir/test/groovy").toURL())
+    println "| Added test/groovy to ClassPath"
 }

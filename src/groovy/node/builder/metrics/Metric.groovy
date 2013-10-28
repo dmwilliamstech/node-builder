@@ -28,9 +28,6 @@ class Metric {
                     println '| Connected to mongo for logging'
                     connected = true
                 }
-                if(Environment.current == Environment.TEST){
-                    db.getCollection(METRIC_COLLECTION_NAME).drop()
-                }
             }catch(e){
                 LogFactoryImpl.getLog(this).warn("Unable to connect to mongod server")
             }
@@ -69,19 +66,5 @@ class Metric {
 
     static def metricCollection(){
         return db.getCollection(METRIC_COLLECTION_NAME)
-    }
-
-    static def resetMetrics(){
-        if(Environment.current == Environment.TEST){
-            BasicDBObject query = new BasicDBObject()
-            query.append('group', MetricGroups.TASK.title)
-            db.getCollection(METRIC_COLLECTION_NAME).remove(query)
-
-            query = new BasicDBObject()
-            query.append('group', MetricGroups.WORKFLOW.title)
-            db.getCollection(METRIC_COLLECTION_NAME).remove(query)
-        } else {
-            throw new Exception("Cannot reset metrics in ${Environment.current.name}")
-        }
     }
 }
