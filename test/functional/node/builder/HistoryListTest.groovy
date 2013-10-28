@@ -62,6 +62,9 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
     @Test
     void shouldDisplayAListOfResults(){
 
+
+
+
         def process = "history_testy2/update_me.sh".execute()
         assert process.waitFor() == 0
 
