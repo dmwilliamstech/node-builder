@@ -1,13 +1,11 @@
 package node.builder
 
-import com.mongodb.DBObject
 import node.builder.metrics.Metric
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource

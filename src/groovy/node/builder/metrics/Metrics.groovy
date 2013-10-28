@@ -5,7 +5,6 @@ import grails.util.Environment
 import groovy.json.JsonOutput
 import node.builder.Config
 import org.codehaus.groovy.reflection.ReflectionUtils
-import org.json.JSONObject
 
 /**
  * Copyright 2013 AirGap, LLC.

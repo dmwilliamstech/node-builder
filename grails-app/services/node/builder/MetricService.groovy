@@ -16,18 +16,12 @@
 
 package node.builder
 
-import com.mongodb.AggregationOutput
-import com.mongodb.BasicDBList
 import com.mongodb.BasicDBObject
 import com.mongodb.DBCollection
-import com.mongodb.DBCursor
 import com.mongodb.DBObject
 import groovy.time.TimeCategory
 import node.builder.metrics.Metric
 import node.builder.metrics.Metrics
-
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 /**
  * MetricService

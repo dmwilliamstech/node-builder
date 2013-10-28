@@ -16,13 +16,11 @@
 
 package node.builder
 
-import geb.junit4.GebReportingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
-
 
 class ManifestShowTest extends NodeBuilderFunctionalTestBase {
     @BeforeClass
