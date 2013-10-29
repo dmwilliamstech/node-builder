@@ -2,9 +2,6 @@
 <div id="Content" class="container">
 	<!-- Show page's content -->
     <div class="pull-right">
-    <sec:ifNotLoggedIn>
-        <g:link controller="login" action="auth">Login</g:link>
-    </sec:ifNotLoggedIn>
     <sec:ifLoggedIn>
         Welcome <sec:username />! (<g:link controller="logout">Logout</g:link>)
     </sec:ifLoggedIn>
@@ -20,6 +17,7 @@
                                 <span class="icon-bar"></span>
                             </a>
                             <a class="brand" href="${request.contextPath}" title="${node.builder.Config.getApplicationName()}">${node.builder.Config.getApplicationName()}</a>
+                            <sec:ifLoggedIn>
                             <div class="nav-collapse">
                                 <ul class="nav">
                                     <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
@@ -49,6 +47,7 @@
                                     <li class="${request.getServletPath().contains('about') ? 'active' : '' }"><a href="${request.contextPath}/about" >About</a></li>
                                 </ul>
                             </div><!-- /.nav-collapse -->
+                            </sec:ifLoggedIn>
                         </div>
                     </div><!-- /navbar-inner -->
                 </div>
