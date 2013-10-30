@@ -20,6 +20,7 @@ import org.activiti.engine.*
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.repository.Deployment
 import org.activiti.engine.runtime.Execution
+import org.activiti.engine.task.Task
 
 class ProcessEngineFactory {
     static private final $lock = new Object[0]
@@ -43,6 +44,40 @@ class ProcessEngineFactory {
         }
     }
 
+    public static def getResultFromProcess(processEngine, processInstance){
+        RuntimeService runtimeService = processEngine.getRuntimeService()
+        HistoryService historyService = processEngine.getHistoryService()
+        TaskService    taskService    = processEngine.getTaskService()
+        def result
+
+        if(processInstance.ended){
+            def histories = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.id).variableNameLike('result').singleResult()
+            result = histories.value
+            def start = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.id).variableNameLike('start').singleResult()
+            result.data.start = start?.value
+
+            def businessKey = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.id).variableNameLike('businessKey').singleResult()
+            result.data.businessKey = businessKey?.value
+        } else {
+            def task = taskService.createTaskQuery().processInstanceId(processInstance.id).active().singleResult()
+            if(task == null){
+                result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
+                Execution execution = runtimeService.createExecutionQuery()
+                        .processInstanceId(processInstance.getId())
+                        .activityId("receiveTask")
+                        .singleResult();
+
+                runtimeService.signal(execution.getId())
+            }else{
+                result = task
+            }
+        }
+        return result
+    }
+
     public static Deployment deployProcessDefinitionFromUrlWithProcessEngine(String url, String engineName, String deploymentName = null){
         ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine(engineName)
         RepositoryService repositoryService = processEngine.getRepositoryService();
@@ -57,29 +92,18 @@ class ProcessEngineFactory {
     }
 
     public static def runProcessWithBusinessKeyAndVariables(ProcessEngine processEngine, String processKey, String businessKey, Map variables){
-        RuntimeService runtimeService = processEngine.getRuntimeService();
-        def processInstance
+        RuntimeService runtimeService = processEngine.getRuntimeService()
 
         // Start a process instance
-        processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables)
+        def processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables)
 
         // verify that the process is actually finished
-
-        def result = runtimeService.getVariable(processInstance.getId(), "error") ?: runtimeService.getVariable(processInstance.getId(), "result")
-
-        Execution execution = runtimeService.createExecutionQuery()
-                .processInstanceId(processInstance.getId())
-                .activityId("receiveTask")
-                .singleResult();
-
-        runtimeService.signal(execution.getId())
-
-        HistoryService historyService = processEngine.getHistoryService()
-        HistoricProcessInstance historicProcessInstance =
-            historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult()
+        def result = getResultFromProcess(processEngine, processInstance)
 
         return result
     }
+
+
 
     public static def runProcessWithVariables(ProcessEngine processEngine, String processKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -103,5 +127,24 @@ class ProcessEngineFactory {
             historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
 
         return result
+    }
+
+    public static def taskToMap(task){
+        def taskData = [:]
+        task.properties.each { key, value ->
+            taskData[key] = value.toString()
+        }
+        return taskData
+    }
+
+    public static def tasksForGroups(List groups){
+        def tasks = []
+        ProcessEngines.processEngines.each { name, processEngine ->
+            processEngine.taskService.createTaskQuery()
+                .taskCandidateGroupIn(groups).list().each{Task task ->
+                tasks << taskToMap(task)
+            }
+        }
+        return tasks
     }
 }
