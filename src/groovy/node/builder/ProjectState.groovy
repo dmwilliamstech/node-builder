@@ -20,7 +20,8 @@ public enum ProjectState {
     RUNNING('icon-refresh', 'black'),
     OK('icon-ok-sign', 'green'),
     WARNING('icon-warning-sign', 'yellow'),
-    ERROR('icon-remove-sign', 'red')
+    ERROR('icon-remove-sign', 'red'),
+    WAITING('icon-time','black')
 
 
     def icon
