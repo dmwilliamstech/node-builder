@@ -61,6 +61,60 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         }
     }
 
+    @Test
+    void shouldRunANewProjectWithUserTasks(){
+        login()
+        go('project')
+        assert title == "Project List"
+        def project = Project.first()
+        project.bpmn = new ClassPathResource("resources/human_task.bpmn20.xml").getFile().text
+        project.processDefinitionKey = "gitChangeMonitor"
+        project.save(flush: true)
+
+
+
+        $("#runProject${project.id}").click()
+        this.waitFor(10,1){
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
+            assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
+        }
+
+        this.waitFor(20, 1){
+            $("a[href\$=\"project\"]").click()
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.icon)
+            assert $("#projectMessage$project.id").text() == "Process ${project.processDefinitionKey} on project ${project.name} waiting on some name"
+        }
+
+        //accept the first task
+        $("a[href\$=\"project/completeTask/$project.id\"]").click()
+
+        this.waitFor(20, 1){
+            $("a[href\$=\"project\"]").click()
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.icon)
+            assert $("#projectMessage$project.id").text() == "Process ${project.processDefinitionKey} on project ${project.name} waiting on some other name"
+        }
+
+        //accept the second task
+        $("a[href\$=\"project/completeTask/$project.id\"]").click()
+
+        this.waitFor(20, 1){
+            $("a[href\$=\"project\"]").click()
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
+            assert $("#projectMessage$project.id").text() == "Running process gitChangeMonitor on project Test"
+        }
+
+        this.waitFor(20, 1){
+            $("a[href\$=\"project\"]").click()
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.color)
+            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.icon)
+            assert $("#projectMessage$project.id").text() == "Process gitChangeMonitor on project Test finished - It's even groovier man"
+        }
+    }
+
     @After
     void tearDown(){
         ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);

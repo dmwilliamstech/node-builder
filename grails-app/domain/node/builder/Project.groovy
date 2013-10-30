@@ -39,6 +39,7 @@ class Project {
     String bpmn
     ProjectState state = ProjectState.OK
     String message = ""
+    Map task
 
     static hasMany = [organizations:String]
 
@@ -48,6 +49,7 @@ class Project {
 
 
     static mapping = {
+        organizations lazy: false
     }
 
     static constraints = {
@@ -55,6 +57,8 @@ class Project {
         name blank: false
         name unique: true
         message nullable: true
+        task nullable: true
+
 
         processDefinitionKey validator: {value, object ->
             if(value.contains("Please provide BPMN workflow")){

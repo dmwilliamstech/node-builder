@@ -1,0 +1,73 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+        >
+
+    <process id="gitChangeMonitor" name="mock for human involved task">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow0' sourceRef='theStart' targetRef='groovyTask' />
+
+
+        <scriptTask id="groovyTask"
+                    name="a real groovy task"
+                    scriptFormat="groovy" >
+            <script>
+                def result = new node.builder.bpm.ProcessResult()
+                result.data.repositoryDidChange = true
+                result.message = "It's groovy man"
+                execution.setVariable('result', result)
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow.5' sourceRef='groovyTask' targetRef='humanTask' />
+
+        <userTask id='humanTask' name='some name'>
+            <documentation>
+                Something witty, blah blah blah
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>${projectOrganizations}</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+
+        <sequenceFlow id='flow.75' sourceRef='humanTask' targetRef='humanTask2' />
+
+        <userTask id='humanTask2' name='some other name'>
+            <documentation>
+                Something witty, blah blah blah
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>${projectOrganizations}</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+
+
+        <sequenceFlow id='flow.80' sourceRef='humanTask2' targetRef='groovyTask2' />
+
+
+        <scriptTask id="groovyTask2"
+                    name="a real groovy task"
+                    scriptFormat="groovy" >
+            <script>
+                def result = new node.builder.bpm.ProcessResult()
+                result.data.repositoryDidChange = true
+                result.message = "It's even groovier man"
+                execution.setVariable('result', result)
+                sleep(10000)
+            </script>
+        </scriptTask>
+
+
+        <sequenceFlow id='flow1' sourceRef='groovyTask2' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>

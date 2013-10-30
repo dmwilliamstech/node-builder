@@ -1,5 +1,5 @@
 
-<%@ page import="node.builder.Project" %>
+<%@ page import="node.builder.ProjectState; node.builder.Project" %>
 <!doctype html>
 <html>
 <head>
@@ -51,6 +51,9 @@
                     <hr>
                     <sec:ifAnyGranted roles="ROLE_ADMINS">
                         <g:remoteLink action="run" id="${projectInstance.id}" elementId="runProject${projectInstance.id}" onFailure="runFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="runSuccess(data, ${projectInstance.id})" ><i class="icon-play-circle"></i></g:remoteLink>
+                        <g:if test="${projectInstance.state == ProjectState.WAITING}">
+                            <g:remoteLink action="completeTask" id="${projectInstance.id}" elementId="completeTaskProject${projectInstance.id}" onFailure="completeFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="completeSuccess(data, ${projectInstance.id})" ><i class="icon-check"></i></g:remoteLink>
+                        </g:if>
                         <g:link action="edit" id="${projectInstance.id}" elementId="editProject${projectInstance.id}"><i class="icon-pencil"></i></g:link>
                     </sec:ifAnyGranted>
                     <g:link action="history" id="${projectInstance.id}" elementId="historyProject${projectInstance.id}"><i class="icon-info-sign"></i></g:link>
@@ -85,7 +88,16 @@
         function runFailure(XMLHttpRequest, id){
 
             var json = JSON.parse(XMLHttpRequest.responseText)
-            $("#projectState" + id).html("ERROR")
+            $("#projectState" + id).html('<h2><i class="red icon-remove-sign"></i></h2>')
+            $("#alert").html('<div class="alert alert-error">'+json.message+'</div>')
+        }
+        function completeSuccess(data, id){
+            $("#projectState" + id).html('<h2><i class="black icon-refresh"></i></h2>')
+            $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
+        }
+        function completeFailure(XMLHttpRequest, id){
+            var json = JSON.parse(XMLHttpRequest.responseText)
+            $("#projectState" + id).html('<h2><i class="red icon-remove-sign"></i></h2>')
             $("#alert").html('<div class="alert alert-error">'+json.message+'</div>')
         }
     </g:javascript>

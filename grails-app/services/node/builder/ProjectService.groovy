@@ -21,6 +21,7 @@ import node.builder.bpm.ProcessResult
 import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.ActivitiObjectNotFoundException
+import org.activiti.engine.task.Task
 
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -81,7 +82,34 @@ class ProjectService {
         }
     }
 
-    def run(project) {
+    def completeTask(Project project){
+        Executors.newSingleThreadExecutor().execute {
+            Project.withNewSession {
+                project = project.refresh()
+                project.state = ProjectState.RUNNING
+                project.message = "Running process ${project.processDefinitionKey} on project ${project.name}"
+                project.save(validate: false, flush: true)
+
+                ProcessEngineFactory.defaultProcessEngine(project.name).getTaskService().complete(project.task.id)
+                def result
+                def processInstanceId = project.task.processInstanceId.toString()
+                def processInstance = ProcessEngineFactory.defaultProcessEngine(project.name)
+                        .runtimeService
+                        .createProcessInstanceQuery()
+                        .processInstanceId(processInstanceId).singleResult()?: [ended: true, id:processInstanceId]
+
+                result = ProcessEngineFactory.getResultFromProcess(ProcessEngineFactory.defaultProcessEngine(project.name), processInstance)
+
+                if(result instanceof ProcessResult){
+                    processRunResult(result, project, result.data.start, result.data.businessKey)
+                }else{
+                    processRunResult(result, project, -1, "")
+                }
+            }
+        }
+    }
+
+    def run(Project project) {
         def message = ""
 
             if(futures.get(project.name) != null && !futures.get(project.name).isDone())
@@ -102,66 +130,83 @@ class ProjectService {
                             log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "")
 
                             def variables = new HashMap();
-
-                            def config =  Config.getGlobalConfig()
-                            config.each { key, value ->
-                                variables.put(key, value)
-                            }
-
-                            variables.put("projectName", project.name)
-                            variables.put("remotePath", project.location)
-                            variables.put("localPath", "${config.get("workspace.path")}/${project.name.replaceAll("\\W", "").toLowerCase()}")
-
-                            variables.put("jenkinsUrl", config.get("jenkins.url"))
-                            variables.put("jenkinsUser",config.get("jenkins.user"))
-                            variables.put("jenkinsPassword", config.get("jenkins.password"))
-
-                            variables.put("jiraUrl", config.get("jira.url"))
-                            variables.put("jiraUser", config.get("jira.user"))
-                            variables.put("jiraPassword", config.get("jira.password"))
-                            variables.put("jiraProject", config.get("jira.project"))
-                            variables.put("jiraIssueType", config.get("jira.issueType"))
-                            variables.put("businessKey", businessKey)
-                            variables.put("projectName",  project.name)
+                            variables.start = start
+                            populateVariables(variables, project.properties, project.organizations.toList(), businessKey)
 
                             log.info "Running process ${project.processDefinitionKey} on project ${project.name}"
                             result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, project.processDefinitionKey, businessKey, variables)
                             log.info "Process ${project.processDefinitionKey} on project ${project.name} finished"
 
-                            project.state = ProjectState.OK
-                            project.message = "Process ${project.processDefinitionKey} on project ${project.name} finished - ${result?.message}"
                         }catch(ActivitiObjectNotFoundException e){
                             log.error(e.getMessage())
                             e.printStackTrace()
                             project.state = ProjectState.WARNING
                             project.message = "Unable to detect state of project, please add a receive task to your workflow"
-                            result = new ProcessResult(project.message, [:])
                         }catch(e){
                             log.error(e.getMessage())
                             e.printStackTrace()
                             project.state = ProjectState.ERROR
                             project.message = e.getMessage()
-                            result = new ProcessResult(project.message, [:])
                         }finally{
-                            result?.data?.status = project?.state
-                            result?.data?.artifactFiles = filesFromResult(result)
-
-                            def duration = -1
-                            if(result?.data?.repositoryDidChange){
-                                duration = (System.currentTimeMillis() - start)
-                            }
-
-                            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey,  project.name, "", result, duration)
-
-                            log.info("Saving project object with state $project.state")
-                            project.save(validate: false)
+                            processRunResult(result, project, start, businessKey)
                         }
-                        return new ProcessResult(project.message, project)
+                        return new ProcessResult(project.message, project, businessKey)
                     }
-                }
+            }
             ));
         return [message: project.message, project: project]
     }
 
+
+    def processRunResult(result, project, long start, businessKey) {
+        if(result instanceof ProcessResult){
+            project.message = "Process ${project.processDefinitionKey} on project ${project.name} finished - ${result?.message}"
+            project.state = ProjectState.OK
+
+            result?.data?.status = project?.state
+            result?.data?.artifactFiles = filesFromResult(result)
+
+            def duration = -1
+            if (result?.data?.repositoryDidChange) {
+                duration = (System.currentTimeMillis() - start)
+            }
+
+
+            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, project.message, businessKey, project.name, "", result, duration)
+
+        }else if(result instanceof Task){
+            def task = (Task)result
+            def name = task.name?: (task.description ?: task.id)
+            project.message = "Process ${project.processDefinitionKey} on project ${project.name} waiting on ${name}"
+            project.state = ProjectState.WAITING
+            project.task = ProcessEngineFactory.taskToMap(task)
+        }
+        Project.withTransaction {
+            project.save(validate: false)
+        }
+    }
+
+    def populateVariables(HashMap variables, project, organizations, GString businessKey) {
+        def config =  Config.getGlobalConfig()
+        config.each { key, value ->
+            variables.put(key, value)
+        }
+        variables.put("projectName", project.name)
+        variables.put("projectOrganizations", organizations)
+        variables.put("remotePath", project.location)
+        variables.put("localPath", "${config.get("workspace.path")}/${project.name.replaceAll("\\W", "").toLowerCase()}")
+
+        variables.put("jenkinsUrl", config.get("jenkins.url"))
+        variables.put("jenkinsUser", config.get("jenkins.user"))
+        variables.put("jenkinsPassword", config.get("jenkins.password"))
+
+        variables.put("jiraUrl", config.get("jira.url"))
+        variables.put("jiraUser", config.get("jira.user"))
+        variables.put("jiraPassword", config.get("jira.password"))
+        variables.put("jiraProject", config.get("jira.project"))
+        variables.put("jiraIssueType", config.get("jira.issueType"))
+        variables.put("businessKey", businessKey)
+        variables.put("projectName", project.name)
+    }
 
 }
