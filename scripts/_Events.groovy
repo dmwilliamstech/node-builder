@@ -49,7 +49,7 @@ eventCleanStart = {
 }
 
 eventCompileStart = { kind ->
-    projectCompiler.srcDirectories << "$basedir/test/groovy"
+    projectCompiler.srcDirectories << "$basedir/test/groovy".toString()
     println "| Added test/groovy to Source Directories"
     def reference = "git rev-parse HEAD".execute().text
     new File("grails-app/conf/reference.txt").write(reference)
