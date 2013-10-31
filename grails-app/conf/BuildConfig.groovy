@@ -113,6 +113,7 @@ grails.project.dependency.resolution = {
         compile ':quartz:1.0-RC9'
         compile ':spring-security-core:1.2.7.3'
         compile ':spring-security-ldap:1.0.6'
+        compile ':font-awesome-resources:3.2.1.3'
     }
 }
 
