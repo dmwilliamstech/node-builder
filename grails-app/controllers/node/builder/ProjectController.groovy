@@ -150,27 +150,25 @@ class ProjectController {
     }
 
     def completeTask(){
-        Project.withSession {
-            def project = Project.get(params.id)
-            response.setContentType("application/json")
-            if(project == null){
-                response.status = Response.SC_NOT_FOUND
-                render([project:[:], message:"Project with id $params.id not found"] as JSON)
-            }
+        def project = Project.get(params.id)
+        response.setContentType("application/json")
+        if(project == null){
+            response.status = Response.SC_NOT_FOUND
+            render([project:[:], message:"Project with id $params.id not found"] as JSON)
+        }
 
-            if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMINS")){
-                if(project.state != ProjectState.WAITING){
-                    response.status = Response.SC_NOT_MODIFIED
-                    render([project:project, message:"Project with id $params.id is not $ProjectState.WAITING"] as JSON)
-                    return true
-                }
-                def responseData = projectService.completeTask(project)
-                response.status = project.state == ProjectState.ERROR ? Response.SC_INTERNAL_SERVER_ERROR : Response.SC_OK
-                render([message: "Project approved"] as JSON)
-            }else{
-                response.status = Response.SC_UNAUTHORIZED
-                render([project:[:], message:"User ${springSecurityService.currentUser} is not authorized to run project with id $params.id"] as JSON)
+        if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMINS")){
+            if(project.state != ProjectState.WAITING){
+                response.status = Response.SC_NOT_MODIFIED
+                render([project:project, message:"Project with id $params.id is not $ProjectState.WAITING"] as JSON)
+                return true
             }
+            def responseData = projectService.completeTask(project, params.decision)
+            response.status = project.state == ProjectState.ERROR ? Response.SC_INTERNAL_SERVER_ERROR : Response.SC_OK
+            render(responseData as JSON)
+        }else{
+            response.status = Response.SC_UNAUTHORIZED
+            render([project:[:], message:"User ${springSecurityService.currentUser} is not authorized to run project with id $params.id"] as JSON)
         }
     }
 
