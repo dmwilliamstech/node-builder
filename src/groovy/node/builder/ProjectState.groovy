@@ -17,11 +17,11 @@ package node.builder
  */
 
 public enum ProjectState {
-    RUNNING('icon-refresh', 'black'),
+    RUNNING('icon-cogs', 'black'),
     OK('icon-ok-sign', 'green'),
     WARNING('icon-warning-sign', 'yellow'),
     ERROR('icon-remove-sign', 'red'),
-    WAITING('icon-time','black')
+    WAITING('icon-user','black')
 
 
     def icon
