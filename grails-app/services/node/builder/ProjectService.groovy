@@ -115,49 +115,50 @@ class ProjectService {
 
     def run(Project project) {
         def message = ""
+        if(project.state.isRunning()){
+            log.info("Project $project.name already running, ignoring request to run")
+            return [message: "Project already running", project: project]
+        }
+        project.state = ProjectState.RUNNING
+        project.message = "Running process ${project.processDefinitionKey} on project ${project.name}"
+        project.save(validate: false)
 
-            if(futures.get(project.name) != null && !futures.get(project.name).isDone())
-                return [message: "Project already running", project: project]
-            project.state = ProjectState.RUNNING
-            project.message = "Running process ${project.processDefinitionKey} on project ${project.name}"
-            project.save(validate: false)
+        futures.remove(project.name)
+        futures.put(project.name, pool.submit(new Callable<ProcessResult>() {
+                public ProcessResult call() {
+                    def businessKey = "${project.name}-${java.util.UUID.randomUUID()}"
+                    def start = System.currentTimeMillis()
+                    def result
+                    try{
+                        def processEngine = ProcessEngineFactory.defaultProcessEngine(project.name)
 
-            futures.remove(project.name)
-            futures.put(project.name, pool.submit(new Callable<ProcessResult>() {
-                    public ProcessResult call() {
-                        def businessKey = "${project.name}-${java.util.UUID.randomUUID()}"
-                        def start = System.currentTimeMillis()
-                        def result
-                        try{
-                            def processEngine = ProcessEngineFactory.defaultProcessEngine(project.name)
+                        log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "")
 
-                            log.metric(MetricEvents.START, MetricGroups.WORKFLOW, "", businessKey, project.name, "")
+                        def variables = new HashMap();
+                        variables.start = start
+                        populateVariables(variables, project.properties, project.organizations.toList(), businessKey)
 
-                            def variables = new HashMap();
-                            variables.start = start
-                            populateVariables(variables, project.properties, project.organizations.toList(), businessKey)
+                        log.info "Running process ${project.processDefinitionKey} on project ${project.name}"
+                        result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, project.processDefinitionKey, businessKey, variables)
+                        log.info "Process ${project.processDefinitionKey} on project ${project.name} finished"
 
-                            log.info "Running process ${project.processDefinitionKey} on project ${project.name}"
-                            result = ProcessEngineFactory.runProcessWithBusinessKeyAndVariables(processEngine, project.processDefinitionKey, businessKey, variables)
-                            log.info "Process ${project.processDefinitionKey} on project ${project.name} finished"
-
-                        }catch(ActivitiObjectNotFoundException e){
-                            log.error(e.getMessage())
-                            e.printStackTrace()
-                            project.state = ProjectState.WARNING
-                            project.message = "Unable to detect state of project, please add a receive task to your workflow"
-                        }catch(e){
-                            log.error(e.getMessage())
-                            e.printStackTrace()
-                            project.state = ProjectState.ERROR
-                            project.message = e.getMessage()
-                        }finally{
-                            processRunResult(result, project, start, businessKey)
-                        }
-                        return new ProcessResult(project.message, project, businessKey)
+                    }catch(ActivitiObjectNotFoundException e){
+                        log.error(e.getMessage())
+                        e.printStackTrace()
+                        project.state = ProjectState.WARNING
+                        project.message = "Unable to detect state of project, please add a receive task to your workflow"
+                    }catch(e){
+                        log.error(e.getMessage())
+                        e.printStackTrace()
+                        project.state = ProjectState.ERROR
+                        project.message = e.getMessage()
+                    }finally{
+                        processRunResult(result, project, start, businessKey)
                     }
-            }
-            ));
+                    return new ProcessResult(project.message, project, businessKey)
+                }
+        }
+        ));
         return [message: project.message, project: project]
     }
 

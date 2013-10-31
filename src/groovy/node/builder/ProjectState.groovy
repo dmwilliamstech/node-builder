@@ -30,4 +30,8 @@ public enum ProjectState {
         this.icon = icon
         this.color = color
     }
+
+    public boolean isRunning(){
+        return this.color == 'black'
+    }
 }
