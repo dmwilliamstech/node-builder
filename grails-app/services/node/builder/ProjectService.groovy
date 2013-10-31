@@ -82,17 +82,20 @@ class ProjectService {
         }
     }
 
-    def completeTask(Project project){
+    def completeTask(Project project, decision){
+        def message = "Task '$project.task.name' was ${decision.toString().replaceAll(/e$/, '') + 'ed'}"
         Executors.newSingleThreadExecutor().execute {
             Project.withNewSession {
                 project = project.refresh()
                 project.state = ProjectState.RUNNING
                 project.message = "Running process ${project.processDefinitionKey} on project ${project.name}"
                 project.save(validate: false, flush: true)
+                def processInstanceId = project.task.processInstanceId.toString()
 
+                ProcessEngineFactory.defaultProcessEngine(project.name).runtimeService.setVariable(processInstanceId, "userTaskDecision", decision)
                 ProcessEngineFactory.defaultProcessEngine(project.name).getTaskService().complete(project.task.id)
                 def result
-                def processInstanceId = project.task.processInstanceId.toString()
+
                 def processInstance = ProcessEngineFactory.defaultProcessEngine(project.name)
                         .runtimeService
                         .createProcessInstanceQuery()
@@ -107,6 +110,7 @@ class ProjectService {
                 }
             }
         }
+        return [message: message, id: project.id]
     }
 
     def run(Project project) {
