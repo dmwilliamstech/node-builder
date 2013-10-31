@@ -88,9 +88,13 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         }
 
         //accept the first task
-        $("a[href\$=\"project/completeTask/$project.id\"]").click()
+        $("#completeTaskAccept${project.id}").click()
+
+        sleep(2000)
+        $("#completeTaskButton").click()
 
         this.waitFor(20, 1){
+
             $("a[href\$=\"project\"]").click()
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.color)
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.icon)
@@ -98,9 +102,13 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         }
 
         //accept the second task
-        $("a[href\$=\"project/completeTask/$project.id\"]").click()
+        $("#completeTaskDecline${project.id}").click()
+
+        sleep(2000)
+        $("#completeTaskButton").click()
 
         this.waitFor(20, 1){
+
             $("a[href\$=\"project\"]").click()
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
