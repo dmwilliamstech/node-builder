@@ -3,6 +3,7 @@
 <!doctype html>
 <html>
 <head>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="kickstart" />
 	<g:set var="entityName" value="${message(code: 'project.label', default: 'Project')}" />
@@ -51,9 +52,6 @@
                     <hr>
                     <sec:ifAnyGranted roles="ROLE_ADMINS">
                         <g:remoteLink action="run" id="${projectInstance.id}" elementId="runProject${projectInstance.id}" onFailure="runFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="runSuccess(data, ${projectInstance.id})" ><i class="icon-play-circle"></i></g:remoteLink>
-                        <g:if test="${projectInstance.state == ProjectState.WAITING}">
-                            <g:remoteLink action="completeTask" id="${projectInstance.id}" elementId="completeTaskProject${projectInstance.id}" onFailure="completeFailure(XMLHttpRequest, ${projectInstance.id})" onSuccess="completeSuccess(data, ${projectInstance.id})" ><i class="icon-check"></i></g:remoteLink>
-                        </g:if>
                         <g:link action="edit" id="${projectInstance.id}" elementId="editProject${projectInstance.id}"><i class="icon-pencil"></i></g:link>
                     </sec:ifAnyGranted>
                     <g:link action="history" id="${projectInstance.id}" elementId="historyProject${projectInstance.id}"><i class="icon-info-sign"></i></g:link>
@@ -63,7 +61,15 @@
 
                 <td id="projectState${projectInstance.id}"><h2><i class="center ${projectInstance.state.color} ${projectInstance.state.icon}"></i></h2></td>
 
-                <td id="projectMessage${projectInstance.id}">${fieldValue(bean: projectInstance, field: "message")}</td>
+                <td id="projectMessage${projectInstance.id}">${fieldValue(bean: projectInstance, field: "message")}
+                    <hr>
+                <sec:ifAnyGranted roles="ROLE_ADMINS">
+                    <g:if test="${projectInstance.state == ProjectState.WAITING}">
+                        <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskAccept${projectInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="accept" data-task-description="${projectInstance.task.description}" data-task-name="${projectInstance.task.name}" data-project-id="${projectInstance.id}" data-project-name="${projectInstance.name}" class="icon-thumbs-up"></i></a>
+                        <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskDecline${projectInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="decline" data-task-description="${projectInstance.task.description}" data-task-name="${projectInstance.task.name}" data-project-id="${projectInstance.id}" data-project-name="${projectInstance.name}" class="icon-thumbs-down"></i></a>
+                    </g:if>
+                </sec:ifAnyGranted>
+                </td>
 
                 <td>${fieldValue(bean: projectInstance, field: "location")}</td>
 
@@ -82,26 +88,62 @@
 	</div>
     <g:javascript>
         function runSuccess(data, id){
-            $("#projectState" + id).html('<h2><i class="black icon-refresh"></i></h2>')
+            $("#projectState" + id).html('<h2><i class="black icon-cogs"></i></h2>')
             $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
+            $("#projectMessage" + id).html(data.message)
         }
         function runFailure(XMLHttpRequest, id){
 
             var json = JSON.parse(XMLHttpRequest.responseText)
             $("#projectState" + id).html('<h2><i class="red icon-remove-sign"></i></h2>')
             $("#alert").html('<div class="alert alert-error">'+json.message+'</div>')
+            $("#projectMessage" + id).text(json.message)
         }
         function completeSuccess(data, id){
-            $("#projectState" + id).html('<h2><i class="black icon-refresh"></i></h2>')
+            $("#projectState" + data.id).html('<h2><i class="black icon-cogs"></i></h2>')
             $("#alert").html('<div class="alert alert-info">'+data.message+'</div>')
+            $("#projectMessage" + data.id).html(data.message)
         }
         function completeFailure(XMLHttpRequest, id){
             var json = JSON.parse(XMLHttpRequest.responseText)
-            $("#projectState" + id).html('<h2><i class="red icon-remove-sign"></i></h2>')
+            $("#projectState" + json.id).html('<h2><i class="red icon-remove-sign"></i></h2>')
             $("#alert").html('<div class="alert alert-error">'+json.message+'</div>')
+            $("#projectMessage" + json.id).html(json.message)
+        }
+
+        function handleTaskComplete(data){
+            $("#completeTaskButton").data("project-id", $(data).data("project-id"))
+            $("#completeTaskButton").data("task-decision", $(data).data("task-decision"))
+            $(".modal-body #completeTaskConfirm").html( "Are you sure you want to " + $(data).data("task-decision") + " task '"+$(data).data("task-name")+"' for <i>" + $(data).data("project-name") + "</i>?")
+        }
+
+        function handleOkCompleteTask(data){
+            $('#completeTaskModal').modal('hide')
+            path = location.pathname.replace(/list.*/, "completeTask/"+$(data).data("project-id")+'?decision='+$(data).data("task-decision"))
+            $.ajax(path, {
+                contentType : 'application/json',
+                type : 'POST',
+                success: completeSuccess,
+                failure: completeFailure
+            });
         }
     </g:javascript>
 </section>
+
+
+<div id="completeTaskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="completeTaskLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="completeTaskModalLabel">Complete Task</h3>
+    </div>
+    <div class="modal-body">
+        <div id="completeTaskConfirm">Are you sure you want to complete this task?</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" data-target="#completeTaskModal" >Cancel</button>
+        <button id="completeTaskButton" class="btn btn-primary" onclick="handleOkCompleteTask(this)" >OK</button>
+    </div>
+</div>
 
 </body>
 
