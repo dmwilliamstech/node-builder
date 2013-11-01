@@ -8,8 +8,8 @@
             <div>  
               <sec:loggedInUserInfo field="organizations" />  
             </div>
-            <div id="footer_text" class=${node.builder.Config.globalConfig.get('application.footer_text_color')}>
-              ${node.builder.Config.globalConfig.get('application.footer_text')}
+            <div id="footerCopyrightText" class=${node.builder.Config.globalConfig.get('application.footer.text.color')}>
+              ${node.builder.Config.globalConfig.get('application.footer.text')}
             </div>
         </p>
 

@@ -28,6 +28,7 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
+        Config.globalConfig.put("application.footer.text", "Copyright &copy; 2013 Some Company")
         (new ProjectCreateTest()).shouldCreateANewProject()
     }
 
@@ -39,7 +40,7 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
         waitFor(0.1){
             assert $('[id^=projectShow]').first().text() == ("Test")
             assert $('.icon-pencil') != null
-            assert $('[id^=footer_text]').first().text() == ("Copyright © 2013 AirGap IT")
+            assert $('#footerCopyrightText').first().text() == ("Copyright © 2013 Some Company")
         }
     }
 
