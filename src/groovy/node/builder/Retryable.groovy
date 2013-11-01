@@ -57,7 +57,7 @@ abstract class Retryable {
             if(e.class == clazz && retries >= 0){
                 handler(e)
                 sleep(timeout)
-                retry(handler, Exception, retries, timeout, c)
+                staticRetry(handler, Exception, retries, timeout, c)
             }else{
                 throw e
             }
