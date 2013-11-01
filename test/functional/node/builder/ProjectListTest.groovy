@@ -39,6 +39,7 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
         waitFor(0.1){
             assert $('[id^=projectShow]').first().text() == ("Test")
             assert $('.icon-pencil') != null
+            assert $('[id^=footer_text]').first().text() == ("Copyright © 2013 AirGap IT")
         }
     }
 
