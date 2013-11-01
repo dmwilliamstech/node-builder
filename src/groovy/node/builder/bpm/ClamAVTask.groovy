@@ -25,7 +25,7 @@ class ClamAVTask extends ShellTask{
     static final String SUMMARY_STRING = '----------- SCAN SUMMARY -----------'
 
     def processOutput(String output){
-        def data = [files:[], summaries: []]
+        def data = [files:[], summaries: [], output: output]
 
         output.split(SUMMARY_STRING).eachWithIndex{ half, i ->
             half.split('\n').each{line ->
@@ -65,7 +65,6 @@ class ClamAVTask extends ShellTask{
                 result.error.message = e.getMessage()
                 result.message = e.getMessage()
             }
-            println output.text
             result.message = "Scan of file(s) (${filesToScan.replaceAll('\n', ', ')}) is complete"
             result.data.clamAVScan = processOutput(output.text)
             execution.setVariable(ProcessResult.RESULT_KEY, result)
