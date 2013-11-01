@@ -16,11 +16,13 @@
 
 package node.builder.bpm
 
+import node.builder.Retryable
 import org.activiti.engine.*
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.repository.Deployment
 import org.activiti.engine.runtime.Execution
 import org.activiti.engine.task.Task
+
 
 class ProcessEngineFactory {
     static private final $lock = new Object[0]
@@ -91,16 +93,22 @@ class ProcessEngineFactory {
         return deployment
     }
 
+
+
     public static def runProcessWithBusinessKeyAndVariables(ProcessEngine processEngine, String processKey, String businessKey, Map variables){
-        RuntimeService runtimeService = processEngine.getRuntimeService()
+        use(Retryable){
+            staticRetry(org.activiti.engine.ActivitiOptimisticLockingException, 5){
+                RuntimeService runtimeService = processEngine.getRuntimeService()
 
-        // Start a process instance
-        def processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables)
+                // Start a process instance
+                def processInstance = runtimeService.startProcessInstanceByKey(processKey, businessKey, variables)
 
-        // verify that the process is actually finished
-        def result = getResultFromProcess(processEngine, processInstance)
+                // verify that the process is actually finished
+                def result = getResultFromProcess(processEngine, processInstance)
 
-        return result
+                return result
+            }
+        }
     }
 
 
