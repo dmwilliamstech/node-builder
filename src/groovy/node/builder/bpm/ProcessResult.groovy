@@ -17,6 +17,7 @@
 package node.builder.bpm
 
 class ProcessResult extends HashMap{
+    public static final String RESULT_KEY = 'result'
 
     def ProcessResult(){
         init("", null, null)
@@ -54,7 +55,7 @@ class ProcessResult extends HashMap{
 
     }
 
-    public Boolean wasSuccessfull(){
-        return error == null
+    public Boolean wasSuccessful(){
+        return error.message.empty
     }
 }
