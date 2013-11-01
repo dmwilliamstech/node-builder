@@ -2,6 +2,7 @@ package node.builder.user
 
 import org.springframework.ldap.core.DirContextAdapter
 import org.springframework.ldap.core.DirContextOperations
+import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper
 
@@ -22,8 +23,17 @@ import org.springframework.security.ldap.userdetails.UserDetailsContextMapper
  */
 class CustomUserDetailsContextMapper  implements UserDetailsContextMapper {
     private static final String DEFAULT_ORGANIZATION= "default"
+    private static final List AUTHORITY_NAMES = ['ROLE_NBADMINS', 'ROLE_ADMINS', 'ROLE_USERS']
 
     UserDetails mapUserFromContext(DirContextOperations dirContextOperations, String username, Collection authorities) {
+        if(!authorities.find {authority ->
+            return AUTHORITY_NAMES.find { name ->
+                return name == authority.getAuthority()
+            }
+        }){
+            throw new InsufficientAuthenticationException("User is not a member of a proper role")
+        }
+
         def user = new CustomUserDetails(username, "", true, true, true, true,
                 authorities)
 
