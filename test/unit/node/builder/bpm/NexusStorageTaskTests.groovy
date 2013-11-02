@@ -39,8 +39,8 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
 
         def variables = [:]
         variables.put(NexusStorageTask.NEXUS_REPO_FILE_LIST_KEY, ['./activiti.lock.db','./activiti.h2.db'])
-        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "age")
-        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "foobar99")
+        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
+        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://rizzo/nexus/content/repositories/releases/")
         variables.put("projectName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
@@ -59,8 +59,8 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
 
         def variables = [:]
         variables.put(NexusStorageTask.NEXUS_REPO_FILE_LIST_KEY, './activiti.lock.db,./activiti.h2.db')
-        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "age")
-        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "foobar99")
+        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
+        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://rizzo/nexus/content/repositories/releases/")
         variables.put("projectName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
@@ -80,8 +80,8 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
 
         def variables = [:]
         variables.put(NexusStorageTask.NEXUS_REPO_FILE_LIST_KEY, './activiti.lock.db,./activiti.h2.db')
-        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "age")
-        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "foobar99")
+        variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
+        variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://notreal/nexus/content/repositories/releases/")
         variables.put("projectName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
