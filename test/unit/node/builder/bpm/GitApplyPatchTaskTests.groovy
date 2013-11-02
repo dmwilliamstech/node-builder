@@ -22,6 +22,8 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
 
 @TestMixin(ControllerUnitTestMixin)
 class GitApplyPatchTaskTests extends BPMNTaskTestBase{
@@ -95,8 +97,9 @@ class GitApplyPatchTaskTests extends BPMNTaskTestBase{
         assert result.id != null
     }
 
-
-    def testApplyPatch(){
+    @Ignore
+    @Test
+    void testApplyPatch(){
         def task = new GitMonitorTask()
         setupLocalRepo(new File(localPath))
         setupLocalRepo(new File(localPath2))
