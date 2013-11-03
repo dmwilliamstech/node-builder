@@ -151,7 +151,7 @@ class ProjectService {
                         log.error(e.getMessage())
                         e.printStackTrace()
                         project.state = ProjectState.ERROR
-                        project.message = e.getMessage()
+                        project.message = e.getMessage().substring(0,254)
                     }finally{
                         processRunResult(result, project, start, businessKey)
                     }
