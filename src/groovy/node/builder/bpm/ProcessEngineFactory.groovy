@@ -123,7 +123,6 @@ class ProcessEngineFactory {
         } catch(e) {
             retries -= 1
             if(e.class == clazz && retries >= 0){
-                println "Retrying closuer ${retries} ${clazz.name} ${timeout}"
                 handler(e)
                 sleep(timeout)
                 staticRetry3(handler, clazz, retries, timeout, c)
