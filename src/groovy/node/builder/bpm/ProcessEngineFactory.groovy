@@ -23,7 +23,7 @@ import org.activiti.engine.repository.Deployment
 import org.activiti.engine.runtime.Execution
 import org.activiti.engine.task.Task
 
-
+@Category(Retryable)
 class ProcessEngineFactory {
     static private final $lock = new Object[0]
 
@@ -97,7 +97,13 @@ class ProcessEngineFactory {
 
     public static def runProcessWithBusinessKeyAndVariables(ProcessEngine processEngine, String processKey, String businessKey, Map variables){
         use(Retryable){
-            staticRetry(org.activiti.engine.ActivitiOptimisticLockingException, 5){
+            def r = 0
+            Closure handler = {
+                log.warn("Activiti error detected retrying process - ${processKey} - ${businessKey}")
+                businessKey = businessKey.replaceAll(/\-\d$/, '') + "-${++r}"
+            }
+
+            staticRetry3(handler, ActivitiOptimisticLockingException, 5, 500){
                 RuntimeService runtimeService = processEngine.getRuntimeService()
 
                 // Start a process instance
@@ -111,7 +117,21 @@ class ProcessEngineFactory {
         }
     }
 
-
+    static def staticRetry3(handler, clazz = Exception, retries = 1, timeout, c) {
+        try {
+            return c()
+        } catch(e) {
+            retries -= 1
+            if(e.class == clazz && retries >= 0){
+                println "Retrying closuer ${retries} ${clazz.name} ${timeout}"
+                handler(e)
+                sleep(timeout)
+                staticRetry3(handler, clazz, retries, timeout, c)
+            }else{
+                throw e
+            }
+        }
+    }
 
     public static def runProcessWithVariables(ProcessEngine processEngine, String processKey, Map variables){
         RuntimeService runtimeService = processEngine.getRuntimeService();

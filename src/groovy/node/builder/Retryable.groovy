@@ -34,30 +34,7 @@ abstract class Retryable {
             if(e.class == clazz && retries >= 0){
                 handler(e)
                 sleep(timeout)
-                retry(handler, Exception, retries, timeout, c)
-            }else{
-                throw e
-            }
-        }
-    }
-
-    static def staticRetry(Class clazz = Exception, Integer retries = 1, c) {
-        staticRetry({}, clazz, retries, c)
-    }
-
-    static def staticRetry(handler, Class clazz = Exception, Integer retries = 1, c) {
-        staticRetry(handler, clazz, retries, 500l, c)
-    }
-
-    static def staticRetry(handler, Class clazz = Exception, Integer retries = 1, Long timeout, c) {
-        try {
-            return c()
-        } catch(e) {
-            retries -= 1
-            if(e.class == clazz && retries >= 0){
-                handler(e)
-                sleep(timeout)
-                staticRetry(handler, Exception, retries, timeout, c)
+                retry(handler, clazz, retries, timeout, c)
             }else{
                 throw e
             }

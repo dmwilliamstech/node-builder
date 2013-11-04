@@ -16,6 +16,7 @@
 
 package node.builder
 
+import org.activiti.engine.ActivitiOptimisticLockingException
 import org.junit.Test
 
 
@@ -31,11 +32,11 @@ class RetryableTests extends Retryable{
         }
 
         shouldFail(Exception){
-            retry(handler, Exception, 1) {
-                throw new Exception("Retry once only")
+            retry(handler, Exception, 5) {
+                throw new Exception("Retry 5 times")
             }
         }
-        assert count == 1
+        assert count == 5
     }
 
     @Test
@@ -65,5 +66,23 @@ class RetryableTests extends Retryable{
         }
 
         assert value == 99
+    }
+
+    @Test
+    void shouldRunHandlerClosureAndProcessLocalVariables(){
+        def count = 0
+        def string = "somestring"
+        def handler = { exception ->
+            string = string.replaceAll(/\-\d$/, '') + "-${++count}"
+            assert exception instanceof ActivitiOptimisticLockingException
+        }
+
+        shouldFail(ActivitiOptimisticLockingException){
+            retry(handler, ActivitiOptimisticLockingException, 5) {
+                throw new ActivitiOptimisticLockingException("Let's retry this")
+            }
+        }
+        assert count == 5
+        assert string == "somestring-5"
     }
 }
