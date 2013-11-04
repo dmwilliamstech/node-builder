@@ -37,6 +37,9 @@ class CustomUserDetailsService implements GrailsUserDetailsService{
     UserDetails loadUserByUsername(String s, boolean loadRoles) throws UsernameNotFoundException, DataAccessException {
         SecUser.withTransaction {
             def user = SecUser.findByUsername(s)
+            if(user == null)
+                throw new UsernameNotFoundException(s)
+
             def authorities = new ArrayList<GrantedAuthority>()
             def secRoles = SecUserSecRole.findAllBySecUser(user)
 
