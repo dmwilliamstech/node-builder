@@ -50,7 +50,7 @@
                 </tr>
                 <tr class="prop">
                     <td valign="top" class="name"><g:message code="project.name.label" default="Message" /></td>
-                    <td valign="top" class="value">${workflow.message}</td>
+                    <td valign="top" class="value">${workflow.message?.toString().replaceAll(/\n/, '<br>')}</td>
                 </tr>
                 <tr class="prop">
                     <td valign="top" class="name"><g:message code="project.name.label" default="Artifacts" /></td>
