@@ -78,8 +78,10 @@ class BootStrap {
     }
 
     def loadProjectTypes() {
-        def projectType = ProjectType.findByName("GIT Repository")?: new ProjectType(name: "GIT Repository")
-        projectType.save()
+        ProjectTypeEnum.values().each{projectTypeEnum ->
+            def projectType = ProjectType.findByName(projectTypeEnum.name)?: new ProjectType(name: projectTypeEnum.name)
+            projectType.save()
+        }
     }
 
     def loadSecurity() {
