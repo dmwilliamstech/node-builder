@@ -35,13 +35,13 @@ class NexusStorageTask extends ShellTask{
         fileList.each {filePath ->
             try{
                 def filename = FilenameUtils.getName(filePath)
-                url += filename
-                runCommand("curl -T ${filePath} ${url} -u ${execution.getVariable(NEXUS_REPO_USER_KEY)}:${execution.getVariable(NEXUS_REPO_PASSWORD_KEY)}",
+                url + filename
+                runCommand("curl -T ${filePath} ${url + filename} -u ${execution.getVariable(NEXUS_REPO_USER_KEY)}:${execution.getVariable(NEXUS_REPO_PASSWORD_KEY)}",
                         './',
                         output.path,
                         error.path)
-                urls << [filename: filename, url: url, title: filename]
-                result.message += "Uploaded $filename to $url\n"
+                urls << [filename: filename, url: url + filename, title: filename]
+                result.message += "Uploaded $filename to ${url + filename}\n"
             } catch(e){
                result.error.message = e.getMessage()
                result.message = e.getMessage()
@@ -49,9 +49,10 @@ class NexusStorageTask extends ShellTask{
 
             if(result.data.artifactUrls == null)
                 result.data.artifactUrls = []
-            result.data.artifactUrls.addAll(urls)
-            result.data.nexusStorageUrls = urls
         }
+
+        result.data.artifactUrls.addAll(urls)
+        result.data.nexusStorageUrls = urls
     }
 
     @Override
