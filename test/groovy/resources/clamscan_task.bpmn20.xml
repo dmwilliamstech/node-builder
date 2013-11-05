@@ -1,0 +1,44 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <process id="clamScan" name="mock for human involved task">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow0' sourceRef='theStart' targetRef='createVariable' />
+
+        <scriptTask id="createVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                execution.setVariable('clamAVScanList', ['/tmp/authorized_keys'])
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow.1' sourceRef='createVariable' targetRef='clamscan' />
+
+
+        <serviceTask id="clamscan"
+                     name="Check a Git Repo For changes"
+                     activiti:class="node.builder.bpm.ClamAVTask"
+                />
+
+        <sequenceFlow id='flow.2' sourceRef='clamscan' targetRef='readVariable' />
+
+        <scriptTask id="readVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                println result
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow1' sourceRef='readVariable' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>

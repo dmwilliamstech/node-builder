@@ -1,0 +1,51 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <process id="nexusStorage" name="mock for human involved task">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow0' sourceRef='theStart' targetRef='createVariable' />
+
+        <scriptTask id="createVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                "echo hello > /tmp/test.txt"
+
+                execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_USER_KEY, "age")
+                execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "foobar99")
+                execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_URL_KEY, "http://rizzo/nexus/content/repositories/releases/")
+                execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_VERSION_KEY, businessKey)
+                execution.setVariable('nexusStorageFileList', ['/tmp/test.txt'])
+                result.data.repositoryDidChange = true
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow.1' sourceRef='createVariable' targetRef='nexusStorageTask' />
+
+
+        <serviceTask id="nexusStorageTask"
+                     name="Check a Git Repo For changes"
+                     activiti:class="node.builder.bpm.NexusStorageTask"
+                />
+
+        <sequenceFlow id='flow.2' sourceRef='nexusStorageTask' targetRef='readVariable' />
+
+        <scriptTask id="readVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                println result
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow1' sourceRef='readVariable' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>
