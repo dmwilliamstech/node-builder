@@ -198,7 +198,9 @@ class ProjectService {
             variables.put(key, value)
         }
         variables.put("projectName", project.name)
+        variables.put("projectLastUpdated", project.lastUpdated)
         variables.put("projectOrganizations", organizations)
+        variables.put("projectLocation", project.location)
         variables.put("remotePath", project.location)
         variables.put("localPath", "${config.get("workspace.path")}/${project.name.replaceAll("\\W", "").toLowerCase()}")
 
@@ -212,7 +214,6 @@ class ProjectService {
         variables.put("jiraProject", config.get("jira.project"))
         variables.put("jiraIssueType", config.get("jira.issueType"))
         variables.put("businessKey", businessKey)
-        variables.put("projectName", project.name)
         variables.put('result', new ProcessResult())
     }
 
