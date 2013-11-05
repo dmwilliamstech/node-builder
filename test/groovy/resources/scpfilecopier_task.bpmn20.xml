@@ -1,0 +1,53 @@
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <process id="scpFileCopier" name="scp a file">
+
+        <startEvent id="theStart" />
+
+        <sequenceFlow id='flow0' sourceRef='theStart' targetRef='createVariable' />
+
+        <scriptTask id="createVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                new File("/tmp/test1.txt").write("test1")
+                new File("/tmp/test2.txt").write("test2")
+                new File("/tmp/test3.txt").write("test3")
+
+                execution.setVariable(node.builder.bpm.SCPFileCopierTask.SCP_SRC_FILE_LIST_KEY, ['/tmp/test2.txt','/tmp/test3.txt','/tmp/test1.txt'])
+                execution.setVariable(node.builder.bpm.SCPFileCopierTask.SCP_USER_KEY, "root")
+                execution.setVariable(node.builder.bpm.SCPFileCopierTask.SCP_KEY_PATH_KEY, "/Users/kelly/.ssh/id_rsa")
+                execution.setVariable(node.builder.bpm.SCPFileCopierTask.SCP_HOSTNAME_KEY, "scooter")
+                execution.setVariable(node.builder.bpm.SCPFileCopierTask.SCP_DEST_FILE_PATH_KEY, "/tmp")
+                result.data.repositoryDidChange = true
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow.1' sourceRef='createVariable' targetRef='scpFileCopierTask' />
+
+
+        <serviceTask id="scpFileCopierTask"
+                     name="Copy a file"
+                     activiti:class="node.builder.bpm.SCPFileCopierTask"
+                />
+
+        <sequenceFlow id='flow.2' sourceRef='scpFileCopierTask' targetRef='readVariable' />
+
+        <scriptTask id="readVariable"
+                    name="Create a Variable"
+                    scriptFormat="groovy" >
+            <script>
+                println result
+            </script>
+        </scriptTask>
+
+        <sequenceFlow id='flow1' sourceRef='readVariable' targetRef='theEnd' />
+
+        <endEvent id="theEnd" />
+
+    </process>
+
+</definitions>
