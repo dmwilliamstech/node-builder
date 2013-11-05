@@ -34,21 +34,8 @@
             </potentialOwner>
         </userTask>
 
-        <sequenceFlow id='flow.75' sourceRef='humanTask' targetRef='humanTask2' />
 
-        <userTask id='humanTask2' name='some other name'>
-            <documentation>
-                Something witty, blah blah blah
-            </documentation>
-            <potentialOwner>
-                <resourceAssignmentExpression>
-                    <formalExpression>${projectOrganizations}</formalExpression>
-                </resourceAssignmentExpression>
-            </potentialOwner>
-        </userTask>
-
-
-        <sequenceFlow id='flow.80' sourceRef='humanTask2' targetRef='groovyTask2' />
+        <sequenceFlow id='flow.80' sourceRef='humanTask' targetRef='groovyTask2' />
 
 
         <scriptTask id="groovyTask2"
@@ -59,7 +46,7 @@
                 result.data.repositoryDidChange = true
                 result.message = "It's even groovier man"
                 execution.setVariable('result', result)
-                sleep(10000)
+                sleep(5000)
             </script>
         </scriptTask>
 

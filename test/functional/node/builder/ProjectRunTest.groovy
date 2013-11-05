@@ -94,28 +94,6 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         $("#completeTaskButton").click()
 
         this.waitFor(30, 1){
-
-            $("a[href\$=\"project\"]").click()
-            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.color)
-            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.WAITING.icon)
-            assert $("#projectMessage$project.id").text() == "Process ${project.processDefinitionKey} on project ${project.name} waiting on some other name"
-        }
-
-        //accept the second task
-        $("#completeTaskDecline${project.id}").click()
-
-        sleep(5000)
-        $("#completeTaskButton").click()
-
-        this.waitFor(20, 1){
-
-            $("a[href\$=\"project\"]").click()
-            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.color)
-            assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.RUNNING.icon)
-            assert $("#projectMessage$project.id").text() == "Running process gitChangeMonitor on project Test"
-        }
-
-        this.waitFor(20, 1){
             $("a[href\$=\"project\"]").click()
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.color)
             assert $("#projectState${project.id} h2 i").classes().contains(ProjectState.OK.icon)
