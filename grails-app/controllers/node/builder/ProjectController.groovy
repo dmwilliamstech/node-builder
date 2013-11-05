@@ -18,6 +18,7 @@ package node.builder
 
 import grails.converters.JSON
 import org.apache.catalina.connector.Response
+import org.apache.commons.io.FilenameUtils
 import org.springframework.dao.DataIntegrityViolationException
 
 /**
@@ -185,14 +186,36 @@ class ProjectController {
     }
 
     def artifact(){
-        def file = new File(java.net.URLDecoder.decode(params.id, "UTF-8"))
-        if(!file.exists() || !file.file){
-            response.status = Response.SC_NOT_FOUND
-            render([project:[:], message:"File with id $params.id not found"] as JSON)
+        def decodedId = java.net.URLDecoder.decode(params.id, "UTF-8")
+        if(!decodedId.startsWith('http')){
+            decodedId = 'file://' + decodedId
         }
+        def url = new URL(decodedId)
+        def filename = FilenameUtils.getBaseName( decodedId ) + FilenameUtils.getExtension( FilenameUtils.getExtension( decodedId ))
+        try{
+            def file
+            response.setHeader("Content-Type", "text/plain")
+            response.setHeader("Content-disposition", "attachment;filename=${filename}")
 
-        response.setHeader("Content-Type", "text/plain")
-        response.setHeader("Content-disposition", "attachment;filename=${file.name}")
-        response.outputStream << file.newInputStream()
+            file = url.openConnection()
+            if(url.protocol.toLowerCase().matches('http')){
+                def remoteAuth = "Basic " + "${springSecurityService.authentication.principal.username}:${springSecurityService.authentication.credentials}".getBytes().encodeBase64().toString()
+                file.setRequestProperty("Authorization", remoteAuth);
+            }
+            response.outputStream << file.getInputStream()
+            return
+        }catch(e){
+            log.error e.message
+            if(e.getMessage().contains('401')){
+                response.status = Response.SC_UNAUTHORIZED
+                render([project:[:], message:"File ${filename} at ${url.path} not authorized"] as JSON)
+                return
+
+            }   else {
+                response.status = Response.SC_NOT_FOUND
+                render([project:[:], message:"File ${filename} at ${url.path} not found"] as JSON)
+                return
+            }
+        }
     }
 }

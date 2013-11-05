@@ -72,8 +72,9 @@ class ProjectService {
                 return files
 
             result.data.each{ key, value ->
-                if(key.toString().toLowerCase().contains('file'))
+                if(key.toString().toLowerCase().matches(/.*file$/)){
                     files << [path: value, name: new File(value).name]
+                }
             }
 
             return files
@@ -212,6 +213,7 @@ class ProjectService {
         variables.put("jiraIssueType", config.get("jira.issueType"))
         variables.put("businessKey", businessKey)
         variables.put("projectName", project.name)
+        variables.put('result', new ProcessResult())
     }
 
 }

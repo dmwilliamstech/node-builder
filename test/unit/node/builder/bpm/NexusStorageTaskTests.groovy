@@ -35,7 +35,7 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
 
     @Test
     void shouldUploadFilesFromAList(){
-        def task =  [runCommand: { command, workingDir, outputFile, errorFile -> outputFile.metaClass.text = "" }] as NexusStorageTask
+        def task =  [runCommand: { command, workingDir, outputFile, errorFile -> }] as NexusStorageTask
 
         def variables = [:]
         variables.put(NexusStorageTask.NEXUS_REPO_FILE_LIST_KEY, ['./activiti.lock.db','./activiti.h2.db'])
@@ -55,7 +55,7 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
 
     @Test
     void shouldUploadFilesFromADelimitedString(){
-        def task =  [runCommand: { command, workingDir, outputFile, errorFile -> outputFile.metaClass.text = "" }] as NexusStorageTask
+        def task =  [runCommand: {command, workingDir, outputFile, errorFile -> }] as NexusStorageTask
 
         def variables = [:]
         variables.put(NexusStorageTask.NEXUS_REPO_FILE_LIST_KEY, './activiti.lock.db,./activiti.h2.db')
@@ -72,7 +72,6 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
                 "Uploaded activiti.h2.db to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.lock.dbactiviti.h2.db"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
     }
-
 
     @Test
     void shouldFailIfNexusIsNotFound(){

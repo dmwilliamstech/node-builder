@@ -54,6 +54,7 @@ class Project {
 
     static constraints = {
         bpmn maxSize: 16000
+        message maxSize: 10000
         name blank: false
         name unique: true
         message nullable: true

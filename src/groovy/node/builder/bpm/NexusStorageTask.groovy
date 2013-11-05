@@ -40,13 +40,16 @@ class NexusStorageTask extends ShellTask{
                         './',
                         output.path,
                         error.path)
-                urls << [filename: filename, url: url]
+                urls << [filename: filename, url: url, title: filename]
                 result.message += "Uploaded $filename to $url\n"
             } catch(e){
                result.error.message = e.getMessage()
                result.message = e.getMessage()
             }
 
+            if(result.data.artifactUrls == null)
+                result.data.artifactUrls = []
+            result.data.artifactUrls.addAll(urls)
             result.data.nexusStorageUrls = urls
         }
     }
