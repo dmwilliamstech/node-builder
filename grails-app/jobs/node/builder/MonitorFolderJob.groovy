@@ -16,25 +16,25 @@
 
 package node.builder
 
-class MonitorGitJob {
+class MonitorFolderJob {
     def projectService
 
     static triggers = {
-        simple(repeatInterval: (300l * 1000l), // execute job once in 5 minutes
-               startDelay: (30l * 1000l)) // start after 30 seconds
+        simple(startDelay: (35l * 1000l), // start after 35 seconds
+               repeatInterval: (300l * 1000l)) // execute job once in 5 minutes
     }
 
     def execute() {
-        def repos
+        def folders
         try{
-            repos = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.GIT_REPOSITORY.name), true)
+            folders = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.FOLDER_MONITOR.name), true)
         }catch(e){
             log.error("Error retrieving repository data")
             return
         }
 
-        repos.each{ Project repo ->
-            projectService.run(repo)
+        folders.each{ Project folder ->
+            projectService.run(folder)
         }
     }
 }

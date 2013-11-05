@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.validator
 
-class MonitorGitJob {
-    def projectService
+import org.junit.Test
 
-    static triggers = {
-        simple(repeatInterval: (300l * 1000l), // execute job once in 5 minutes
-               startDelay: (30l * 1000l)) // start after 30 seconds
+
+class FolderLocationValidatorTests {
+
+    @Test
+    void shouldDetermineInValidLocation(){
+        def validator = new FolderLocationValidator()
+
+        assert !validator.isValid("/no/folder/here")
     }
 
-    def execute() {
-        def repos
-        try{
-            repos = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.GIT_REPOSITORY.name), true)
-        }catch(e){
-            log.error("Error retrieving repository data")
-            return
-        }
+    @Test
+    void shouldDetermineValidLocation(){
+        def validator = new FolderLocationValidator()
 
-        repos.each{ Project repo ->
-            projectService.run(repo)
-        }
+        assert validator.isValid("/tmp")
     }
 }

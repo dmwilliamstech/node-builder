@@ -55,7 +55,7 @@ class InputFileChangeListener implements DirectoryWatcher.FileChangeListener {
         loadFile(file)
     }
 
-    private void loadFile(File file){
+    protected void loadFile(File file){
         try{
             log.info "File added ${file.absolutePath}"
             def json = (new JsonSlurper()).parseText(file.text)

@@ -16,6 +16,7 @@
 
 package node.builder
 
+import node.builder.validator.FolderLocationValidator
 import node.builder.validator.GitLocationValidator
 import org.apache.commons.logging.LogFactory
 
@@ -34,6 +35,7 @@ abstract class LocationValidator {
 
     private static def loadValidators(){
         validators.put(GitLocationValidator.PROJECT_TYPE, new GitLocationValidator())
+        validators.put(FolderLocationValidator.PROJECT_TYPE, new FolderLocationValidator())
     }
 
 

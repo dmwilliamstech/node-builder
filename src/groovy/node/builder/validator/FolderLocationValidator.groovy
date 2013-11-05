@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package node.builder
+package node.builder.validator
 
-class MonitorGitJob {
-    def projectService
+import node.builder.LocationValidator
+import node.builder.ProjectTypeEnum
 
-    static triggers = {
-        simple(repeatInterval: (300l * 1000l), // execute job once in 5 minutes
-               startDelay: (30l * 1000l)) // start after 30 seconds
+class FolderLocationValidator extends LocationValidator{
+    static String PROJECT_TYPE = ProjectTypeEnum.FOLDER_MONITOR.name
+
+    @Override
+    Boolean isValid(location) {
+        location = processLocationString(location)
+        if(new File(location).exists()){
+            return true
+        }else{
+            return false
+        }
+
     }
 
-    def execute() {
-        def repos
-        try{
-            repos = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.GIT_REPOSITORY.name), true)
-        }catch(e){
-            log.error("Error retrieving repository data")
-            return
-        }
-
-        repos.each{ Project repo ->
-            projectService.run(repo)
-        }
+    def processLocationString(String location){
+        return location
     }
 }
