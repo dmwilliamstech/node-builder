@@ -29,11 +29,14 @@ class FolderMonitorTaskTests extends BPMNTaskTestBase {
 
     @Before
     void setup(){
-        files << new File('/tmp/test_folder_monitor.txt')
+        def dir = new File('/tmp/folder')
+        dir.mkdirs()
+        files << new File('/tmp/folder/test_folder_monitor.txt')
         files.last().write("testing!!!")
-        files << new File('/tmp/test_folder')
+        files << dir
+        files << new File('/tmp/folder/test_folder')
         files.last().mkdirs()
-        files << new File('/tmp/test_folder/test_folder_monitor.txt')
+        files << new File('/tmp/folder/test_folder/test_folder_monitor.txt')
         files.last().write("testing!!!")
     }
 
@@ -43,13 +46,13 @@ class FolderMonitorTaskTests extends BPMNTaskTestBase {
         def task =  [uploadFile: {file, hostname, username, keyPath, destPath -> }] as FolderMonitorTask
 
         def variables = [:]
-        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp")
+        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp/folder")
         variables.put(FolderMonitorTask.FOLDER_MONITOR_LAST_UPDATED_KEY, new Date())
 
         task.execute(mockDelegateExecutionWithVariables(variables,3, 1))
 
         assert variables.result.wasSuccessful()
-        def message = "Successfully ran file monitor on target /tmp"
+        def message = "Successfully ran file monitor on target /tmp/folder"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
 
     }
@@ -59,13 +62,13 @@ class FolderMonitorTaskTests extends BPMNTaskTestBase {
         def task =  [uploadFile: {file, hostname, username, keyPath, destPath -> }] as FolderMonitorTask
 
         def variables = [:]
-        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp")
+        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp/folder")
         variables.put(FolderMonitorTask.FOLDER_MONITOR_LAST_UPDATED_KEY, new Date().toString())
 
         task.execute(mockDelegateExecutionWithVariables(variables,3, 1))
 
         assert variables.result.wasSuccessful()
-        def message = "Successfully ran file monitor on target /tmp"
+        def message = "Successfully ran file monitor on target /tmp/folder"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
 
     }
@@ -75,14 +78,14 @@ class FolderMonitorTaskTests extends BPMNTaskTestBase {
         def task =  [uploadFile: {file, hostname, username, keyPath, destPath -> }] as FolderMonitorTask
 
         def variables = [:]
-        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp")
+        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp/folder")
         use(TimeCategory) {
             variables.put(FolderMonitorTask.FOLDER_MONITOR_LAST_UPDATED_KEY, new Date() - 5.seconds)
         }
         task.execute(mockDelegateExecutionWithVariables(variables,3, 1))
 
         assert variables.result.wasSuccessful()
-        def message = "Successfully ran file monitor on target /tmp"
+        def message = "Successfully ran file monitor on target /tmp/folder"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
 
         assert variables.result.data.fileSystemDidChange
@@ -96,14 +99,14 @@ class FolderMonitorTaskTests extends BPMNTaskTestBase {
         def task =  [uploadFile: {file, hostname, username, keyPath, destPath -> }] as FolderMonitorTask
 
         def variables = [:]
-        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp")
+        variables.put(FolderMonitorTask.FOLDER_MONITOR_PATH_KEY, "/tmp/folder")
         use(TimeCategory) {
             variables.put(FolderMonitorTask.FOLDER_MONITOR_LAST_UPDATED_KEY, new Date() + 5.seconds)
         }
         task.execute(mockDelegateExecutionWithVariables(variables,3, 1))
 
         assert variables.result.wasSuccessful()
-        def message = "Successfully ran file monitor on target /tmp"
+        def message = "Successfully ran file monitor on target /tmp/folder"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
 
         assert !variables.result.data.fileSystemDidChange
