@@ -13,7 +13,7 @@
                     name="Create a Variable"
                     scriptFormat="groovy" >
             <script>
-                "echo hello > /tmp/test.txt"
+                new File("/tmp/test.txt").write("test")
 
                 execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_USER_KEY, "age")
                 execution.setVariable(node.builder.bpm.NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "foobar99")
