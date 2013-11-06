@@ -62,9 +62,10 @@
                 <td id="projectState${projectInstance.id}"><h2><i class="center ${projectInstance.state.color} ${projectInstance.state.icon}"></i></h2></td>
 
                 <td id="projectMessage${projectInstance.id}">${fieldValue(bean: projectInstance, field: "message")}
-                    <hr>
+
                 <sec:ifAnyGranted roles="ROLE_ADMINS">
                     <g:if test="${projectInstance.state == ProjectState.WAITING}">
+                        <hr>
                         <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskAccept${projectInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="accept" data-task-description="${projectInstance.task.description}" data-task-name="${projectInstance.task.name}" data-project-id="${projectInstance.id}" data-project-name="${projectInstance.name}" class="icon-thumbs-up"></i></a>
                         <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskDecline${projectInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="decline" data-task-description="${projectInstance.task.description}" data-task-name="${projectInstance.task.name}" data-project-id="${projectInstance.id}" data-project-name="${projectInstance.name}" class="icon-thumbs-down"></i></a>
                     </g:if>
