@@ -101,6 +101,46 @@ class ProjectRunTest extends NodeBuilderFunctionalTestBase {
         }
     }
 
+    @Test
+    void shouldRunANewProjectWithUserTasksFromShow(){
+        login()
+        go('project')
+        assert title == "Project List"
+        def project = Project.first()
+        project.bpmn = new ClassPathResource("resources/human_task.bpmn20.xml").getFile().text
+        project.processDefinitionKey = "gitChangeMonitor"
+        project.save(flush: true)
+
+
+        $("#projectShow${project.id}").click()
+        $("#runProject").click()
+        this.waitFor(10,1){
+            assert $("#projectState h2 i").classes().contains(ProjectState.RUNNING.color)
+            assert $("#projectState h2 i").classes().contains(ProjectState.RUNNING.icon)
+            assert $(".alert").text() == "Running process gitChangeMonitor on project Test"
+        }
+
+        this.waitFor(20, 1){
+            driver.navigate().refresh()
+            assert $("#projectState h2 i").classes().contains(ProjectState.WAITING.color)
+            assert $("#projectState h2 i").classes().contains(ProjectState.WAITING.icon)
+            assert $("#projectMessage").text() == "Process ${project.processDefinitionKey} on project ${project.name} waiting on some name"
+        }
+
+        //accept the first task
+        $("#completeTaskAccept").click()
+
+        sleep(5000)
+        $("#completeTaskButton").click()
+
+        this.waitFor(30, 1){
+            driver.navigate().refresh()
+            assert $("#projectState h2 i").classes().contains(ProjectState.OK.color)
+            assert $("#projectState h2 i").classes().contains(ProjectState.OK.icon)
+            assert $("#projectMessage").text() == "Process gitChangeMonitor on project Test finished - It's even groovier man"
+        }
+    }
+
     @After
     void tearDown(){
         ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
