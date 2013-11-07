@@ -31,14 +31,14 @@ abstract class MetricsTask extends Retryable implements JavaDelegate  {
         if(Config.globalConfig.get("metrics.initialized")){
             def taskKey = "${this.class.name.toLowerCase()}-${java.util.UUID.randomUUID()}"
             def start = System.currentTimeMillis()
-            log.metric(MetricEvents.START, MetricGroups.TASK, "", taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"),  execution.getVariable("result"), -1)
+            log.metric(MetricEvents.START, MetricGroups.TASK, "", taskKey, execution.getVariable("businessKey"), execution.getVariable("workflowName"),  execution.getVariable("result"), -1)
 
             this.executeWithMetrics(execution)
 
             def message = execution.getVariable("result")?.message ? execution.getVariable("result").message : "Message not set by task"
 
             def duration = System.currentTimeMillis() - start
-            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message, taskKey, execution.getVariable("businessKey"), execution.getVariable("projectName"), execution.getVariable("result"), duration)
+            log.metric(MetricEvents.FINISH, MetricGroups.TASK, message, taskKey, execution.getVariable("businessKey"), execution.getVariable("workflowName"), execution.getVariable("result"), duration)
 
 
         } else {

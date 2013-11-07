@@ -17,7 +17,7 @@
 package node.builder
 
 class MonitorFolderJob {
-    def projectService
+    def workflowService
 
     static triggers = {
         simple(startDelay: (35l * 1000l), // start after 35 seconds
@@ -27,14 +27,14 @@ class MonitorFolderJob {
     def execute() {
         def folders
         try{
-            folders = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.FOLDER_MONITOR.name), true)
+            folders = Workflow.findAllByWorkflowTypeAndActive(WorkflowType.findByName(WorkflowTypeEnum.FOLDER_MONITOR.name), true)
         }catch(e){
             log.error("Error retrieving repository data")
             return
         }
 
-        folders.each{ Project folder ->
-            projectService.run(folder)
+        folders.each{ Workflow folder ->
+            workflowService.run(folder)
         }
     }
 }

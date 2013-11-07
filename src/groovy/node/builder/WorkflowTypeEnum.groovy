@@ -1,3 +1,5 @@
+package node.builder
+
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -13,36 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package node.builder
-
-/**
- * ProjectType
- * A domain class describes the data object and it's mapping to the database
- */
-class ProjectType {
-
-    /* Default (injected) attributes of GORM */
-	Long	id
+enum WorkflowTypeEnum {
+    GIT_REPOSITORY("GIT Repository"),
+    FOLDER_MONITOR("Folder Monitor")
 
     String name
 
-    /* Automatic timestamping of GORM */
-	Date	dateCreated
-	Date	lastUpdated
-
-
-    static mapping = {
+    def WorkflowTypeEnum(String name){
+        this.name = name
     }
 
-    static constraints = {
-    }
-
-    /*
-     * Methods of the Domain Class
-     */
-	@Override	// Override toString for a nicer / more descriptive UI
-	public String toString() {
-		return "${name}";
-	}
 }

@@ -24,21 +24,21 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.context.ApplicationContext
 
-class ProjectListTest extends NodeBuilderFunctionalTestBase{
+class WorkflowListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
         Config.globalConfig.put("application.footer.text", "Copyright &copy; 2013 Some Company")
-        (new ProjectCreateTest()).shouldCreateANewProject()
+        (new WorkflowCreateTest()).shouldCreateANewWorkflow()
     }
 
     @Test
-    void shouldDisplayProjectList(){
+    void shouldDisplayWorkflowList(){
         login()
-        go('project')
-        assert title == "Project List"
+        go('workflow')
+        assert title == "Workflow List"
         waitFor(0.1){
-            assert $('[id^=projectShow]').first().text() == ("Test")
+            assert $('[id^=workflowShow]').first().text() == ("Test")
             assert $('.icon-pencil') != null
             assert $('#footerCopyrightText').first().text() == ("Copyright © 2013 Some Company")
         }
@@ -49,10 +49,10 @@ class ProjectListTest extends NodeBuilderFunctionalTestBase{
         ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
         SessionFactory sessionFactory = context.getBean('sessionFactory')
 
-        Project.all.each{project ->
-            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        Workflow.all.each{workflow ->
+            sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_ORGANIZATIONS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
         }
-        Project.where {id>0l}.deleteAll()
+        Workflow.where {id>0l}.deleteAll()
         deleteEmptyRepo()
     }
 }

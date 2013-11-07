@@ -29,13 +29,13 @@ import node.builder.metrics.Metrics
  */
 class MetricService {
 
-    def metricsForProject(projectName) {
+    def metricsForWorkflow(workflowName) {
         DBCollection collection = Metric.metricCollection()
         def metrics = [:]
-        //match by project name
+        //match by workflow name
         BasicDBObject regexQuery = new BasicDBObject()
         regexQuery.put('$match', new BasicDBObject('eventId',
-                new BasicDBObject('$regex', "^$projectName\\-.*".toString())
+                new BasicDBObject('$regex', "^$workflowName\\-.*".toString())
                         .append('$options', 'i')))
 
         //only get the entries that have a duration

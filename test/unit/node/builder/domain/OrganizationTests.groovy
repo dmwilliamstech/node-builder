@@ -18,54 +18,54 @@ package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import node.builder.Project
-import node.builder.ProjectType
+import node.builder.Workflow
+import node.builder.WorkflowType
 import org.junit.Test
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Project)
-@Mock([Project, ProjectType])
+@TestFor(Workflow)
+@Mock([Workflow, WorkflowType])
 class OrganizationTests {
 
     @Test
-    void shouldHaveAssociationWithProjects() {
-        def project = new Project(
+    void shouldHaveAssociationWithWorkflows() {
+        def workflow = new Workflow(
                 name: "test",
                 location: "blah",
-                projectType: (new ProjectType(name: "Test Type")).save(validate: false),
+                workflowType: (new WorkflowType(name: "Test Type")).save(validate: false),
                 bpmn: "<bpmn></bpmn>",
                 processDefinitionKey: "key"
         )
 
-        project.save(validate:  false)
-        assert !project.hasErrors()
+        workflow.save(validate:  false)
+        assert !workflow.hasErrors()
 
-        project.addToOrganizations("Testers")
-        project.save(validate:  false)
-        assert !project.hasErrors()
-        assert Project.first().organizations.first() == "Testers"
+        workflow.addToOrganizations("Testers")
+        workflow.save(validate:  false)
+        assert !workflow.hasErrors()
+        assert Workflow.first().organizations.first() == "Testers"
 
-        def projects = Project.findAllByOrganizations(["Testers"])
-        assert projects.size() == 1
+        def workflows = Workflow.findAllByOrganizations(["Testers"])
+        assert workflows.size() == 1
 
-        project.addToOrganizations("Users")
-        project.save(validate:  false)
+        workflow.addToOrganizations("Users")
+        workflow.save(validate:  false)
 
-        projects = Project.findAllByOrganizations(["Testers"])
-        assert projects.size() == 1
+        workflows = Workflow.findAllByOrganizations(["Testers"])
+        assert workflows.size() == 1
 
-        projects = Project.findAllByOrganizations(new TreeSet<String>(["Testers","Users"]))
-        assert projects.size() == 1
+        workflows = Workflow.findAllByOrganizations(new TreeSet<String>(["Testers","Users"]))
+        assert workflows.size() == 1
 
-        projects = Project.findAllByOrganizations(["Admins"])
-        assert projects.size() == 0
+        workflows = Workflow.findAllByOrganizations(["Admins"])
+        assert workflows.size() == 0
 
-        projects = Project.findAllByOrganizations(new TreeSet<String>(["Users","Testers"]))
-        assert projects.size() == 1
+        workflows = Workflow.findAllByOrganizations(new TreeSet<String>(["Users","Testers"]))
+        assert workflows.size() == 1
 
-        project.delete()
-        assert Project.count == 0
+        workflow.delete()
+        assert Workflow.count == 0
     }
 }

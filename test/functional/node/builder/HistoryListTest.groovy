@@ -26,49 +26,49 @@ import org.springframework.core.io.ClassPathResource
  * limitations under the License.
  */
 class HistoryListTest extends NodeBuilderFunctionalTestBase{
-    def project
+    def workflow
 
     @Before
     void setup(){
         MetricsTestHelper.resetMetrics()
 
-        assert Project.count == 0
-        (new ProjectCreateTest()).shouldCreateANewProject()
-        assert Project.count == 1
-        project = Project.first()
-        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
-        project.processDefinitionKey = "gitChangeMonitor"
-        project.location = "https://github.com/kellyp/testy.git"
-        project.save(flush: true)
+        assert Workflow.count == 0
+        (new WorkflowCreateTest()).shouldCreateANewWorkflow()
+        assert Workflow.count == 1
+        workflow = Workflow.first()
+        workflow.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
+        workflow.processDefinitionKey = "gitChangeMonitor"
+        workflow.location = "https://github.com/kellyp/testy.git"
+        workflow.save(flush: true)
     }
 
     @Test
     void shouldDisplayAListOfResults(){
-        (new ProjectRunTest()).shouldRunANewProject()
+        (new WorkflowRunTest()).shouldRunANewWorkflow()
 
-        $("a[href\$=\"project/history/${project.id}\"]").click()
+        $("a[href\$=\"workflow/history/${workflow.id}\"]").click()
         assert $("table").size() == 2 //1 + the summary table
 
-        project = Project.first()
-        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text.replaceAll('true', 'false')
-        project.save()
+        workflow = Workflow.first()
+        workflow.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text.replaceAll('true', 'false')
+        workflow.save()
 
         logout()
 
-        (new ProjectRunTest()).shouldRunANewProject()
+        (new WorkflowRunTest()).shouldRunANewWorkflow()
 
-        $("a[href\$=\"project/history/${project.id}\"]").click()
+        $("a[href\$=\"workflow/history/${workflow.id}\"]").click()
         assert $("table").size() == 2 //1 + the summary table
 
-        project = Project.first()
-        project.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
-        project.save()
+        workflow = Workflow.first()
+        workflow.bpmn = new ClassPathResource("resources/groovy_task.bpmn20.xml").getFile().text
+        workflow.save()
 
         logout()
 
-        (new ProjectRunTest()).shouldRunANewProject()
+        (new WorkflowRunTest()).shouldRunANewWorkflow()
 
-        $("a[href\$=\"project/history/${project.id}\"]").click()
+        $("a[href\$=\"workflow/history/${workflow.id}\"]").click()
         assert $("table").size() == 3 //2 + the summary table
     }
 
@@ -77,10 +77,10 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
         SessionFactory sessionFactory = context.getBean('sessionFactory')
 
-        Project.all.each{project ->
-            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        Workflow.all.each{workflow ->
+            sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_ORGANIZATIONS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
         }
-        Project.where {id>0l}.deleteAll()
+        Workflow.where {id>0l}.deleteAll()
 //        "rm -rf /tmp/history_test".execute()
         deleteEmptyRepo()
     }

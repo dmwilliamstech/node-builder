@@ -26,25 +26,25 @@ import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 
 //@Mixin(Retryable)
-class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
+class WorkflowCreateTest  extends NodeBuilderFunctionalTestBase {
     def tmpDir
 
 
     @Before
     void setup(){
-        assert Project.count == 0
+        assert Workflow.count == 0
     }
 
     @Test
-    void shouldCreateANewProject(){
+    void shouldCreateANewWorkflow(){
         tmpDir = createEmptyRepo()
 
         login()
-        go('project')
-        assert title == "Project List"
+        go('workflow')
+        assert title == "Workflow List"
 
         $('.icon-plus-sign').click()
-        assert title == "Create Project"
+        assert title == "Create Workflow"
 
         name = "Test"
 
@@ -61,17 +61,17 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
 
         waitFor(0.5){
             assert title.contains("Show")
-            assert Project.count() == 1
+            assert Workflow.count() == 1
         }
-        def project2 = Project.last()
-        assert project2.name == "Test"
-        assert project2.processDefinitionKey == "process"
-        assert project2.location == tmpDir.path
+        def workflow2 = Workflow.last()
+        assert workflow2.name == "Test"
+        assert workflow2.processDefinitionKey == "process"
+        assert workflow2.location == tmpDir.path
 
 
         $("a[href\$=\"logout/index\"]").click()
         login("gobo", "gobo")
-        assert $("#runProject${project2.id}").empty
+        assert $("#runWorkflow${workflow2.id}").empty
 
         $("a[href\$=\"logout/index\"]").click()
     }
@@ -81,10 +81,10 @@ class ProjectCreateTest  extends NodeBuilderFunctionalTestBase {
         ApplicationContext context = (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
         SessionFactory sessionFactory = context.getBean('sessionFactory')
 
-        Project.all.each{project ->
-            sessionFactory.currentSession.createSQLQuery("delete from PROJECT_ORGANIZATIONS po where po.PROJECT_ID = ${project.id}").executeUpdate()
+        Workflow.all.each{workflow ->
+            sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_ORGANIZATIONS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
         }
-        Project.where {id>0l}.deleteAll()
+        Workflow.where {id>0l}.deleteAll()
 
         deleteEmptyRepo()
     }

@@ -29,7 +29,7 @@
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
-                    <formalExpression>${projectOrganizations}</formalExpression>
+                    <formalExpression>${workflowOrganizations}</formalExpression>
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>

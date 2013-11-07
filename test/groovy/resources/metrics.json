@@ -31,7 +31,7 @@
     },
     {
         "_id": "526eb12494363cf3de830a86",
-        "clazz": "builder.ProjectService$1",
+        "clazz": "builder.WorkflowService$1",
         "thread": "pool-10-thread-1",
         "message": "",
         "group": "workflow",
@@ -72,7 +72,7 @@
     },
     {
         "_id": "526eb12894363cf3de830a88",
-        "clazz": "builder.ProjectService$1",
+        "clazz": "builder.WorkflowService$1",
         "thread": "pool-10-thread-1",
         "message": "",
         "group": "workflow",
@@ -113,7 +113,7 @@
     },
     {
         "_id": "526eb12b94363cf3de830a8a",
-        "clazz": "builder.ProjectService$1",
+        "clazz": "builder.WorkflowService$1",
         "thread": "pool-10-thread-1",
         "message": "",
         "group": "workflow",
@@ -154,7 +154,7 @@
     },
     {
         "_id": "526eb14194363cf3de830a8c",
-        "clazz": "builder.ProjectService$1",
+        "clazz": "builder.WorkflowService$1",
         "thread": "pool-10-thread-1",
         "message": "",
         "group": "workflow",

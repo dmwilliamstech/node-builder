@@ -20,7 +20,7 @@
                             <sec:ifLoggedIn>
                             <div class="nav-collapse">
                                 <ul class="nav">
-                                    <li class="${request.getServletPath().contains('project') ? 'active' : '' }"><a href="${request.contextPath}/project" >Projects</a></li>
+                                    <li class="${request.getServletPath().contains('workflow') ? 'active' : '' }"><a href="${request.contextPath}/workflow" >Workflows</a></li>
                                     <li class="dropdown ${request.getServletPath().contains('manifest') ? 'active' : '' }">
                                         <a href="#"  id="dropdownSandbox" class="dropdown-toggle" data-toggle="dropdown">Sandboxes <b class="caret"></b></a>
                                         <ul class="dropdown-menu">

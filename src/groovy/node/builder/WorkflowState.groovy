@@ -16,7 +16,7 @@ package node.builder
  * limitations under the License.
  */
 
-public enum ProjectState {
+public enum WorkflowState {
     RUNNING('icon-cogs', 'black'),
     OK('icon-ok-sign', 'green'),
     WARNING('icon-warning-sign', 'yellow'),
@@ -26,7 +26,7 @@ public enum ProjectState {
 
     def icon
     def color
-    ProjectState(icon, color){
+    WorkflowState(icon, color){
         this.icon = icon
         this.color = color
     }

@@ -18,8 +18,8 @@ package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import node.builder.Project
-import node.builder.ProjectType
+import node.builder.Workflow
+import node.builder.WorkflowType
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
@@ -29,81 +29,81 @@ import org.springframework.core.io.ClassPathResource
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Project)
-@Mock([ProjectType])
-class ProjectTests {
-    def projectType
+@TestFor(Workflow)
+@Mock([WorkflowType])
+class WorkflowTests {
+    def workflowType
 
     @Before
     void setup(){
-        projectType = new ProjectType(name: "GIT Repository")
-        projectType.save()
-        assert projectType.errors.errorCount == 0
+        workflowType = new WorkflowType(name: "GIT Repository")
+        workflowType.save()
+        assert workflowType.errors.errorCount == 0
     }
 
     @Ignore
     @Test
     void shouldValidateName(){
-        def project = new Project(name:"",
+        def workflow = new Workflow(name:"",
                 bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
-                projectType: projectType,
+                workflowType: workflowType,
                 processDefinitionKey: "gitChangeMonitor"
         )
-        project.save()
-        assert project.errors.errorCount == 1
+        workflow.save()
+        assert workflow.errors.errorCount == 1
 
-        project.name = "Some Name"
-        project.save()
-        assert project.errors.errorCount == 0
+        workflow.name = "Some Name"
+        workflow.save()
+        assert workflow.errors.errorCount == 0
 
-        project = new Project(name:"Some Name",
+        workflow = new Workflow(name:"Some Name",
                 bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "git@github.com:OpenDX/node-builder.git",
                 active: true,
-                projectType: projectType,
+                workflowType: workflowType,
                 processDefinitionKey: "gitChangeMonitor"
         )
-        project.save()
-        assert project.errors.errorCount == 1
+        workflow.save()
+        assert workflow.errors.errorCount == 1
 
-        project.name = "Some Name Part 2"
-        project.save()
-        assert project.errors.errorCount == 0
+        workflow.name = "Some Name Part 2"
+        workflow.save()
+        assert workflow.errors.errorCount == 0
     }
 
     @Test
     void shouldValidateLocation(){
-        def project = new Project(name:"Some Name",
+        def workflow = new Workflow(name:"Some Name",
                 bpmn: new ClassPathResource("resources/process.xml").getFile().text,
                 description: "some description",
                 location: "not???**^^^### a url",
                 active: true,
-                projectType: projectType,
+                workflowType: workflowType,
                 processDefinitionKey: "gitChangeMonitor"
         )
-        project.validate()
-        assert project.errors.errorCount == 1
+        workflow.validate()
+        assert workflow.errors.errorCount == 1
 
-        project.location = "git@github.com:OpenDX/node-builder.git"
-        project.save()
-        assert project.errors.errorCount == 0
+        workflow.location = "git@github.com:OpenDX/node-builder.git"
+        workflow.save()
+        assert workflow.errors.errorCount == 0
 
-        project.location = "https://github.com/OpenDX/node-builder.git"
-        project.save()
-        assert project.errors.errorCount == 0
+        workflow.location = "https://github.com/OpenDX/node-builder.git"
+        workflow.save()
+        assert workflow.errors.errorCount == 0
 
         createEmptyRepo()
-        project.location = "/tmp/dir"
-        project.save()
-        assert project.errors.errorCount == 0
+        workflow.location = "/tmp/dir"
+        workflow.save()
+        assert workflow.errors.errorCount == 0
 
-        project.location = "https://192.168.1.100/user/project.git"
-        project.save()
-        assert project.errors.errorCount == 1
+        workflow.location = "https://192.168.1.100/user/workflow.git"
+        workflow.save()
+        assert workflow.errors.errorCount == 1
     }
 
     @After

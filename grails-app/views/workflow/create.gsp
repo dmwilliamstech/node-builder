@@ -1,21 +1,21 @@
-<%@ page import="node.builder.Project" %>
+<%@ page import="node.builder.Workflow" %>
 <!doctype html>
 <html>
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'project.label', default: 'Project')}" />
+	<g:set var="entityName" value="${message(code: 'workflow.label', default: 'Workflow')}" />
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
 </head>
 
 <body>
 
-<section id="create-project" class="first">
+<section id="create-workflow" class="first">
 
-	<g:hasErrors bean="${projectInstance}">
+	<g:hasErrors bean="${workflowInstance}">
 	<div class="alert alert-error">
-		<g:renderErrors bean="${projectInstance}" as="list" />
+		<g:renderErrors bean="${workflowInstance}" as="list" />
 	</div>
 	</g:hasErrors>
 	

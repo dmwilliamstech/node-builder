@@ -21,11 +21,11 @@ import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 
 /**
- * Project
+ * Workflow
  * A domain class describes the data object and it's mapping to the database
  */
-class Project {
-    static expose = 'project'
+class Workflow {
+    static expose = 'workflow'
 
     /* Default (injected) attributes of GORM */
 	Long	id
@@ -33,11 +33,11 @@ class Project {
     String name
     String description
     String location
-    ProjectType projectType
+    WorkflowType workflowType
     Boolean active
     String processDefinitionKey
     String bpmn
-    ProjectState state = ProjectState.OK
+    WorkflowState state = WorkflowState.OK
     String message = ""
     Map task
 
@@ -78,7 +78,7 @@ class Project {
                             .addInputStream(file.path, new FileInputStream(file))
                             .deploy();
                     assert processEngine.repositoryService.createProcessDefinitionQuery().deploymentId(deployment.id).list().size() > 0
-                    log.info("Loaded process definition for project ${object.name} with id (${deployment.id})")
+                    log.info("Loaded process definition for workflow ${object.name} with id (${deployment.id})")
                 }catch(Exception e){
                     return "invalid"
                 }
@@ -90,7 +90,7 @@ class Project {
             if(value.empty){
                 return 'empty'
             }
-            if(!LocationValidator.validateLocationForProjectType(value, object.projectType.name)){
+            if(!LocationValidator.validateLocationForWorkflowType(value, object.workflowType.name)){
                 return 'connection'
             }
         }

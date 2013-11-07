@@ -42,15 +42,15 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
         variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
         variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://rizzo/nexus/content/repositories/releases/")
-        variables.put("projectName", "nexus-storage-test")
+        variables.put("workflowName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
 
         task.execute(mockDelegateExecutionWithVariables(variables,11, 6))
 
         assert variables.result.wasSuccessful()
-        def message = "Uploaded activiti.lock.db to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.lock.db\n" +
-                "Uploaded activiti.h2.db to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.h2.db\n" +
-                "Uploaded third.file to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/third.file"
+        def message = "Uploaded activiti.lock.db to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.lock.db\n" +
+                "Uploaded activiti.h2.db to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.h2.db\n" +
+                "Uploaded third.file to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/third.file"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
         assert variables.result.data.artifactUrls.size() == 3
     }
@@ -64,15 +64,15 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
         variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
         variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://rizzo/nexus/content/repositories/releases/")
-        variables.put("projectName", "nexus-storage-test")
+        variables.put("workflowName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
 
         task.execute(mockDelegateExecutionWithVariables(variables,11, 6))
 
         assert variables.result.wasSuccessful()
-        def message = "Uploaded activiti.lock.db to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.lock.db\n" +
-                "Uploaded activiti.h2.db to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.h2.db\n" +
-                "Uploaded third.file to http://rizzo/nexus/content/repositories/releases//projects/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/third.file"
+        def message = "Uploaded activiti.lock.db to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.lock.db\n" +
+                "Uploaded activiti.h2.db to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/activiti.h2.db\n" +
+                "Uploaded third.file to http://rizzo/nexus/content/repositories/releases//workflows/nexus-storage-test/${variables.get(NexusStorageTask.NEXUS_REPO_VERSION_KEY)}/third.file"
         assert variables.result.message.replaceAll('\n','') == message.replaceAll('\n','')
         assert variables.result.data.artifactUrls.size() == 3
     }
@@ -86,7 +86,7 @@ class NexusStorageTaskTests extends BPMNTaskTestBase {
         variables.put(NexusStorageTask.NEXUS_REPO_USER_KEY, "name")
         variables.put(NexusStorageTask.NEXUS_REPO_PASSWORD_KEY, "password")
         variables.put(NexusStorageTask.NEXUS_REPO_URL_KEY, "http://notreal/nexus/content/repositories/releases/")
-        variables.put("projectName", "nexus-storage-test")
+        variables.put("workflowName", "nexus-storage-test")
         variables.put(NexusStorageTask.NEXUS_REPO_VERSION_KEY, UUID.randomUUID().toString())
 
         task.execute(mockDelegateExecutionWithVariables(variables,10, 6))

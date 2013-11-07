@@ -17,10 +17,10 @@
 package node.builder.validator
 
 import node.builder.LocationValidator
-import node.builder.ProjectTypeEnum
+import node.builder.WorkflowTypeEnum
 
 class FolderLocationValidator extends LocationValidator{
-    static String PROJECT_TYPE = ProjectTypeEnum.FOLDER_MONITOR.name
+    static String PROJECT_TYPE = WorkflowTypeEnum.FOLDER_MONITOR.name
 
     @Override
     Boolean isValid(location) {

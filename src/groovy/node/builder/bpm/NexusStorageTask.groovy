@@ -26,11 +26,11 @@ class NexusStorageTask extends ShellTask{
     static final String NEXUS_REPO_PASSWORD_KEY = 'nexusStorageRepoPassword'
 
     def processFiles(List fileList, result, output, error, DelegateExecution execution){
-        def project = execution.getVariable("projectName")
+        def workflow = execution.getVariable("workflowName")
         def version = execution.getVariable(NEXUS_REPO_VERSION_KEY)
         def url =     execution.getVariable( NEXUS_REPO_URL_KEY )
         def urls = []
-        url = "${url}/projects/${project}/${version}/"
+        url = "${url}/workflows/${workflow}/${version}/"
         result.message = ""
         fileList.each {filePath ->
             try{

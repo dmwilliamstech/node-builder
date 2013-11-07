@@ -17,7 +17,7 @@
 package node.builder
 
 class MonitorGitJob {
-    def projectService
+    def workflowService
 
     static triggers = {
         simple(repeatInterval: (300l * 1000l), // execute job once in 5 minutes
@@ -27,14 +27,14 @@ class MonitorGitJob {
     def execute() {
         def repos
         try{
-            repos = Project.findAllByProjectTypeAndActive(ProjectType.findByName(ProjectTypeEnum.GIT_REPOSITORY.name), true)
+            repos = Workflow.findAllByWorkflowTypeAndActive(WorkflowType.findByName(WorkflowTypeEnum.GIT_REPOSITORY.name), true)
         }catch(e){
             log.error("Error retrieving repository data")
             return
         }
 
-        repos.each{ Project repo ->
-            projectService.run(repo)
+        repos.each{ Workflow repo ->
+            workflowService.run(repo)
         }
     }
 }

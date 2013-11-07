@@ -17,11 +17,11 @@
 package node.builder.validator
 
 import node.builder.LocationValidator
-import node.builder.ProjectTypeEnum
+import node.builder.WorkflowTypeEnum
 
 
 class GitLocationValidator extends LocationValidator{
-    static String PROJECT_TYPE = ProjectTypeEnum.GIT_REPOSITORY.name
+    static String PROJECT_TYPE = WorkflowTypeEnum.GIT_REPOSITORY.name
 
     @Override
     Boolean isValid(location) {

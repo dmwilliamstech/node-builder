@@ -33,8 +33,8 @@ class MetricServiceTests {
     }
 
     @Test
-    void shouldGenerateMetricsPerProject(){
-        def metrics = metricService.metricsForProject("test")
+    void shouldGenerateMetricsPerWorkflow(){
+        def metrics = metricService.metricsForWorkflow("test")
         assert metrics.averageDuration == "00:00:00.151"
         assert metrics.workflows.size() == 2
     }

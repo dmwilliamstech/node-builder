@@ -25,7 +25,7 @@ abstract class LocationValidator {
 
     static def validators =[:]
 
-    private static def getValidatorForProjectType(String type){
+    private static def getValidatorForWorkflowType(String type){
         if(validators.isEmpty()){
             loadValidators()
         }
@@ -39,8 +39,8 @@ abstract class LocationValidator {
     }
 
 
-    static def validateLocationForProjectType(location, String type){
-        LocationValidator validator = getValidatorForProjectType(type)
+    static def validateLocationForWorkflowType(location, String type){
+        LocationValidator validator = getValidatorForWorkflowType(type)
         if(validator == null){
             LogFactory.getLog(this)
                     .error "Validator for ${type} is not installed"

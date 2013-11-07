@@ -42,7 +42,7 @@ class BootStrap {
         if(Environment.currentEnvironment != Environment.PRODUCTION){
             loadSecurity()
         }
-        loadProjectTypes()
+        loadWorkflowTypes()
         loadProcessDefinitions()
 
         if(Node.count.is(0)){
@@ -77,10 +77,10 @@ class BootStrap {
         log.info("Node Builder startup complete")
     }
 
-    def loadProjectTypes() {
-        ProjectTypeEnum.values().each{projectTypeEnum ->
-            def projectType = ProjectType.findByName(projectTypeEnum.name)?: new ProjectType(name: projectTypeEnum.name)
-            projectType.save()
+    def loadWorkflowTypes() {
+        WorkflowTypeEnum.values().each{workflowTypeEnum ->
+            def workflowType = WorkflowType.findByName(workflowTypeEnum.name)?: new WorkflowType(name: workflowTypeEnum.name)
+            workflowType.save()
         }
     }
 
