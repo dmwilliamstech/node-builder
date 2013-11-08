@@ -62,6 +62,7 @@ class Workflow {
         name unique: true
         message nullable: true
         task nullable: true
+        subscribable nullable: true
 
 
         processDefinitionKey validator: {value, object ->

@@ -25,13 +25,11 @@
 		<thead>
 			<tr>
 
-                <g:sortableColumn property="name" title="${message(code: 'workflow.name.label', default: 'Name')}" />
+                <g:sortableColumn property="name" title="${message(code: 'workflow.name.label', default: 'Name')}" class='span2' />
 			
-				<g:sortableColumn property="description" title="${message(code: 'workflow.description.label', default: 'Description')}" />
+				<g:sortableColumn  property="description" title="${message(code: 'workflow.description.label', default: 'Description')}" class='span1'/>
 
                 <g:sortableColumn property="state" title="${message(code: 'workflow.state.label', default: 'Status')}" />
-
-                <g:sortableColumn property="message" title="${message(code: 'workflow.message.label', default: 'Message')}" />
 
                 <g:sortableColumn property="location" title="${message(code: 'workflow.location.label', default: 'Location')}" />
 
@@ -59,17 +57,14 @@
 			
 				<td>${fieldValue(bean: workflowInstance, field: "description")}</td>
 
-                <td id="workflowState${workflowInstance.id}"><h2><i class="center ${workflowInstance.state.color} ${workflowInstance.state.icon}"></i></h2></td>
-
-                <td id="workflowMessage${workflowInstance.id}">${fieldValue(bean: workflowInstance, field: "message")}
-
-                <sec:ifAnyGranted roles="ROLE_ADMINS">
-                    <g:if test="${workflowInstance.state == WorkflowState.WAITING}">
-                        <hr>
-                        <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskAccept${workflowInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="accept" data-task-description="${workflowInstance.task.description}" data-task-name="${workflowInstance.task.name}" data-workflow-id="${workflowInstance.id}" data-workflow-name="${workflowInstance.name}" class="icon-thumbs-up"></i></a>
-                        <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskDecline${workflowInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="decline" data-task-description="${workflowInstance.task.description}" data-task-name="${workflowInstance.task.name}" data-workflow-id="${workflowInstance.id}" data-workflow-name="${workflowInstance.name}" class="icon-thumbs-down"></i></a>
-                    </g:if>
-                </sec:ifAnyGranted>
+                <td id="workflowState${workflowInstance.id}"><h2><i class="center ${workflowInstance.state.color} ${workflowInstance.state.icon}"></i></h2>
+                    <sec:ifAnyGranted roles="ROLE_ADMINS">
+                        <g:if test="${workflowInstance.state == WorkflowState.WAITING}">
+                            <hr>
+                            <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskAccept${workflowInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="accept" data-task-description="${workflowInstance.task.description}" data-task-name="${workflowInstance.task.name}" data-workflow-id="${workflowInstance.id}" data-workflow-name="${workflowInstance.name}" class="icon-thumbs-up"></i></a>
+                            <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskDecline${workflowInstance.id}' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="decline" data-task-description="${workflowInstance.task.description}" data-task-name="${workflowInstance.task.name}" data-workflow-id="${workflowInstance.id}" data-workflow-name="${workflowInstance.name}" class="icon-thumbs-down"></i></a>
+                        </g:if>
+                    </sec:ifAnyGranted>
                 </td>
 
                 <td>${fieldValue(bean: workflowInstance, field: "location")}</td>
@@ -97,7 +92,7 @@
 			
 				<td>${fieldValue(bean: workflowInstance, field: "workflowType")}</td>
 
-                <td><g:formatDate date="${workflowInstance.lastUpdated}" /></td>
+                <td><g:formatDate date="${workflowInstance.lastUpdated}" format="HH:mm:ss MM-dd-yyyy" /></td>
 			
 			</tr>
 		</g:each>

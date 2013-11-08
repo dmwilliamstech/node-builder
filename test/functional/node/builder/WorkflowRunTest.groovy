@@ -84,7 +84,6 @@ class WorkflowRunTest extends NodeBuilderFunctionalTestBase {
             $("a[href\$=\"workflow\"]").click()
             assert $("#workflowState${workflow.id} h2 i").classes().contains(WorkflowState.WAITING.color)
             assert $("#workflowState${workflow.id} h2 i").classes().contains(WorkflowState.WAITING.icon)
-            assert $("#workflowMessage$workflow.id").text() == "Process ${workflow.processDefinitionKey} on workflow ${workflow.name} waiting on some name"
         }
 
         //accept the first task
@@ -97,7 +96,6 @@ class WorkflowRunTest extends NodeBuilderFunctionalTestBase {
             $("a[href\$=\"workflow\"]").click()
             assert $("#workflowState${workflow.id} h2 i").classes().contains(WorkflowState.OK.color)
             assert $("#workflowState${workflow.id} h2 i").classes().contains(WorkflowState.OK.icon)
-            assert $("#workflowMessage$workflow.id").text() == "Process gitChangeMonitor on workflow Test finished - It's even groovier man"
         }
     }
 
