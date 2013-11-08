@@ -149,10 +149,12 @@
                    })
 
 
-                    var tags = ${workflowInstance.tags as JSON}
+                    var tags = ${(workflowInstance.tags?: [] )as JSON};
+
                     $.each(tags, function(index, tag){
-                       $('#workflowTags').tagsinput('add', tag)
+                            $('#workflowTags').tagsinput('add', tag)
                     })
 
+                    $('div.bootstrap-tagsinput').width(206)
                 })
             </g:javascript>
