@@ -1,3 +1,6 @@
+import grails.converters.JSON
+import node.builder.WorkflowTag
+
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -13,33 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class CustomObjectMarshallers {
 
-modules = {
-    application {
-        resource url:'js/application.js'
+    static def registerCustomObjectMarshallers(){
+        JSON.registerObjectMarshaller(WorkflowTag) {
+            def json = [:]
+            json.name = it.name
+            json.id = it.id
+            json.workflows = it.workflows?.collect{[
+                    id:it.id,
+                    name: it.name,
+                    description : it.description
+            ]}
+            json.lastUpdated = it.lastUpdated
+            json.dateCreated = it.dateCreated
+            return json
+        }
     }
-    show {
-        resource url: 'js/show.js'
-    }
-    configure {
-        resource url: 'js/configure.js'
-    }
-    deploy {
-        resource url: 'js/deploy.js'
-    }
-    manifest {
-        resource url: 'js/manifest.js'
-    }
-    ace {
-        resource url: 'js/ace.js'
-    }
-    mode_xml {
-        resource url: 'js/mode-xml.js'
-    }
-    xml2json {
-        resource url: 'js/xml2json.js'
-    }
-    bootstrapTags {
-        resource url: 'js/bootstrap-tagsinput.js'
-    }
+
 }

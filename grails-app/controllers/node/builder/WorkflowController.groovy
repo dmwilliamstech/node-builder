@@ -97,6 +97,11 @@ class WorkflowController {
             }
         }
 
+        if(!params.tags.toString().empty){
+            workflowInstance = workflowService.addWorkflowTagsById(params.tags.split(','), workflowInstance)
+            params.remove('tags')
+        }
+
         workflowInstance.properties = params
 
         if (!workflowInstance.save(flush: true)) {
@@ -171,6 +176,25 @@ class WorkflowController {
             response.status = Response.SC_UNAUTHORIZED
             render([workflow:[:], message:"User ${springSecurityService.currentUser} is not authorized to run workflow with id $params.id"] as JSON)
         }
+    }
+
+    def tags(){
+        response.setContentType("application/json")
+        if (request.method == 'POST'){
+            if(springSecurityService.loggedIn && springSecurityService.authentication.authorities*.authority.contains("ROLE_ADMINS")){
+                WorkflowTag.findOrCreateByName(request.JSON.name).save(flush: true)
+            } else {
+                response.status = Response.SC_UNAUTHORIZED
+                render([workflow:[:], message:"User ${springSecurityService.currentUser} is not authorized to create workflow tags"] as JSON)
+                return
+            }
+        }
+
+
+        def tags = WorkflowTag.all//[]
+//        WorkflowTag.executeQuery("select name as name, id as id from WorkflowTag ").each { it -> tags << [name: it[0], id: it[1]]}
+        render(tags as JSON)
+        return
     }
 
     def history(){

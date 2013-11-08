@@ -40,17 +40,24 @@ class WorkflowService {
 
     def createWithoutSaving(params, organizations){
         def workflowInstance = new Workflow(params)
-
+        if(!params.tags.toString().empty){
+            workflowInstance = addWorkflowTagsById(params.tags.split(','), workflowInstance)
+        }
         workflowInstance.organizations = organizations
         return workflowInstance
     }
 
+    def addWorkflowTagsById(ids, workflowInstance){
+        WorkflowTag.all.each { tag-> workflowInstance.removeFromTags(tag) }
+        WorkflowTag.findAllByIdInList(ids*.toLong()).each{tag -> workflowInstance.addToTags(tag)}
+        return workflowInstance
+    }
 
     def findAllByOrganizations(organizations, params){
         if(organizations == null || organizations.empty)
             return []
         def workflows = Workflow.executeQuery(
-                'from Workflow p where :organizations in elements(p.organizations)',
+                'from Workflow p where :organizations in elements(p.organizations) order by name',
                 [organizations: organizations], params)
         return workflows
     }

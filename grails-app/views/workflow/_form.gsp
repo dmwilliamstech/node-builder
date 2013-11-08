@@ -1,4 +1,4 @@
-<%@ page import="node.builder.Workflow" %>
+<%@ page import="grails.converters.JSON; node.builder.Workflow" %>
             <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'workflowType', 'error')} required">
                 <label for="workflowType" class="control-label"><g:message code="workflow.workflowType.label" default="Workflow Type" /><span class="required-indicator">*</span></label>
                 <div class="controls">
@@ -12,6 +12,14 @@
                 <div class="controls">
                     <g:textField name="name" value="${workflowInstance?.name}"/>
                     <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'name', '<i class="icon-exclamation-sign"></i>')}</span>
+                </div>
+            </div>
+
+            <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'tags', 'error')} ">
+                <label for="tags" class="control-label"><g:message code="workflow.group.label" default="Tags" /></label>
+                <div class="controls">
+                    <g:textField id="workflowTags" name="tags" value=""/>
+                    <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'tags', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
 
@@ -52,12 +60,21 @@
             <g:textArea id="bpmnTextArea" rows="20" class="span8" name="bpmn" value="${workflowInstance?.bpmn}"/>
 
             <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'active', 'error')} ">
-                <label for="active" class="control-label"><g:message code="workflow.active.label" default="Active" /></label>
+                <label for="active" class="control-label"><g:message code="workflow.active.label" default="Workflow should be active?" /></label>
                 <div class="controls">
                     <g:checkBox rows="20" class="span8" name="active" value="${workflowInstance?.active}"/>
                     <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'active', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
+
+            <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'subscribable', 'error')} ">
+                <label for="subscribable" class="control-label"><g:message code="workflow.active.label" default="Users can subscribe?" /></label>
+                <div class="controls">
+                    <g:checkBox rows="20" class="span8" name="subscribable" value="${workflowInstance?.subscribable}"/>
+                    <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'subscribable', '<i class="icon-exclamation-sign"></i>')}</span>
+                </div>
+            </div>
+
             <g:hiddenField name="state" value="OK"/>
             <g:hiddenField name="message" value=""/>
 
@@ -65,6 +82,9 @@
             <g:javascript library="xml2json" />
             <g:javascript library="ace" />
             <g:javascript library="mode_xml" />
+
+            <g:javascript library="bootstrapTags" />
+            <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-tagsinput.css')}" type="text/css">
             <g:javascript>
                 $(document).ready(function(){
                     var x2js = new X2JS();
@@ -116,5 +136,23 @@
                             }
                         });
                     }
+
+                   $('#workflowTags').tagsinput({
+                      itemValue: 'id',
+                      itemText: 'name',
+                      maxTags: 3,
+                      typeahead: {
+                        source: function(query) {
+                          return $.getJSON(location.pathname.replace(/workflow.*/,'workflow/tags'))
+                        }
+                      }
+                   })
+
+
+                    var tags = ${workflowInstance.tags as JSON}
+                    $.each(tags, function(index, tag){
+                       $('#workflowTags').tagsinput('add', tag)
+                    })
+
                 })
             </g:javascript>

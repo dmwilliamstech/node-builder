@@ -46,9 +46,28 @@
             </tr>
 
             <tr class="prop">
-                <td valign="top" class="name"><g:message code="workflow.active.label" default="Active" /></td>
+                <td valign="top" class="name"><g:message code="workflow.information.label" default="Information" /></td>
 
-                <td valign="top" class="value"><g:formatBoolean boolean="active" false="No" true="Yes"/></td>
+                <td valign="top" class="value">
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li class="">
+                            Active <div class="pull-right label ${workflowInstance.active? "label-success":"label-default"}"><g:formatBoolean boolean="${workflowInstance.active}" false="No" true="Yes"/></div>
+                        </li>
+                        <li>
+                            Subscribable <div class="pull-right label ${workflowInstance.subscribable? "label-success":"label-default"}"><g:formatBoolean boolean="${workflowInstance.subscribable}" false="No" true="Yes"/></div>
+                        </li>
+                        <li>
+                            Tags
+                            <ul class="pull-right nav nav-tabs nav-stacked">
+                                <g:each in="${workflowInstance.tags}" var="tag">
+                                    <li>
+                                        <div class="label label-info">${tag.name}</div>
+                                    </li>
+                                </g:each>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
 
             </tr>
 

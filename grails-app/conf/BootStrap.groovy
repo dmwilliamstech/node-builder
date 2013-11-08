@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 import grails.util.Environment
 import node.builder.*
 import node.builder.bpm.ProcessEngineFactory
@@ -37,6 +34,8 @@ class BootStrap {
     FlavorService flavorService
 
     def init = { servletContext ->
+        CustomObjectMarshallers.registerCustomObjectMarshallers()
+
         Metrics.initialize()
         loadConfig()
         if(Environment.currentEnvironment != Environment.PRODUCTION){

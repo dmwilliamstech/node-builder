@@ -14,32 +14,29 @@
  * limitations under the License.
  */
 
-modules = {
-    application {
-        resource url:'js/application.js'
+package node.builder
+/**
+ * WorkflowType
+ * A domain class describes the data object and it's mapping to the database
+ */
+class WorkflowTag {
+    /* Default (injected) attributes of GORM */
+	Long	id
+
+    String name
+
+    /* Automatic timestamping of GORM */
+	Date	dateCreated
+	Date	lastUpdated
+
+    static belongsTo = [Workflow]
+    static hasMany = [workflows: Workflow]
+
+    static mapping = {
+        workflows lazy: false
     }
-    show {
-        resource url: 'js/show.js'
+
+    static constraints = {
     }
-    configure {
-        resource url: 'js/configure.js'
-    }
-    deploy {
-        resource url: 'js/deploy.js'
-    }
-    manifest {
-        resource url: 'js/manifest.js'
-    }
-    ace {
-        resource url: 'js/ace.js'
-    }
-    mode_xml {
-        resource url: 'js/mode-xml.js'
-    }
-    xml2json {
-        resource url: 'js/xml2json.js'
-    }
-    bootstrapTags {
-        resource url: 'js/bootstrap-tagsinput.js'
-    }
+
 }

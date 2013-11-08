@@ -41,15 +41,18 @@ class Workflow {
     String message = ""
     Map task
 
-    static hasMany = [organizations:String]
+    Boolean subscribable = false
+    List tags
+
+    static hasMany = [organizations:String, tags:WorkflowTag]
 
     /* Automatic timestamping of GORM */
 	Date	dateCreated
 	Date	lastUpdated
 
-
     static mapping = {
         organizations lazy: false
+        tags lazy: false
     }
 
     static constraints = {

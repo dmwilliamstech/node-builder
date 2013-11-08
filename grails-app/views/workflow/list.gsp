@@ -35,7 +35,7 @@
 
                 <g:sortableColumn property="location" title="${message(code: 'workflow.location.label', default: 'Location')}" />
 
-                <g:sortableColumn property="active" title="${message(code: 'workflow.active.label', default: 'Active')}" />
+                <th><g:message code="workflow.information.label" default="Information" /></th>
 
                 <th><g:message code="workflow.workflowType.label" default="Workflow Type" /></th>
 
@@ -74,7 +74,26 @@
 
                 <td>${fieldValue(bean: workflowInstance, field: "location")}</td>
 
-                <td><g:formatBoolean boolean="${workflowInstance.active}" false="No" true="Yes"/></td>
+                <td>
+                    <ul class="nav nav-tabs nav-stacked">
+                        <li class="">
+                            Active <div class="pull-right label ${workflowInstance.active? "label-success":"label-default"}"><g:formatBoolean boolean="${workflowInstance.active}" false="No" true="Yes"/></div>
+                        </li>
+                        <li>
+                            Subscribable <div class="pull-right label ${workflowInstance.subscribable? "label-success":"label-default"}"><g:formatBoolean boolean="${workflowInstance.subscribable}" false="No" true="Yes"/></div>
+                        </li>
+                        <li>
+                            Tags
+                                <ul class="pull-right nav nav-tabs nav-stacked">
+                                <g:each in="${workflowInstance.tags}" var="tag">
+                                <li>
+                                    <div class="label label-info">${tag.name}</div>
+                                </li>
+                                </g:each>
+                                </ul>
+                        </li>
+                    </ul>
+                </td>
 			
 				<td>${fieldValue(bean: workflowInstance, field: "workflowType")}</td>
 
