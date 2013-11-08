@@ -9,7 +9,7 @@
               <sec:loggedInUserInfo field="organizations" />  
             </div>
             <div id="footerCopyrightText" class=${node.builder.Config.globalConfig.get('application.footer.text.color')}>
-              ${node.builder.Config.globalConfig.get('application.footer.text')}
+              ${node.builder.Config.globalConfig.get('application.footer.text.value')}
             </div>
         </p>
 

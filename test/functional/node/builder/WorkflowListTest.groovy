@@ -28,7 +28,7 @@ class WorkflowListTest extends NodeBuilderFunctionalTestBase{
 
     @Before
     void setup(){
-        Config.globalConfig.put("application.footer.text", "Copyright &copy; 2013 Some Company")
+        Config.globalConfig.put("application.footer.text.value", "Copyright &copy; 2013 Some Company")
         (new WorkflowCreateTest()).shouldCreateANewWorkflow()
     }
 
