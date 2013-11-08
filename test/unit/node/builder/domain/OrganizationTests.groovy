@@ -18,54 +18,27 @@ package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import node.builder.Workflow
-import node.builder.WorkflowType
+import node.builder.Organization
+import node.builder.SubscriptionLevel
 import org.junit.Test
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Workflow)
-@Mock([Workflow, WorkflowType])
+
+@TestFor(Organization)
+@Mock([SubscriptionLevel])
 class OrganizationTests {
 
     @Test
-    void shouldHaveAssociationWithWorkflows() {
-        def workflow = new Workflow(
-                name: "test",
-                location: "blah",
-                workflowType: (new WorkflowType(name: "Test Type")).save(validate: false),
-                bpmn: "<bpmn></bpmn>",
-                processDefinitionKey: "key"
-        )
+    void shouldCreateANewOrganization(){
+        def subscriptionLevel = new SubscriptionLevel(name: "Level99", description: "Some words", count: 99)
+        subscriptionLevel.save()
 
-        workflow.save(validate:  false)
-        assert !workflow.hasErrors()
+        def organization = new Organization()
+        organization.name = "Some Org"
+        organization.subscriptionLevel = subscriptionLevel
 
-        workflow.addToOrganizations("Testers")
-        workflow.save(validate:  false)
-        assert !workflow.hasErrors()
-        assert Workflow.first().organizations.first() == "Testers"
-
-        def workflows = Workflow.findAllByOrganizations(["Testers"])
-        assert workflows.size() == 1
-
-        workflow.addToOrganizations("Users")
-        workflow.save(validate:  false)
-
-        workflows = Workflow.findAllByOrganizations(["Testers"])
-        assert workflows.size() == 1
-
-        workflows = Workflow.findAllByOrganizations(new TreeSet<String>(["Testers","Users"]))
-        assert workflows.size() == 1
-
-        workflows = Workflow.findAllByOrganizations(["Admins"])
-        assert workflows.size() == 0
-
-        workflows = Workflow.findAllByOrganizations(new TreeSet<String>(["Users","Testers"]))
-        assert workflows.size() == 1
-
-        workflow.delete()
-        assert Workflow.count == 0
+        assert organization.validate() == true
     }
 }

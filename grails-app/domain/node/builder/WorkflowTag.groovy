@@ -30,7 +30,7 @@ class WorkflowTag {
 	Date	lastUpdated
 
     static belongsTo = [Workflow]
-    static hasMany = [workflows: Workflow]
+    static hasMany = [workflows: Workflow, subscriptions: Subscription]
 
     static mapping = {
         workflows lazy: false
