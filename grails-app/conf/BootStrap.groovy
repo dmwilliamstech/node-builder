@@ -44,7 +44,7 @@ class BootStrap {
         loadWorkflowTypes()
         loadProcessDefinitions()
 
-        def subscriptionLevel = new SubscriptionLevel(name: 'Unlimited',
+        def subscriptionLevel = SubscriptionLevel.findOrCreateWhere(name: 'Unlimited',
          subscriptionCount: 9999, description: 'Unlimited project subscriptions')
         subscriptionLevel.save(failOnError: true)
 
