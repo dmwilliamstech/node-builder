@@ -32,7 +32,7 @@ class OrganizationTests {
 
     @Test
     void shouldCreateANewOrganization(){
-        def subscriptionLevel = new SubscriptionLevel(name: "Level99", description: "Some words", count: 99)
+        def subscriptionLevel = new SubscriptionLevel(name: "Level99", description: "Some words", subscriptionCount: 99)
         subscriptionLevel.save()
 
         def organization = new Organization()

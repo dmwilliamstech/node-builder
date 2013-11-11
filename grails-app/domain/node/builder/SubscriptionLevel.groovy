@@ -27,7 +27,7 @@ class SubscriptionLevel {
 
     String name
     String description
-    Integer count
+    int subscriptionCount
 
 	
 	/* Automatic timestamping of GORM */
@@ -49,8 +49,8 @@ class SubscriptionLevel {
 	/*
 	 * Methods of the Domain Class
 	 */
-//	@Override	// Override toString for a nicer / more descriptive UI 
-//	public String toString() {
-//		return "${name}";
-//	}
+	@Override	// Override toString for a nicer / more descriptive UI
+	public String toString() {
+		return "${name}";
+	}
 }

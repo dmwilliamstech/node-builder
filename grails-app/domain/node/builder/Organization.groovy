@@ -26,6 +26,7 @@ class Organization {
 	Long	id
 
     String name
+    String description
 	
 	/* Automatic timestamping of GORM */
 	Date	dateCreated
@@ -44,8 +45,8 @@ class Organization {
 	/*
 	 * Methods of the Domain Class
 	 */
-//	@Override	// Override toString for a nicer / more descriptive UI 
-//	public String toString() {
-//		return "${name}";
-//	}
+	@Override	// Override toString for a nicer / more descriptive UI
+	public String toString() {
+		return "${name}";
+	}
 }

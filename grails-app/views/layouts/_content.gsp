@@ -1,14 +1,9 @@
 
 <div id="Content" class="container">
 	<!-- Show page's content -->
-    <div class="pull-right">
-    <sec:ifLoggedIn>
-        Welcome <sec:username />! (<g:link controller="logout">Logout</g:link>)
-    </sec:ifLoggedIn>
-    </div>
         <section class="row-fluid">
             <div class="span12">
-                <div class="navbar">
+                <div class="navbar ${sec.loggedInUserInfo([field: 'authorities']).contains('NBADMINS')? 'navbar-inverse':'navbar-default'} navbar-fixed-top">
                     <div class="navbar-inner">
                         <div class="container">
                             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" href="">
@@ -46,6 +41,15 @@
                                 <ul class="nav pull-right">
                                     <li class="${request.getServletPath().contains('about') ? 'active' : '' }"><a href="${request.contextPath}/about" >About</a></li>
                                 </ul>
+                                <ul class="nav pull-right">
+                                    <li>
+                                        <p class="navbar-text">
+                                            <sec:ifLoggedIn>
+                                                <sec:username /> (<g:link controller="logout">Logout</g:link>)
+                                            </sec:ifLoggedIn>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div><!-- /.nav-collapse -->
                             </sec:ifLoggedIn>
                         </div>
@@ -55,6 +59,7 @@
             </div>
         </section>
         <!-- /navbar -->
+
 	<g:layoutBody />
 	<g:pageProperty name="page.body" />
 </div>
