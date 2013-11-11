@@ -21,6 +21,7 @@ import grails.test.mixin.TestFor
 import node.builder.Organization
 import node.builder.Subscription
 import node.builder.SubscriptionLevel
+import node.builder.SubscriptionVariable
 import node.builder.WorkflowTag
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +30,7 @@ import org.junit.Test
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Subscription)
-@Mock([SubscriptionLevel, Organization, WorkflowTag])
+@Mock([SubscriptionLevel, SubscriptionVariable, Organization, WorkflowTag])
 class SubscriptionTests {
 
     SubscriptionLevel subscriptionLevel
@@ -38,11 +39,12 @@ class SubscriptionTests {
 
     @Before
     void setup(){
-        subscriptionLevel = new SubscriptionLevel(name: "Level99", description: "Some words", count: 99)
+        subscriptionLevel = new SubscriptionLevel(name: "Level99", description: "Some words", subscriptionCount: 99)
         subscriptionLevel.save()
 
         organization = new Organization()
         organization.name = "Some Org"
+        organization.description = "Some Org"
         organization.subscriptionLevel = subscriptionLevel
 
         assert organization.validate() == true
@@ -69,11 +71,17 @@ class SubscriptionTests {
         def subscription = new Subscription()
         subscription.organization = organization
         subscription.workflowTag = workflowTag
-        subscription.variables.key = 'value'
 
         subscription.save()
         assert subscription.validate() == true
-        assert subscription.variables.key == 'value'
+
+        def subscriptionVariable = new SubscriptionVariable(name: 'name', value: 'value', subscription: subscription)
+        subscriptionVariable.save()
+        assert subscriptionVariable.validate()
+        subscription.variables = [subscriptionVariable]
+        subscription.save()
+
+        assert subscription.variables.first().value == 'value'
     }
 
     @Test
@@ -81,16 +89,21 @@ class SubscriptionTests {
         def subscription = new Subscription()
         subscription.organization = organization
         subscription.workflowTag = workflowTag
-        subscription.variables.key = 'value'
         subscription.save()
         assert subscription.validate() == true
+
+        def subscriptionVariable = new SubscriptionVariable(name: 'name', value: 'value', subscription: subscription)
+        subscriptionVariable.save()
+        assert subscriptionVariable.validate()
+        subscription.variables = [subscriptionVariable]
+        subscription.save()
 
         workflowTag.addToSubscriptions(subscription)
 
         subscriptionLevel.addToOrganizations(organization)
         organization.addToSubscriptions(subscription)
 
-        assert workflowTag.subscriptions.first().variables.key == 'value'
-        assert subscriptionLevel.organizations.first().subscriptions.first().variables.key == 'value'
+        assert workflowTag.subscriptions.first().variables.first().value == 'value'
+        assert subscriptionLevel.organizations.first().subscriptions.first().variables.first().value == 'value'
     }
 }

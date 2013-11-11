@@ -33,7 +33,7 @@ class SubscriptionLevelTests {
         def subscriptionLevel = new SubscriptionLevel()
         subscriptionLevel.name = "Level1"
         subscriptionLevel.description = "The first level"
-        subscriptionLevel.count = 1
+        subscriptionLevel.subscriptionCount = 1
 
         subscriptionLevel.save()
         assert subscriptionLevel.validate() == true
@@ -45,7 +45,7 @@ class SubscriptionLevelTests {
         def subscriptionLevel = new SubscriptionLevel()
         subscriptionLevel.name = "Level1"
         subscriptionLevel.description = ".".multiply(10000)
-        subscriptionLevel.count = 1
+        subscriptionLevel.subscriptionCount = 1
 
         subscriptionLevel.save()
         assert subscriptionLevel.validate() == true
@@ -56,7 +56,7 @@ class SubscriptionLevelTests {
         def subscriptionLevel = new SubscriptionLevel()
         subscriptionLevel.name = "Level1"
         subscriptionLevel.description = "Some description"
-        subscriptionLevel.count = 1
+        subscriptionLevel.subscriptionCount = 1
 
         subscriptionLevel.save(flush: true)
         assert subscriptionLevel.validate() == true
@@ -64,7 +64,7 @@ class SubscriptionLevelTests {
         def subscriptionLevel2 = new SubscriptionLevel()
         subscriptionLevel2.name = "Level1"
         subscriptionLevel2.description = "Some description"
-        subscriptionLevel2.count = 1
+        subscriptionLevel2.subscriptionCount = 1
 
         subscriptionLevel2.save()
         assert subscriptionLevel2.validate() == false
