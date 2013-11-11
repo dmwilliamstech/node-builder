@@ -37,6 +37,7 @@ class OrganizationTests {
 
         def organization = new Organization()
         organization.name = "Some Org"
+        organization.description = "Some Org"
         organization.subscriptionLevel = subscriptionLevel
 
         assert organization.validate() == true

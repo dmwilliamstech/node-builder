@@ -1,5 +1,6 @@
 package node.builder.user
 
+import node.builder.Organization
 import org.springframework.ldap.core.DirContextAdapter
 import org.springframework.ldap.core.DirContextOperations
 import org.springframework.security.authentication.InsufficientAuthenticationException
@@ -41,6 +42,7 @@ class CustomUserDetailsContextMapper  implements UserDetailsContextMapper {
         if(organizations == null || organizations.empty)
             organizations = [DEFAULT_ORGANIZATION]
         organizations?.each{ organization ->
+            Organization.findOrCreateWhere(name: organization, description: organization).save()
             user.addOrganization(organization)
         }
 

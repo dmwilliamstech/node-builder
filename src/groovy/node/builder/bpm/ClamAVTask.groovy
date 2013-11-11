@@ -2,9 +2,6 @@ package node.builder.bpm
 
 import org.activiti.engine.delegate.DelegateExecution
 
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
 /**
  * Copyright 2013 AirGap, LLC.
  *

@@ -99,7 +99,7 @@ class SubscriptionLevelController {
         }
 
 		flash.message = message(code: 'default.updated.message', args: [message(code: 'subscriptionLevel.label', default: 'SubscriptionLevel'), subscriptionLevelInstance.id])
-        redirect(action: "show", id: subscriptionLevelInstance.id)
+        redirect(action: "index")
     }
 
     def delete() {

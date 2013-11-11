@@ -1,6 +1,5 @@
 package node.builder.bpm
 
-import node.builder.SCPFileCopier
 import org.activiti.engine.delegate.DelegateExecution
 
 /**

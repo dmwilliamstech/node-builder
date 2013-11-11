@@ -2,7 +2,6 @@ package node.builder.bpm
 
 import node.builder.SCPFileCopier
 import org.activiti.engine.delegate.DelegateExecution
-import org.apache.commons.io.FilenameUtils
 
 /**
  * Copyright 2013 AirGap, LLC.

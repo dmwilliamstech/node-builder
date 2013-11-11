@@ -5,7 +5,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: organizationInstance, field: 'name', 'error')} ">
 				<label for="name" class="control-label"><g:message code="organization.name.label" default="Name" /></label>
 				<div class="controls">
-					<g:textField name="name" value="${organizationInstance?.name}"/>
+					<g:textField name="name" value="${organizationInstance?.name}" disabled="disabled"/>
 					<span class="help-inline">${hasErrors(bean: organizationInstance, field: 'name', 'error')}</span>
 				</div>
 			</div>
@@ -13,7 +13,7 @@
 			<div class="control-group fieldcontain ${hasErrors(bean: organizationInstance, field: 'description', 'error')} ">
 				<label for="description" class="control-label"><g:message code="organization.description.label" default="Description" /></label>
 				<div class="controls">
-					<g:textField name="description" value="${organizationInstance?.description}"/>
+					<g:textField name="description" value="${organizationInstance?.description}" disabled="disabled"/>
 					<span class="help-inline">${hasErrors(bean: organizationInstance, field: 'description', 'error')}</span>
 				</div>
 			</div>

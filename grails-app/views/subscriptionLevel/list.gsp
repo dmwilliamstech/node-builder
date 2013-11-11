@@ -5,12 +5,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'subscriptionLevel.label', default: 'SubscriptionLevel')}" />
+	<g:set var="entityName" value="${message(code: 'subscriptionLevel.label', default: 'Subscription Level')}" />
 	<title><g:message code="default.list.label" args="[entityName]" /></title>
 </head>
 
 <body>
-	
+<g:link action="create"><i class="icon-plus-sign"></i> <b>New Subscription Level</b></g:link><br>
 <section id="list-subscriptionLevel" class="first">
 
 	<table class="table table-bordered">
@@ -31,9 +31,9 @@
 		</thead>
 		<tbody>
 		<g:each in="${subscriptionLevelInstanceList}" status="i" var="subscriptionLevelInstance">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+			<tr id='subscriptionLevelRow${subscriptionLevelInstance.id}' class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
-				<td><g:link action="show" id="${subscriptionLevelInstance.id}">${fieldValue(bean: subscriptionLevelInstance, field: "name")}</g:link></td>
+				<td><g:link action="edit" id="${subscriptionLevelInstance.id}">${fieldValue(bean: subscriptionLevelInstance, field: "name")}</g:link></td>
 			
 				<td>${fieldValue(bean: subscriptionLevelInstance, field: "description")}</td>
 			

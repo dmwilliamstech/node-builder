@@ -31,9 +31,9 @@
 		</thead>
 		<tbody>
 		<g:each in="${organizationInstanceList}" status="i" var="organizationInstance">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+			<tr id='organizationRow${organizationInstance.id}' class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
-				<td><g:link action="show" id="${organizationInstance.id}">${fieldValue(bean: organizationInstance, field: "name")}</g:link></td>
+				<td><g:link action="edit" id="${organizationInstance.id}">${fieldValue(bean: organizationInstance, field: "name")}</g:link></td>
 			
 				<td><g:formatDate date="${organizationInstance.dateCreated}" /></td>
 			

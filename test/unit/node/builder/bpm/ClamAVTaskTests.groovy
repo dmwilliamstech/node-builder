@@ -2,7 +2,6 @@ package node.builder.bpm
 
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
-import groovy.mock.interceptor.MockFor
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

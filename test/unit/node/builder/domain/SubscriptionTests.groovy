@@ -18,11 +18,7 @@ package node.builder.domain
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import node.builder.Organization
-import node.builder.Subscription
-import node.builder.SubscriptionLevel
-import node.builder.SubscriptionVariable
-import node.builder.WorkflowTag
+import node.builder.*
 import org.junit.Before
 import org.junit.Test
 

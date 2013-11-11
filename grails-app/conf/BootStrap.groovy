@@ -44,6 +44,10 @@ class BootStrap {
         loadWorkflowTypes()
         loadProcessDefinitions()
 
+        def subscriptionLevel = new SubscriptionLevel(name: 'Unlimited',
+         subscriptionCount: 9999, description: 'Unlimited project subscriptions')
+        subscriptionLevel.save(failOnError: true)
+
         if(Node.count.is(0)){
             log.info "Creating default Node"
             def nodeType = new Node(name: "Default", description: "Default Container for nodetype less Applications")
@@ -116,6 +120,7 @@ class BootStrap {
 
             if (!gogoUser.authorities.contains(adminRole)) {
                 SecUserSecRole.create gogoUser, adminRole
+                SecUserSecRole.create gogoUser, userRole
             }
         }
     }

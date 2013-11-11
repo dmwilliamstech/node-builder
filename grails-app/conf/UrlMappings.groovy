@@ -37,7 +37,7 @@ class UrlMappings {
         "/logout/$action?"(controller: "logout")
 
         "/"	{
-			controller	= 'workflow'
+			controller	= 'subscription'
 			action		= { 'index' }
             view		= { 'index' }
         }

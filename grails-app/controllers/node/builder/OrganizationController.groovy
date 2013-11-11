@@ -99,7 +99,7 @@ class OrganizationController {
         }
 
 		flash.message = message(code: 'default.updated.message', args: [message(code: 'organization.label', default: 'Organization'), organizationInstance.id])
-        redirect(action: "show", id: organizationInstance.id)
+        redirect(action: "index")
     }
 
     def delete() {

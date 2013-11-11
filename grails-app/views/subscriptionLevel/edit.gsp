@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'subscriptionLevel.label', default: 'SubscriptionLevel')}" />
+	<g:set var="entityName" value="${message(code: 'subscriptionLevel.label', default: 'Subscription Level')}" />
 	<title><g:message code="default.edit.label" args="[entityName]" /></title>
 </head>
 

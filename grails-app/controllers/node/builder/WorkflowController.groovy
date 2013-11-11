@@ -38,7 +38,7 @@ class WorkflowController {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [workflowInstanceList: workflowService.findAllByOrganizations(new TreeSet<String>(springSecurityService.principal.organizations), params), workflowInstanceTotal: Workflow.count()]
+        [workflowInstanceList: workflowService.findAllByOrganizations(new TreeSet<String>(springSecurityService.principal.organizations.collect{it.toString()}), params), workflowInstanceTotal: Workflow.count()]
     }
 
     def create() {
@@ -46,7 +46,7 @@ class WorkflowController {
     }
 
     def save() {
-        def workflowInstance = workflowService.createWithoutSaving(params, springSecurityService.principal.organizations)
+        def workflowInstance = workflowService.createWithoutSaving(params, springSecurityService.principal.organizations.collect{it.toString()})
         if (!workflowInstance.save(flush: true)) {
             render(view: "create", model: [workflowInstance: workflowInstance])
             return
@@ -57,7 +57,7 @@ class WorkflowController {
     }
 
     def show() {
-        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations))
+        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations.collect{it.toString()}))
         if (!workflowInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'workflow.label', default: 'Workflow'), params.id])
             redirect(action: "list")
@@ -68,7 +68,7 @@ class WorkflowController {
     }
 
     def edit() {
-        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations))
+        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations.collect{it.toString()}))
         if (!workflowInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'workflow.label', default: 'Workflow'), params.id])
             redirect(action: "list")
@@ -198,7 +198,7 @@ class WorkflowController {
     }
 
     def history(){
-        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations))
+        def workflowInstance = workflowService.getByOrganizations(params.id, new TreeSet<String>(springSecurityService.principal.organizations.collect{it.toString()}))
         if (!workflowInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'workflow.label', default: 'Workflow'), params.id])
             redirect(action: "list")

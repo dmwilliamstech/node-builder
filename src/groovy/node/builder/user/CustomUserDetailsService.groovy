@@ -1,8 +1,10 @@
 package node.builder.user
 
 import grails.plugins.springsecurity.SpringSecurityService
+import node.builder.Organization
 import node.builder.SecUser
 import node.builder.SecUserSecRole
+import node.builder.SubscriptionLevel
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserDetailsService
 import org.springframework.dao.DataAccessException
 import org.springframework.security.core.GrantedAuthority
@@ -60,7 +62,13 @@ class CustomUserDetailsService implements GrailsUserDetailsService{
 
             def orgs = []
             user.organizations.each { org ->
-                orgs << org
+                def organization = Organization.findOrCreateWhere(name: org, description: org)
+                if(organization.subscriptionLevel == null){
+                    organization.subscriptionLevel = SubscriptionLevel.first()
+                }
+
+                organization.save(failOnError: true)
+                orgs << organization
             }
             details.organizations = orgs
             return details
