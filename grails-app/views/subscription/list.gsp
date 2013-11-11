@@ -10,12 +10,14 @@
 </head>
 
 <body>
-<sec:ifAllGranted roles="ROLE_USERS">
-<g:render template="userList"/>
-</sec:ifAllGranted>
-<sec:ifAllGranted roles="ROLE_NBADMINS">
-    <g:render template="adminList"/>
-</sec:ifAllGranted>
+    <sec:ifAllGranted roles="ROLE_USERS">
+        <sec:ifNotGranted roles="ROLE_NBADMINS">
+            <g:render template="userList"/>
+        </sec:ifNotGranted>
+    </sec:ifAllGranted>
+    <sec:ifAllGranted roles="ROLE_NBADMINS">
+        <g:render template="adminList"/>
+    </sec:ifAllGranted>
 </body>
 
 </html>
