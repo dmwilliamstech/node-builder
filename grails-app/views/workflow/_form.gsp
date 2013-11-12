@@ -77,7 +77,7 @@
             <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'variables', 'error')} ">
                 <label for="variables" class="control-label"><g:message code="workflow.variables.label" default="Variables" /></label>
                 <div class="controls">
-                    <g:textField data-role="tagsinput" id="workflowVariables" name="variables" value=""/>
+                    <select multiple data-role="tagsinput" id="workflowVariables" name="variables" value=""/>
                     <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'variables', 'error')}</span>
                 </div>
             </div>

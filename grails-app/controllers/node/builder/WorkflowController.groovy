@@ -102,6 +102,7 @@ class WorkflowController {
             params.remove('tags')
         }
 
+        if(params.variables == null){params.variables = []}
         workflowInstance.properties = params
 
         if (!workflowInstance.save(flush: true)) {

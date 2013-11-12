@@ -84,7 +84,9 @@ class WriteSmtpMessagesTask extends MetricsTask{
             multipart.addBodyPart(messageBodyPart)
 
             files?.each {file ->
-                 addAttachment(multipart, file)
+                if(file != null){
+                    addAttachment(multipart, file)
+                }
             }
 
             //set the content

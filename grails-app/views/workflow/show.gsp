@@ -1,5 +1,5 @@
 
-<%@ page import="node.builder.WorkflowState; node.builder.Workflow" %>
+<%@ page import="grails.converters.JSON; node.builder.WorkflowState; node.builder.Workflow" %>
 <!doctype html>
 <html>
 
@@ -81,7 +81,7 @@
             </tr>
 
             <tr class="prop">
-                <td valign="top" class="name"><g:message code="workflow.state.label" default="Message" /></td>
+                <td valign="top" class="name"><g:message code="workflow.message.label" default="Message" /></td>
 
                 <td valign="top" class="value" id="workflowMessage">
                     ${workflowInstance.message}
@@ -93,6 +93,18 @@
                             <a  href="#completeTaskModal" data-toggle="modal" > <i id='completeTaskDecline' onclick="handleTaskComplete(this)" data-type="completeTask" data-task-decision="decline" data-task-description="${workflowInstance.task.description}" data-task-name="${workflowInstance.task.name}" data-workflow-id="${workflowInstance.id}" data-workflow-name="${workflowInstance.name}" class="icon-thumbs-down"></i></a>
                         </g:if>
                     </sec:ifAnyGranted>
+                </td>
+
+            </tr>
+
+            <tr class="prop">
+                <td valign="top" class="name"><g:message code="workflow.variables.label" default="Variables" /></td>
+
+                <td valign="top" class="value">
+
+                    <g:each in="${workflowInstance.variables}" var="variable">
+                        <div class="label label-info">${variable}</div>
+                    </g:each>
                 </td>
 
             </tr>
