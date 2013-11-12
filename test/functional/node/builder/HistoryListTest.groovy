@@ -78,6 +78,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         SessionFactory sessionFactory = context.getBean('sessionFactory')
 
         Workflow.all.each{workflow ->
+            sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_VARIABLES po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
             sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_ORGANIZATIONS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
         }
         Workflow.where {id>0l}.deleteAll()

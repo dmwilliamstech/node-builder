@@ -45,7 +45,6 @@
                     <select name="processDefinitionKey" id="processDefinitionKey" value="" >
                         <option id="0"><g:message code="workflow.processDefinitionKey.default.option" default="Please provide BPMN workflow" /></option>
                     </select>
-                    %{--<g:textField name="processDefinitionKey" value="${workflowInstance?.processDefinitionKey}"/>--}%
                     <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'processDefinitionKey', '<i class="icon-exclamation-sign"></i>')}</span>
                 </div>
             </div>
@@ -72,6 +71,14 @@
                 <div class="controls">
                     <g:checkBox rows="20" class="span8" name="subscribable" value="${workflowInstance?.subscribable}"/>
                     <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'subscribable', '<i class="icon-exclamation-sign"></i>')}</span>
+                </div>
+            </div>
+
+            <div class="control-group fieldcontain ${hasErrors(bean: workflowInstance, field: 'variables', 'error')} ">
+                <label for="variables" class="control-label"><g:message code="workflow.variables.label" default="Variables" /></label>
+                <div class="controls">
+                    <g:textField data-role="tagsinput" id="workflowVariables" name="variables" value=""/>
+                    <span class="help-inline">${hasErrors(bean: workflowInstance, field: 'variables', 'error')}</span>
                 </div>
             </div>
 
@@ -148,11 +155,14 @@
                       }
                    })
 
-
                     var tags = ${(workflowInstance.tags?: [] )as JSON};
-
                     $.each(tags, function(index, tag){
                             $('#workflowTags').tagsinput('add', tag)
+                    })
+
+                    var variables = ${(workflowInstance.variables?: [] )as JSON};
+                    $.each(variables, function(index, variable){
+                            $('#workflowVariables').tagsinput('add', variable)
                     })
 
                     $('div.bootstrap-tagsinput').width(206)

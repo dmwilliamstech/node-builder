@@ -44,7 +44,7 @@ class Workflow {
     Boolean subscribable = false
     List tags
 
-    static hasMany = [organizations:String, tags:WorkflowTag]
+    static hasMany = [organizations:String, tags:WorkflowTag, variables:String]
 
     /* Automatic timestamping of GORM */
 	Date	dateCreated
