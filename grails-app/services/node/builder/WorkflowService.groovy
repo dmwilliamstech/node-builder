@@ -22,6 +22,7 @@ import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.ActivitiObjectNotFoundException
 import org.activiti.engine.task.Task
+import org.springframework.security.core.GrantedAuthority
 
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -31,6 +32,7 @@ import java.util.concurrent.Executors
  * A service class encapsulates the core business logic of a Grails application
  */
 class WorkflowService {
+    def springSecurityService
 
     static transactional = true
 
@@ -56,6 +58,10 @@ class WorkflowService {
     def findAllByOrganizations(organizations, params){
         if(organizations == null || organizations.empty)
             return []
+
+        if(springSecurityService.principal.authorities.find{GrantedAuthority auth -> auth.authority.contains('NBADMINS')}){
+            return Workflow.list(params)
+        }
         def workflows = Workflow.executeQuery(
                 'from Workflow p where :organizations in elements(p.organizations) order by name',
                 [organizations: organizations], params)
@@ -65,6 +71,10 @@ class WorkflowService {
     def getByOrganizations(id, organizations){
         if(organizations == null || organizations.empty)
             return null
+
+        if(springSecurityService.principal.authorities.find{GrantedAuthority auth -> auth.authority.contains('NBADMINS')}){
+            return Workflow.get(id)
+        }
         def workflow = Workflow.executeQuery(
                 'from Workflow p where p.id=:id and :organizations in elements(p.organizations)',
                 [id: Long.parseLong(id), organizations: organizations])
@@ -204,6 +214,7 @@ class WorkflowService {
         config.each { key, value ->
             variables.put(key, value)
         }
+
         variables.put("workflowName", workflow.name)
         variables.put("workflowLastUpdated", workflow.lastUpdated)
         variables.put("workflowOrganizations", organizations)
@@ -222,6 +233,25 @@ class WorkflowService {
         variables.put("jiraIssueType", config.get("jira.issueType"))
         variables.put("businessKey", businessKey)
         variables.put('result', new ProcessResult())
+
+        addSubscriptionVariables(variables, workflow)
     }
 
+    def addSubscriptionVariables(variables, workflow){
+
+        def subscriptionVariables = [:]
+        workflow.tags.each{WorkflowTag tag ->
+            tag.subscriptions.each {subscription ->
+                subscription.variables.each {variable ->
+                    if(subscriptionVariables[variable.name] == null){
+                        subscriptionVariables[variable.name] = []
+                    }
+                    subscriptionVariables[variable.name] << variable.value
+                }
+            }
+        }
+
+        variables.subscriptionVariables = subscriptionVariables
+
+    }
 }

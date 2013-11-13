@@ -53,7 +53,7 @@ class CustomUserDetailsContextMapper  implements UserDetailsContextMapper {
                         )
                     organization.save(flush: true, failOnError: true)
                 }
-                user.addOrganization(organization.toString())
+                user.addOrganization(organization)
             }
 
         }

@@ -1,4 +1,5 @@
 import grails.converters.JSON
+import node.builder.SubscriptionVariable
 import node.builder.WorkflowTag
 
 /**
@@ -28,6 +29,17 @@ class CustomObjectMarshallers {
                     name: it.name,
                     description : it.description
             ]}
+            json.lastUpdated = it.lastUpdated
+            json.dateCreated = it.dateCreated
+            return json
+        }
+
+        JSON.registerObjectMarshaller(SubscriptionVariable) {
+            def json = [:]
+            json.name = it.name
+            json.id = it.id
+            json.value = it.value
+
             json.lastUpdated = it.lastUpdated
             json.dateCreated = it.dateCreated
             return json

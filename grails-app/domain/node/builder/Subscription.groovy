@@ -34,11 +34,20 @@ class Subscription {
     static hasMany = [variables:SubscriptionVariable]
 	
     static mapping = {
+        variables cascade: "all-delete-orphan"
+        variables lazy: false
     }
     
 	static constraints = {
+
     }
-	
+
+    public def subscriptionState(){
+        WorkflowState state = WorkflowState.OK
+        workflowTag.workflows.each {workflow -> state = (workflow.subscribable && workflow.state > state ? workflow.state : state)}
+        return state
+    }
+
 	/*
 	 * Methods of the Domain Class
 	 */

@@ -60,7 +60,7 @@ class CustomUserDetailsService implements GrailsUserDetailsService{
                     authorities
             )
 
-            def orgs = []
+
             user.organizations.each { org ->
                 def organization = Organization.findOrCreateWhere(name: org, description: org)
                 if(organization.subscriptionLevel == null){
@@ -68,9 +68,9 @@ class CustomUserDetailsService implements GrailsUserDetailsService{
                 }
 
                 organization.save(failOnError: true)
-                orgs << organization
+                details.addOrganization(organization)
             }
-            details.organizations = orgs
+
             return details
         }
     }

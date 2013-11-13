@@ -69,7 +69,10 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
         (new WorkflowRunTest()).shouldRunANewWorkflow()
 
         $("a[href\$=\"workflow/history/${workflow.id}\"]").click()
-        assert $("table").size() == 3 //2 + the summary table
+
+        waitFor(10, 1) {
+            assert $("table").size() == 3 //2 + the summary table
+        }
     }
 
     @After
@@ -79,6 +82,7 @@ class HistoryListTest extends NodeBuilderFunctionalTestBase{
 
         Workflow.all.each{workflow ->
             sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_VARIABLES po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
+            sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_TAGS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
             sessionFactory.currentSession.createSQLQuery("delete from WORKFLOW_ORGANIZATIONS po where po.WORKFLOW_ID = ${workflow.id}").executeUpdate()
         }
         Workflow.where {id>0l}.deleteAll()

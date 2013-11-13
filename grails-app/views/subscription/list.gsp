@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <sec:ifAnyGranted roles="ROLE_ADMINS"><g:link action="create"><i class="icon-plus-sign"></i> <b>Subscribe to a Project</b></g:link><br></sec:ifAnyGranted>
     <sec:ifAllGranted roles="ROLE_USERS">
         <sec:ifNotGranted roles="ROLE_NBADMINS">
             <g:render template="userList"/>

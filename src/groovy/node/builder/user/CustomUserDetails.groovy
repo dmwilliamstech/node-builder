@@ -1,5 +1,6 @@
 package node.builder.user
 
+import node.builder.Organization
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
 
@@ -37,7 +38,24 @@ class CustomUserDetails extends User {
 
     }
 
-    def addOrganization(String organization){
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+        if (!super.equals(o)) return false
+
+        CustomUserDetails that = (CustomUserDetails) o
+
+        if (id != that.id) return false
+        if (organizations != that.organizations) return false
+
+        return true
+    }
+
+    int hashCode() {
+        return username.hashCode()
+    }
+
+    def addOrganization(Organization organization){
         organizations << organization
     }
 

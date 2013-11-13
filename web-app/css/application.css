@@ -15,5 +15,12 @@
 }
 
 .gray {
-    color: #ccc
+    color: #ccc;
+}
+
+.centre
+{
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }

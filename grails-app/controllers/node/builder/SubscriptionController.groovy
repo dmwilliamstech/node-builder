@@ -23,6 +23,8 @@ import org.springframework.dao.DataIntegrityViolationException
  * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
  */
 class SubscriptionController {
+    def subscriptionService
+    def springSecurityService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -32,22 +34,26 @@ class SubscriptionController {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [subscriptionInstanceList: Subscription.list(params), subscriptionInstanceTotal: Subscription.count()]
+        def subscriptions = subscriptionService.subscriptionsForUser(springSecurityService.principal, params)
+        [subscriptionInstanceList: subscriptions, subscriptionInstanceTotal: subscriptions.size(), organizations: springSecurityService.principal.organizations]
     }
 
     def create() {
-        [subscriptionInstance: new Subscription(params)]
+        [subscriptionInstance: new Subscription(params),
+                organizations: springSecurityService.principal.organizations,
+                availableVariables: WorkflowTag.allAvailableWorkflowVariables()
+        ]
     }
 
     def save() {
         def subscriptionInstance = new Subscription(params)
-        if (!subscriptionInstance.save(flush: true)) {
+        if (!subscriptionService.saveWithVariables(subscriptionInstance, params.workflowTagVariables)) {
             render(view: "create", model: [subscriptionInstance: subscriptionInstance])
             return
         }
 
 		flash.message = message(code: 'default.created.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscriptionInstance.id])
-        redirect(action: "show", id: subscriptionInstance.id)
+        redirect(action: "list")
     }
 
     def show() {
@@ -58,7 +64,7 @@ class SubscriptionController {
             return
         }
 
-        [subscriptionInstance: subscriptionInstance]
+        [subscriptionInstance: subscriptionInstance, organizations: springSecurityService.principal.organizations]
     }
 
     def edit() {
@@ -69,7 +75,8 @@ class SubscriptionController {
             return
         }
 
-        [subscriptionInstance: subscriptionInstance]
+        [subscriptionInstance: subscriptionInstance, organizations: springSecurityService.principal.organizations,
+                availableVariables: WorkflowTag.allAvailableWorkflowVariables()]
     }
 
     def update() {
@@ -93,13 +100,13 @@ class SubscriptionController {
 
         subscriptionInstance.properties = params
 
-        if (!subscriptionInstance.save(flush: true)) {
+        if (!subscriptionService.saveWithVariables(subscriptionInstance, params.workflowTagVariables)) {
             render(view: "edit", model: [subscriptionInstance: subscriptionInstance])
             return
         }
 
 		flash.message = message(code: 'default.updated.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscriptionInstance.id])
-        redirect(action: "show", id: subscriptionInstance.id)
+        redirect(action: "list")
     }
 
     def delete() {

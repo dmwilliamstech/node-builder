@@ -24,6 +24,7 @@ import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.compiler.DirectoryWatcher
 import org.codehaus.groovy.runtime.StackTraceUtils
+import org.springframework.core.io.ClassPathResource
 
 class BootStrap {
     def grailsApplication
@@ -38,15 +39,13 @@ class BootStrap {
 
         Metrics.initialize()
         loadConfig()
-        if(Environment.currentEnvironment != Environment.PRODUCTION){
-            loadSecurity()
-        }
         loadWorkflowTypes()
         loadProcessDefinitions()
 
-        def subscriptionLevel = SubscriptionLevel.findOrCreateWhere(name: 'Unlimited',
-         subscriptionCount: 9999, description: 'Unlimited project subscriptions')
-        subscriptionLevel.save(failOnError: true)
+        if(Environment.currentEnvironment != Environment.PRODUCTION){
+            loadSecurity()
+            loadSeed()
+        }
 
         if(Node.count.is(0)){
             log.info "Creating default Node"
@@ -84,6 +83,34 @@ class BootStrap {
         WorkflowTypeEnum.values().each{workflowTypeEnum ->
             def workflowType = WorkflowType.findByName(workflowTypeEnum.name)?: new WorkflowType(name: workflowTypeEnum.name)
             workflowType.save()
+        }
+    }
+
+    def loadSeed(){
+        def subscriptionLevel = SubscriptionLevel.findOrCreateWhere(name: 'Unlimited',
+                subscriptionCount: 9999, description: 'Unlimited project subscriptions')
+        subscriptionLevel.save(failOnError: true)
+
+        ["Postgresql", "MongoDB", "Ozone"].each{ name ->
+            def workflowTag = WorkflowTag.findOrCreateByName(name)
+            workflowTag.save(flush: true)
+        }
+
+        if(Environment.currentEnvironment == Environment.DEVELOPMENT){
+            def workflow = Workflow.findOrCreateByName("Simple Workflow")
+            workflow.state = WorkflowState.OK
+            workflow.organizations = ["fraggles"]
+            workflow.active = false
+            workflow.subscribable = true
+            workflow.location = '/tmp'
+            workflow.workflowType = WorkflowType.findByName(WorkflowTypeEnum.FOLDER_MONITOR.name)
+            workflow.description = "Sample Workflow"
+            workflow.message = "Sample Workflow created OK"
+            workflow.tags = [WorkflowTag.findByName("Postgresql")]
+            workflow.bpmn = new ClassPathResource("resources/sample_process.bpmn20.xml").getFile().text
+            workflow.processDefinitionKey = "groovyProcess"
+            workflow.variables = ["variable1","variable2"]
+            workflow.save(failOnError: true, flush: true)
         }
     }
 

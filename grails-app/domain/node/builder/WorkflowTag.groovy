@@ -34,9 +34,40 @@ class WorkflowTag {
 
     static mapping = {
         workflows lazy: false
+        subscriptions lazy: false
     }
 
     static constraints = {
     }
 
+    /*
+     * Methods of the Domain Class
+     */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${name}";
+    }
+
+    def availableWorkflowVariables(){
+        def variables = []
+        workflows.each{ workflow ->
+            if(workflow.subscribable){
+                workflow.variables.each { variable ->
+                    if(!variables.contains(variable))
+                        variables << variable
+                }
+            }
+        }
+        return variables
+    }
+
+    def static allAvailableWorkflowVariables(){
+        def variables = [:]
+        WorkflowTag.all.each{WorkflowTag tag ->
+            variables << [
+                "${tag.name}": tag.availableWorkflowVariables()
+            ]
+        }
+        return variables
+    }
 }

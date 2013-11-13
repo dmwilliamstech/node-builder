@@ -1,5 +1,3 @@
-package node.builder
-
 /**
  * Copyright 2013 AirGap, LLC.
  *
@@ -16,22 +14,30 @@ package node.builder
  * limitations under the License.
  */
 
-public enum WorkflowState {
-    OK('icon-ok-sign', 'green'),
-    RUNNING('icon-cogs', 'black'),
-    WARNING('icon-warning-sign', 'yellow'),
-    ERROR('icon-remove-sign', 'red'),
-    WAITING('icon-user','black')
+package node.builder
 
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
-    def icon
-    def color
-    WorkflowState(icon, color){
-        this.icon = icon
-        this.color = color
+class SubscriptionListTest extends NodeBuilderFunctionalTestBase{
+
+    @Before
+    void setup(){
+
     }
 
-    public boolean isRunning(){
-        return this.color == 'black'
+    @Test
+    void shouldDisplaySubscriptionList(){
+        login()
+        go('subscription')
+        assert title == "Subscription List"
+
+    }
+
+    @After
+    void teardown(){
+
+        deleteEmptyRepo()
     }
 }

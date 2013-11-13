@@ -57,7 +57,7 @@
 			
 				<td>${fieldValue(bean: workflowInstance, field: "description")}</td>
 
-                <td id="workflowState${workflowInstance.id}"><h2><i class="center ${workflowInstance.state.color} ${workflowInstance.state.icon}"></i></h2>
+                <td id="workflowState${workflowInstance.id}"><h2><i class="centre center ${workflowInstance.state.color} ${workflowInstance.state.icon}"></i></h2>
                     <sec:ifAnyGranted roles="ROLE_ADMINS">
                         <g:if test="${workflowInstance.state == WorkflowState.WAITING}">
                             <hr>
