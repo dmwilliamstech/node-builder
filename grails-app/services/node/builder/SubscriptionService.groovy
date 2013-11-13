@@ -53,5 +53,6 @@ class SubscriptionService {
 
             subscriptionInstance.addToVariables(subscriptionVariable)
         }
+        return true
     }
 }
