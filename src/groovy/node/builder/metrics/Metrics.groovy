@@ -40,7 +40,7 @@ class Metrics {
                         duration: duration
                 )
                 metric.save()
-                log.info "Logged metric $metric.id"
+                log.debug "Logged metric $metric.id"
             }catch (e){
                 log.warn "Unable to log metric $e.message"
             }
