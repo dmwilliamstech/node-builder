@@ -54,8 +54,6 @@ class Workflow {
         organizations lazy: false
         tags lazy: false
         organizations cascade: "all-delete-orphan"
-        tags cascade: "all-delete-orphan"
-        variables cascade: "all-delete-orphan"
     }
 
     static constraints = {
