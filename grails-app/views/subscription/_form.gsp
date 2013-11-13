@@ -37,7 +37,6 @@
         var path = location.pathname.replace(/subscription.*/, 'workflowTag/variables/' + id)
         $('#variables').load(path, function(){
             $.each(variables, function(index, variable){
-                console.log(variable)
                 $('#' + variable.name).val(variable.value)
             })
         })
