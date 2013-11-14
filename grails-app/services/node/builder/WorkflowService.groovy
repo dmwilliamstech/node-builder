@@ -213,9 +213,11 @@ class WorkflowService {
 
         lock.writeLock().lock()
         try{
-            Workflow.withNewSession{
+            log.error "Saving $workflow.name"
+            Workflow.withTransaction{
                 workflow.save(validate: false, flush: true)
             }
+            log.error "Saved $workflow.name"
         }finally {
             lock.writeLock().unlock()
         }
