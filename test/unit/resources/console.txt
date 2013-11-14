@@ -1,0 +1,1083 @@
+Started by user Kelly Plummer (kelly.plummer)
+Building remotely on jenkins-slave-zeke.novalocal in workspace /home/jenkins-slave/workspace/mongo-ruby-driver-kp
+Checkout:mongo-ruby-driver-kp / /home/jenkins-slave/workspace/mongo-ruby-driver-kp - hudson.remoting.Channel@1889777b:jenkins-slave-zeke.novalocal
+Using strategy: Default
+Last Built Revision: Revision 695b08dd3fa8c3af420a64884d5c001183d1b591 (origin/master)
+Fetching changes from 1 remote Git repository
+Fetching upstream changes from origin
+Commencing build of Revision 695b08dd3fa8c3af420a64884d5c001183d1b591 (origin/master)
+Checking out Revision 695b08dd3fa8c3af420a64884d5c001183d1b591 (origin/master)
+[mongo-ruby-driver-kp] $ /bin/bash /tmp/hudson4552618903722068919.sh
++ rm mongo-2.0.0.omega.gem
++ rvm install 1.9.3
+Already installed ruby-1.9.3-p448.
+To reinstall use:
+
+    rvm reinstall 1.9.3
+
++ rvm use 1.9.3 --install --binary --fuzzy
+Using /home/jenkins-slave/.rvm/gems/ruby-1.9.3-p448
++ export BUNDLE_GEMFILE=/home/jenkins-slave/workspace/mongo-ruby-driver-kp/Gemfile
++ gem sources --add http://rizzo/nexus/content/repositories/gems/
+http://rizzo/nexus/content/repositories/gems/ added to sources
++ gem query --local | grep bundler >/dev/null || gem install nexus bundler
+ast (1.1.0)
+bson (2.0.0.rc1)
+bundler (1.3.5)
+bundler-unload (1.0.2)
+cane (2.6.0)
+celluloid (0.15.2)
+coderay (1.1.0, 1.0.9)
+coveralls (0.7.0)
+diff-lcs (1.2.5, 1.2.4)
+docile (1.1.0)
+executable-hooks (1.2.3)
+ffi (1.9.3, 1.9.0)
+flay (2.4.0)
+flog (4.1.2)
+formatador (0.2.4)
+git (1.2.6)
+guard (2.2.3, 2.0.3)
+guard-bundler (2.0.0, 0.1.3)
+guard-rspec (4.0.4, 3.1.0)
+guard-rubocop (1.0.0)
+guard-yard (2.1.0)
+interception (0.3)
+kramdown (1.2.0)
+listen (2.2.0, 2.0.1)
+lockfile (2.1.0)
+lumberjack (1.0.4)
+method_source (0.8.2)
+mime-types (2.0, 1.25)
+multi_json (1.8.2, 1.8.1)
+parallel (0.8.4)
+parser (2.0.0)
+powerpack (0.0.9, 0.0.8)
+pry (0.9.12.3, 0.9.12.2)
+pry-nav (0.2.3)
+pry-rescue (1.2.0, 1.1.1)
+rainbow (1.1.4)
+rake (10.1.0)
+rb-fchange (0.0.6)
+rb-fsevent (0.9.3)
+rb-inotify (0.9.2)
+reek (1.3.3)
+rest-client (1.6.7)
+rspec (2.14.1)
+rspec-core (2.14.7, 2.14.5)
+rspec-expectations (2.14.4, 2.14.3)
+rspec-mocks (2.14.4, 2.14.3)
+rubocop (0.13.1)
+ruby-prof (0.13.0)
+ruby2ruby (2.0.6)
+ruby_parser (3.2.2)
+rubygems-bundler (1.3.4)
+rvm (1.11.3.8)
+sexp_processor (4.3.0)
+simplecov (0.8.1, 0.7.1)
+simplecov-html (0.8.0, 0.7.1)
+slop (3.4.6)
+term-ansicolor (1.2.2)
+terminal-notifier-guard (1.5.3)
+thor (0.18.1)
+timers (1.1.0)
+tins (0.13.1, 0.11.0)
+yard (0.8.7.3, 0.8.7.2)
++ bundle install
+Using rake (10.1.0)
+Using ast (1.1.0)
+Using bson (2.0.0.rc1)
+Using timers (1.1.0)
+Using celluloid (0.15.2)
+Using coderay (1.1.0)
+Using multi_json (1.8.2)
+Using mime-types (2.0)
+Using rest-client (1.6.7)
+Using docile (1.1.0)
+Using lockfile (2.1.0)
+Using simplecov-html (0.8.0)
+Using simplecov (0.8.1)
+Using tins (0.13.1)
+Using term-ansicolor (1.2.2)
+Using thor (0.18.1)
+Using coveralls (0.7.0)
+Using diff-lcs (1.2.5)
+Using ffi (1.9.3)
+Using formatador (0.2.4)
+Using git (1.2.6)
+Using rb-fsevent (0.9.3)
+Using rb-inotify (0.9.2)
+Using listen (2.2.0)
+Using lumberjack (1.0.4)
+Using method_source (0.8.2)
+Using slop (3.4.6)
+Using pry (0.9.12.3)
+Using guard (2.2.3)
+Using bundler (1.3.5)
+Using guard-bundler (2.0.0)
+Using rspec-core (2.14.7)
+Using rspec-expectations (2.14.4)
+Using rspec-mocks (2.14.4)
+Using rspec (2.14.1)
+Using guard-rspec (4.0.4)
+Using parser (2.0.0)
+Using powerpack (0.0.9)
+Using rainbow (1.1.4)
+Using rubocop (0.13.1)
+Using guard-rubocop (1.0.0)
+Using yard (0.8.7.3)
+Using guard-yard (2.1.0)
+Using interception (0.3)
+Using kramdown (1.2.0)
+Using pry-nav (0.2.3)
+Using pry-rescue (1.2.0)
+Using rb-fchange (0.0.6)
+Using ruby-prof (0.13.0)
+Using terminal-notifier-guard (1.5.3)
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
++ bundle exec rake spec
+/home/jenkins-slave/.rvm/rubies/ruby-1.9.3-p448/bin/ruby -S rspec ./spec/mongo/client_spec.rb ./spec/mongo/cluster_spec.rb ./spec/mongo/collection_spec.rb ./spec/mongo/cursor_spec.rb ./spec/mongo/database_spec.rb ./spec/mongo/pool/connection_spec.rb ./spec/mongo/pool/socket/ssl_spec.rb ./spec/mongo/pool/socket/tcp_spec.rb ./spec/mongo/pool/socket/unix_spec.rb ./spec/mongo/protocol/delete_spec.rb ./spec/mongo/protocol/get_more_spec.rb ./spec/mongo/protocol/insert_spec.rb ./spec/mongo/protocol/kill_cursors_spec.rb ./spec/mongo/protocol/query_spec.rb ./spec/mongo/protocol/reply_spec.rb ./spec/mongo/protocol/update_spec.rb ./spec/mongo/scope_spec.rb ./spec/mongo/uri_spec.rb ./spec/mongo/write_concern/acknowledged_spec.rb ./spec/mongo/write_concern/unacknowledged_spec.rb ./spec/quality_spec.rb
+
+Mongo::Client
+  #==
+    when the other is a client
+      when the options and cluster are equal
+        returns true
+      when the options and cluster are not equal
+        returns true
+    when the other is not a client
+      returns false
+  #[]
+    when provided a string
+      behaves like a collection switching object
+        returns the new collection
+    when provided a symbol
+      behaves like a collection switching object
+        returns the new collection
+    when a database has not been selected
+      raises an error
+  .connect
+    when a database is provided
+      sets the database
+    when a database is not provided
+      does not set the database
+    when options are provided
+      sets the options
+  #eql
+    when the other is a client
+      when the options and cluster are equal
+        returns true
+      when the options and cluster are not equal
+        returns true
+    when the other is not a client
+      returns false
+  #hash
+    returns a hash of the cluster and options
+  #inspect
+    returns the cluster information
+  #initialize
+    when providing no options
+      sets the options to empty
+      sets the cluster
+    when providing options
+      when no database is provided
+        sets the options on the client
+      when a database is provided
+        sets the current database
+  #use
+    when provided a string
+      behaves like a database switching object
+        returns the new database
+    when provided a symbol
+      behaves like a database switching object
+        returns the new database
+    when providing nil
+      raises an error
+  #with
+    when the write concern is not changed
+      returns a new client
+      replaces the existing options
+      does not modify the original client
+      clones the cluster addresses
+    when the write concern is changed
+      when the write concern has not been accessed
+        returns the correct write concern
+      when the write concern has been accessed
+        returns the correct write concern
+  #write_concern
+    when no option was provided to the client
+      returns a acknowledged write concern
+    when an option is provided
+      when the option is acknowledged
+        returns a acknowledged write concern
+      when the option is unacknowledged
+        when the w is 0
+          returns an unacknowledged write concern
+        when the w is -1
+          returns an unacknowledged write concern
+
+Mongo::Cluster
+  #==
+    when the other is not a cluster
+      returns false
+    when the other is a cluster
+      when the nodes are equal
+        returns true
+      when the nodes are not equal
+        returns false
+  #add
+    when a node with the address does not exist
+      adds the node to the cluster
+      returns the newly added node
+    when a node with the address exists
+      does not add the node to the cluster
+      returns nil
+  #initialize
+    sets the configured addresses
+  #nodes
+    when all nodes are alive
+      returns all nodes
+    when some nodes are not alive
+      returns all alive nodes
+
+Mongo::Collection
+  #==
+    when the names are the same
+      when the databases are the same
+        returns true
+      when the databases are not the same
+        returns false
+    when the names are not the same
+      returns false
+    when the object is not a collection
+      returns false
+
+Mongo::Cursor
+  #inspect
+    returns a string
+    returns a string containing the scope inspect string
+  when the query has special fields
+    creates a special selector with $query
+  mongos
+    creates a special selector with $query
+  #each
+    when a block is provided
+      yields each doc to the block
+  iteration
+    when the query has a limit
+      when all docs are retreived in one request
+        requests that number of docs in first query message
+        returns exactly that number of documents
+        does not send a kill cursors message
+      when multiple requests are needed
+        requests that number of docs in first query message
+        requests the remaining docs in a get more message
+        returns exactly that number of documents
+        sends a kill cursors message
+    when the query has no limit
+      when all docs are retreived in one request
+        does not limit the first query message
+        returns all documents matching query
+        does not send a kill cursors message
+      when multiple requests are needed
+        does not limit the first query message
+        does not limit the get more message
+        returns the number of documents matching the query
+        does not send a kill cursors message
+    when the query has a negative limit
+      when all results are retreived in one request
+        requests that number of docs in the first query message
+        returns exactly that limit number of documents
+        does not send a get more message
+        does not send a kill cursors message
+      when not all results are returned in one request
+        does not send a get more message
+    when the query has a batch size greater than limit
+      when all docs are retreived in one request
+        requests the limit number of docs in first query message
+        does not send a get more message
+        returns exactly that limit number of documents
+        does not send a kill cursors message
+      when multiple requests are needed
+        requests the limit in the first query message
+        requests the remaining docs in a get more message
+        returns exactly that limit number of documents
+        sends a kill cursors message
+    when the query has a limit greater than batch size
+      requests the batch size in the first query message
+      requests the batch size in each get more message
+      returns exactly that limit number of documents
+      sends a kill cursors message
+    when the query has a batch size set but no limit
+      when all docs are retreived in one request
+        requests the batch size in the first query message
+        does not send a get more message
+        returns exactly that batch size number of documents
+        does not send a kill cursors message
+      when multiple requests are needed
+        requests the batch size in the first query message
+        requests the batch size in a get more message
+        returns the number of documents matching the query
+        sends a kill cursors message
+
+Mongo::Database
+  #==
+    when the names are the same
+      returns true
+    when the names are not the same
+      returns false
+    when the object is not a database
+      returns false
+  #[]
+    when providing a valid name
+      returns a new collection
+    when providing an invalid name
+      raises an error
+  #collection_names
+    returns the stripped names of the collections
+  #collections
+    returns collection objects for each name
+  #command
+    sends the query command to the cluster
+  #initialize
+    when provided a valid name
+      sets the name as a string
+      sets the client
+    when the name is nil
+      raises an error
+
+Mongo::Pool::Connection
+  #initialize
+    sets the host value
+    sets the port value
+    sets the default timeout value
+    sets the last use to nil
+    sets the socket to nil
+    when timeout is specified
+      sets the timeout value
+    when port is nil
+      creates unix socket
+    when options are provided
+      when :connect => false
+        does not invoke connect
+        socket remains nil
+      when :connect => true
+        invokes connect
+        socket is not nil
+      when :connect is not specified
+        invokes connect
+        socket is not nil
+      when ssl options are specified
+        sets the @ssl_opts value
+  #lease
+    sets the lease time to now
+  #expire
+    sets the lease time to nil
+  #expired?
+    returns true when lease time is not set
+    returns false when the lease time has been set
+  #connect
+    creates a tcp socket instance by default
+    when port is not set
+      creates a unix socket instance
+    when ssl_opts are present
+      creates a ssl socket instance
+  #disconnect
+    sets the socket to nil
+    when the socket has not been set
+      does not try to close the socket
+    when the socket has been set
+      will try to close the socket
+
+Mongo::Pool::Socket::SSL
+  #initialize
+    responds to invocation with host, port and timeout
+    responds to invocation with host, port, timeout and opts
+    does not connect automatically by default
+    when options are provided
+      when :connect => true
+        invokes connect automatically
+      when :connect => false
+        does not invoke connect automatically
+      when :connect is nil
+        invokes connect automatically
+      when :ssl_cert is not nil
+        creates an certificate instance
+      when :ssl_key is not nil
+        creates an rsa keyfile instance
+      when :ssl_verify is true
+        enables ssl certificate verification
+        sets SSL context the verify mode
+      when :ssl_ca_cert is not nil
+        implies :ssl_verify => true
+  #connect
+    raises a Mongo::SocketTimeoutError on timeout
+    re-raises exception after unsuccessful connect attempt
+    when peer cert verification is requested
+      verifies the peer certificate identity
+      raises Mongo::Socket error if verification fails
+  #read
+    when an exception occurs in Socket#read
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+  #write
+    when an exception occurs in Socket#write
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+
+Mongo::Pool::Socket::TCP
+  #initialize
+    responds to invocation with host, port and timeout
+    responds to invocation with host, port, timeout and opts
+    does not connect automatically by default
+    when options are provided
+      when :connect => true
+        invokes connect automatically
+      when :connect => false
+        does not invoke connect automatically
+  #connect
+    invokes handle_connect with no args
+    raises a Mongo::SocketTimeoutError on timeout
+    re-raises exception after unsuccessful connect attempt
+  #read
+    when an exception occurs in Socket#read
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+  #write
+    when an exception occurs in Socket#write
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+
+Mongo::Pool::Socket::Unix
+  #initialize
+    responds to invocation with host and timeout
+    responds to invocation with path, timeout and opts
+    does not connect automatically by default
+    when options are provided
+      when :connect => true
+        invokes connect automatically
+      when :connect => false
+        does not invoke connect automatically
+  #connect
+    raises a Mongo::SocketTimeoutError on timeout
+    re-raises exception after unsuccessful connect attempt
+  #read
+    when an exception occurs in Socket#read
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+  #write
+    when an exception occurs in Socket#write
+      raises a Mongo::SocketTimeoutError for Errno::ETIMEDOUT
+      raises a Mongo::SocketError for IOError
+      raises a Mongo::SocketError for SystemCallError
+      raises a Mongo::SocketError for OpenSSL::SSL::SSLError
+
+Mongo::Protocol::Delete
+  #initialize
+    sets the namepsace
+    sets the selector
+    when options are provided
+      when flags are provided
+        sets the flags
+  #==
+    when the other is a delete
+      when the fields are equal
+        returns true
+      when the database is not equal
+        returns false
+      when the collection is not equal
+        returns false
+      when the selector is not equal
+        returns false
+      when the options are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    zero
+      serializes a zero
+    namespace
+      serializes the namespace
+    flags
+      when no flags are provided
+        does not set any bits
+      when flags are provided
+        single remove flag
+          sets the first bit
+    selector
+      serializes the selector
+
+Mongo::Protocol::GetMore
+  #initialize
+    sets the namepsace
+    sets the number to return
+    sets the cursor id
+  #==
+    when the other is a getmore
+      when the fields are equal
+        returns true
+      when the database is not equal
+        returns false
+      when the collection is not equal
+        returns false
+      when the limit is not equal
+        returns false
+      when the cursor id is not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    zero
+      does not set any bits
+    namespace
+      serializes the namespace
+    number to return
+      serializes the number to return
+    cursor id
+      serializes the cursor id
+
+Mongo::Protocol::Insert
+  #initialize
+    sets the namepsace
+    sets the documents
+    when options are provided
+      when flags are provided
+        sets the flags
+  #==
+    when the other is an insert
+      when the fields are equal
+        returns true
+      when the database is not equal
+        returns false
+      when the collection is not equal
+        returns false
+      when the documents are not equal
+        returns false
+      when the opts are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    flags
+      when no flags are provided
+        does not set any bits
+      when flags are provided
+        continue on error flag
+          sets the first bit
+    namespace
+      serializes the namespace
+    documents
+      serializes the documents
+
+Mongo::Protocol::KillCursors
+  #initialize
+    sets the cursor ids
+    sets the count
+  #==
+    when the other is a killcursors
+      when the cursor ids are equal
+        returns true
+      when the cursor ids are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    zero
+      serializes a zero
+    number of cursors
+      serializes the cursor count
+    cursor ids
+      serializes the selector
+
+Mongo::Protocol::Query
+  #initialize
+    sets the namepsace
+    sets the selector
+    when options are provided
+      when flags are provided
+        sets the flags
+      when a limit is provided
+        sets the limit
+      when a skip is provided
+        sets the flags
+      when a projection is provided
+        sets the projection
+  #==
+    when the other is a query
+      when the fields are equal
+        returns true
+      when the database is not equal
+        returns false
+      when the collection is not equal
+        returns false
+      when the selector is not equal
+        returns false
+      when the options are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    flags
+      when no flags are provided
+        does not set any bits
+      when flags are provided
+        tailable cursor flag
+          sets the second bit
+        slave ok flag
+          sets the third bit
+        oplog replay flag
+          sets the fourth bit
+        no cursor timeout flag
+          sets the fifth bit
+        await data flag
+          sets the sixth bit
+        exhaust flag
+          sets the seventh bit
+        partial flag
+          sets the eigth bit
+        multiple flags
+          sets the correct bits
+    namespace
+      serializes the namespace
+    skip
+      when no skip is provided
+        serializes a zero
+      when skip is provided
+        serializes the skip
+    limit
+      when no limit is provided
+        serializes a zero
+      when limit is provided
+        serializes the limit
+    selector
+      serializes the selector
+    project
+      when no projection is provided
+        does not serialize a projection
+      when projection is provided
+        serializes the projection
+
+Mongo::Protocol::Reply
+  #==
+    when the other is a reply
+      when the fields are equal
+        returns true
+      when fields are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #deserialize
+    response flags
+      no flags
+        sets no flags
+      cursor not found
+        sets the cursor not found flag
+      query failure
+        sets the query failure flag
+      shard config stale
+        sets the shard config stale flag
+      await capable
+        sets the await capable flag
+      multiple flags
+        sets multiple flags
+    cursor id
+      sets the cursor id attribute
+    starting from
+      sets the starting from attribute
+    number returned
+      sets the number returned attribute
+    documents
+      sets the documents attribute
+
+Mongo::Protocol::Update
+  #initialize
+    sets the namespace
+    sets the selector
+    sets the update document
+  #==
+    when the other is an update
+      when the fields are equal
+        returns true
+      when the database is not equal
+        returns false
+      when the collection is not equal
+        returns false
+      when the selector is not equal
+        returns false
+      when the update document is not equal
+        returns false
+      when the options are not equal
+        returns false
+  #hash
+    returns a hash of the field values
+  #serialize
+    header
+      length
+        serializes the length
+      request id
+        serializes the request id
+      response to
+        serializes the response to
+      op code
+        serializes the op code
+    zero
+      serializes a zero
+    namespace
+      serializes the namespace
+    flags
+      when no flags are provided
+        does not set any bits
+      when flags are provided
+        upsert flag
+          sets the first bit
+        multi update
+          sets the second bit
+    selector
+      serializes the selector
+    update
+      serializes the update
+
+Mongo::Scope
+  #initialize
+    sets the collection
+    sets the selector
+    dups the selector
+    sets the options
+    dups the options
+  #inspect
+    when there is a namespace, selector, and opts
+      returns a string
+      returns a string containing the collection namespace
+      returns a string containing the selector
+      returns a string containing the opts
+  #comment
+    when a comment is specified
+      sets the comment
+      returns a new Scope
+    when a comment is not specified
+      returns the comment
+  #comment!
+    when a comment is specified
+      sets the comment on the same Scope
+  #batch_size
+    when a batch size is specified
+      sets the batch size
+      retuns a new scope
+    when a batch size is not specified
+      returns the batch_size
+  #batch_size!
+    when a batch size is specified
+      sets the batch size on the same Scope
+  #fields
+    when fields are specified
+      sets the fields
+      returns a new Scope
+    when fields are not specified
+      returns the fields
+  #fields!
+    when fields are specified
+      sets the fields on the same Scope
+  #hint
+    when a hint is specified
+      sets the hint
+      returns a new Scope
+    when a hint is not specified
+      returns the hint
+  #hint!
+    when a hint is specified
+      sets the hint on the same Scope
+  #limit
+    when a limit is specified
+      sets the limit
+      returns a new Scope
+    when a limit is not specified
+      returns the limit
+  #limit!
+    when a limit is specified
+      sets the limit on the same Scope
+  #skip
+    when a skip is specified
+      sets the skip value
+      returns a new Scope
+    when a skip is not specified
+      returns the skip value
+  #skip!
+    when a skip is specified
+      sets the skip value on the same Scope
+  #read
+    when a read pref is specified
+      sets the read preference
+      returns a new Scope
+    when a read pref is not specified
+      returns the read preference
+      when no read pref is set on initializaiton
+        returns the collection read preference
+  #read!
+    when a read pref is specified
+      sets the read preference on the same Scope
+  #sort
+    when a sort is specified
+      sets the sort option
+      returns a new Scope
+    when a sort is not specified
+      returns the sort
+  #sort!
+    when a sort is specified
+      sets the sort option on the same Scope
+  #query_opts
+    when query_opts are specified
+      snapshot
+        returns shapshot in the query options
+      max_scan
+        returns max_scan in the query options
+      show_disk_loc
+        returns show_disk_loc in the query options
+      replacement
+        replaces the old query opts
+      immutability
+        returns a new Scope
+    when query_opts are not specified
+      returns the query opts
+  #query_opts!
+    when query_opts are specified
+      sets the query options on the same Scope
+  #count
+    calls count on collection
+  #explain
+    calls explain on collection
+  #distinct
+    calls distinct on collection
+  #==
+    when the scopes have the same collection, selector, and opts
+      returns true
+    when two scopes have a different collection
+      returns false
+    when two scopes have a different selector
+      returns false
+    when two scopes have different opts
+      returns false
+  #hash
+    returns a unique value based on collection, selector, opts
+    when two scopes only have different collections
+      returns different hash values
+    when two scopes only have different selectors
+      returns different hash values
+    when two scopes only have different opts
+      returns different hash values
+  copy
+    dups the options
+    dups the selector
+    references the same collection
+  enumerable
+    #each
+      when a block is provided
+        yields each doc to the block
+      when a block is not provided
+        returns an enumerator
+  chaining
+    when helper methods are chained
+      alters the scope
+    when a scope is chained with a terminator
+      #count
+        terminates the chaining and returns a value
+      #to_a
+        terminates chaining by returning an array of results
+
+Mongo::URI
+  #initialize
+    string is not uri
+      raises an error
+  #nodes
+    single node
+      returns an array with the parsed node
+    single node with port
+      returns an array with the parsed node
+    numerical ipv4 node
+      returns an array with the parsed node
+    numerical ipv6 node
+      returns an array with the parsed node
+    unix socket node
+      returns an array with the parsed node
+    multiple nodes
+      returns an array with the parsed nodes
+    multiple nodes with ports
+      returns an array with the parsed nodes
+  #credentials
+    username provided
+      returns the username
+    username and password provided
+      returns the username
+      returns the password
+  #database
+    database provided
+      returns the database name
+  #options
+    when no options were provided
+      returns an empty hash
+    write concern options provided
+      numerical w value
+        sets the write concern options
+      w=majority
+        sets the write concern options
+      journal
+        sets the write concern options
+      fsync
+        sets the write concern options
+      wtimeoutMS
+        sets the write concern options
+    read preference option provided
+      primary
+        sets the read preference
+      primaryPreferred
+        sets the read preference
+      secondary
+        sets the read preference
+      secondaryPreferred
+        sets the read preference
+      nearest
+        sets the read preference
+    read preferece tags provided
+      single read preference tag set
+        sets the read preference tag set
+      multiple read preference tag sets
+        sets the read preference tag sets
+    replica set option provided
+      sets the replica set option
+    auth mechanism provided
+      plain
+        sets the auth mechanism to :plain
+      mongodb-cr
+        sets the auth mechanism to :mongodb_cr
+      gssapi
+        sets the auth mechanism to :gssapi
+    auth source provided
+      regular db
+        sets the auth source to the database
+      $external
+        sets the auth source to :external
+    connectTimeoutMS
+      sets the the connect timeout
+    socketTimeoutMS
+      sets the socket timeout
+    ssl
+      true
+        sets the ssl option to true
+      false
+        sets the ssl option to false
+    grouped and non-grouped options provided
+      do not overshadow top level options
+
+Mongo::WriteConcern::Acknowledged
+  #get_last_error
+    when the options are symbols
+      converts the values to strings
+    when the options are strings
+      keeps the values as strings
+    when the options are numbers
+      keeps the values as numbers
+
+Mongo::WriteConcern::Unacknowledged
+  #get_last_error
+    returns nil
+
+Code Quality
+  has no style-guide violations
+  has required minimum test coverage
+
+Finished in 40.44 seconds
+419 examples, 0 failures
++ gem build mongo.gemspec
+[mongo] Warning: No private key present, creating unsigned gem.
+  Successfully built RubyGem
+  Name: mongo
+  Version: 2.0.0.omega
+  File: mongo-2.0.0.omega.gem
+[mongo-ruby-driver-kp] $ /bin/bash /tmp/hudson5072519070253894849.sh
++ curl http://rizzo/nexus/service/local/repositories/gems/content/gems/m/mongo-2.0.0.omega.gem -X DELETE -v
+* About to connect() to rizzo port 80 (#0)
+*   Trying 192.168.10.128... connected
+* Connected to rizzo (192.168.10.128) port 80 (#0)
+* Server auth using Basic with user 'age'
+> DELETE /nexus/service/local/repositories/gems/content/gems/m/mongo-2.0.0.omega.gem HTTP/1.1
+> Authorization: Basic YWdlOmZvb2Jhcjk5
+> User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.14.0.0 zlib/1.2.3 libidn/1.18 libssh2/1.4.2
+> Host: rizzo
+> Accept: */*
+>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0< HTTP/1.1 204 No Content
+< Date: Wed, 13 Nov 2013 23:47:51 GMT
+< Set-Cookie: rememberMe=deleteMe; Path=/nexus; Max-Age=0; Expires=Tue, 12-Nov-2013 23:47:51 GMT
+< Date: Wed, 13 Nov 2013 23:47:52 GMT
+< Server: Noelios-Restlet-Engine/1.1.6-SONATYPE-5348-V8
+< Content-Length: 0
+<
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connection #0 to host rizzo left intact
+
+* Closing connection #0
++ gem nexus -V mongo-2.0.0.omega.gem
+POST http://rizzo/nexus/content/repositories/gems/gems/mongo-2.0.0.omega.gem
+use authorization
+Uploading gem to Nexus...
+Created
+Finished: SUCCESS
