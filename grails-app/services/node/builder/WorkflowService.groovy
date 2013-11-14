@@ -16,16 +16,20 @@
 
 package node.builder
 
+import groovy.transform.Synchronized
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
 import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.ActivitiObjectNotFoundException
 import org.activiti.engine.task.Task
+import org.hibernate.annotations.Synchronize
 import org.springframework.security.core.GrantedAuthority
 
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.locks.ReadWriteLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 /**
  * WorkflowService
@@ -38,7 +42,7 @@ class WorkflowService {
 
     static def pool = Executors.newCachedThreadPool()
     static Map futures = [:]
-
+    ReadWriteLock lock = new ReentrantReadWriteLock();
 
     def createWithoutSaving(params, organizations){
         def workflowInstance = new Workflow(params)
@@ -173,7 +177,9 @@ class WorkflowService {
                     }finally{
                         processRunResult(result, workflow, start, businessKey)
                     }
+
                     return new ProcessResult(workflow.message, workflow, businessKey)
+
                 }
         }
         ));
@@ -204,9 +210,16 @@ class WorkflowService {
             workflow.state = WorkflowState.WAITING
             workflow.task = ProcessEngineFactory.taskToMap(task)
         }
-        Workflow.withTransaction {
-            workflow.save(validate: false)
+
+        lock.writeLock().lock()
+        try{
+            Workflow.withNewSession{
+                workflow.save(validate: false, flush: true)
+            }
+        }finally {
+            lock.writeLock().unlock()
         }
+
     }
 
     def populateVariables(HashMap variables, workflow, organizations, GString businessKey) {
