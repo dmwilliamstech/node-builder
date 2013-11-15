@@ -68,7 +68,6 @@ class ClamAVTask extends ShellTask{
         }finally {
             !output.exists()?:output.delete()
             !error.exists()?:error.delete()
-            !scanListFile.exists()?:scanListFile.delete()
         }
     }
 }
