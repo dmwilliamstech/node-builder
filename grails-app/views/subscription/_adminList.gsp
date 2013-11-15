@@ -37,6 +37,7 @@
 
                 <td>
                 <g:each in="${subscriptionInstance.workflowTag.workflows}" var="workflow">
+                    <g:if test="${workflow.subscribable}" >
                     <div>
                          <g:link controller="workflow" action="show" id="${workflow.id}">${fieldValue(bean: workflow, field: "name")}</g:link>
 
@@ -44,6 +45,7 @@
                         <div class="pull-right label ${workflow.active? "label-success":"label-default"}"><g:formatBoolean boolean="${workflow.active}" false="Inactive" true="Active"/></div>
                     </div>
                      <hr>
+                    </g:if>
                 </g:each>
                 </td>
 
