@@ -16,14 +16,12 @@
 
 package node.builder
 
-import groovy.transform.Synchronized
 import node.builder.bpm.ProcessEngineFactory
 import node.builder.bpm.ProcessResult
 import node.builder.metrics.MetricEvents
 import node.builder.metrics.MetricGroups
 import org.activiti.engine.ActivitiObjectNotFoundException
 import org.activiti.engine.task.Task
-import org.hibernate.annotations.Synchronize
 import org.springframework.security.core.GrantedAuthority
 
 import java.util.concurrent.Callable
@@ -107,16 +105,25 @@ class WorkflowService {
     def completeTask(Workflow workflow, decision){
         def message = "Task '$workflow.task.name' was ${decision.toString().replaceAll(/e$/, '') + 'ed'}"
         Executors.newSingleThreadExecutor().execute {
-            Workflow.withNewSession {
-                workflow = workflow.refresh()
-                workflow.state = WorkflowState.RUNNING
-                workflow.message = "Running process ${workflow.processDefinitionKey} on workflow ${workflow.name}"
-                workflow.save(validate: false, flush: true)
+                lock.writeLock().lock()
+                try{
+                    Workflow.withNewSession {
+                        workflow = workflow.merge(validate: false)
+                        workflow.state = WorkflowState.RUNNING
+                        workflow.message = "Running process ${workflow.processDefinitionKey} on workflow ${workflow.name}"
+                        workflow.merge(validate: false, flush: true)
+                    }
+                }finally {
+                    lock.writeLock().unlock()
+                }
                 def processInstanceId = workflow.task.processInstanceId.toString()
+                def runtimeService = ProcessEngineFactory.defaultProcessEngine(workflow.name).runtimeService
+                def result = runtimeService.getVariable(processInstanceId, ProcessResult.RESULT_KEY)
+                result.message = message
+                runtimeService.setVariable(processInstanceId, ProcessResult.RESULT_KEY, result)
+                runtimeService.setVariable(processInstanceId, "userTaskDecision", decision)
 
-                ProcessEngineFactory.defaultProcessEngine(workflow.name).runtimeService.setVariable(processInstanceId, "userTaskDecision", decision)
                 ProcessEngineFactory.defaultProcessEngine(workflow.name).getTaskService().complete(workflow.task.id)
-                def result
 
                 def processInstance = ProcessEngineFactory.defaultProcessEngine(workflow.name)
                         .runtimeService
@@ -125,11 +132,18 @@ class WorkflowService {
 
                 result = ProcessEngineFactory.getResultFromProcess(ProcessEngineFactory.defaultProcessEngine(workflow.name), processInstance)
 
+            lock.writeLock().lock()
+            try{
+                Workflow.withNewSession {
+                    workflow = workflow.merge(validate: false)
+                }
                 if(result instanceof ProcessResult){
                     processRunResult(result, workflow, result.data.start, result.data.businessKey)
                 }else{
                     processRunResult(result, workflow, -1, "")
                 }
+            }finally {
+                lock.writeLock().unlock()
             }
         }
         return [message: message, id: workflow.id]
@@ -151,6 +165,7 @@ class WorkflowService {
                     def businessKey = "${workflow.name}-${java.util.UUID.randomUUID()}"
                     def start = System.currentTimeMillis()
                     def result
+                    def state
                     try{
                         def processEngine = ProcessEngineFactory.defaultProcessEngine(workflow.name)
 
@@ -167,16 +182,27 @@ class WorkflowService {
                     }catch(ActivitiObjectNotFoundException e){
                         log.error(e.getMessage())
                         e.printStackTrace()
-                        workflow.state = WorkflowState.WARNING
-                        workflow.message = "Unable to detect state of workflow, please add a receive task to your workflow"
+                        state = WorkflowState.WARNING
+                        message = "Unable to detect state of workflow, please add a receive task to your workflow"
                     }catch(e){
                         log.error(e.getMessage())
                         e.printStackTrace()
-                        workflow.state = WorkflowState.ERROR
-                        workflow.message = e.getMessage().substring(0,254)
-                    }finally{
-                        processRunResult(result, workflow, start, businessKey)
+                        state = WorkflowState.ERROR
+                        message = e.getMessage().substring(0,254)
                     }
+
+                    lock.writeLock().lock()
+                    try{
+                        Workflow.withNewSession {
+                            workflow = workflow.merge(validate: false)
+                        }
+                        workflow.state = state
+                        workflow.message = message
+                        processRunResult(result, workflow, start, businessKey)
+                    }finally {
+                        lock.writeLock().unlock()
+                    }
+
 
                     return new ProcessResult(workflow.message, workflow, businessKey)
 
@@ -188,38 +214,33 @@ class WorkflowService {
 
 
     def processRunResult(result, workflow, long start, businessKey) {
-        if(result instanceof ProcessResult){
-            workflow.message = "Process ${workflow.processDefinitionKey} on workflow ${workflow.name} finished - ${result?.message}"
-            workflow.state = WorkflowState.OK
+            if(result instanceof ProcessResult){
+                workflow.message = "Process ${workflow.processDefinitionKey} on workflow ${workflow.name} finished - ${result?.message}"
+                workflow.state = WorkflowState.OK
 
-            result?.data?.status = workflow?.state
-            result?.data?.artifactFiles = filesFromResult(result)
+                result?.data?.status = workflow?.state
+                result?.data?.artifactFiles = filesFromResult(result)
 
-            def duration = -1
-            if (result?.data?.repositoryDidChange) {
-                duration = (System.currentTimeMillis() - start)
+                def duration = -1
+                if (result?.data?.repositoryDidChange) {
+                    duration = (System.currentTimeMillis() - start)
+                }
+
+
+                log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, workflow.message, businessKey, workflow.name, "", result, duration)
+
+            }else if(result instanceof Task){
+                def task = (Task)result
+                def name = task.name?: (task.description ?: task.id)
+                workflow.message = "Process ${workflow.processDefinitionKey} on workflow ${workflow.name} waiting on ${name}"
+                workflow.state = WorkflowState.WAITING
+                workflow.task = ProcessEngineFactory.taskToMap(task)
             }
 
 
-            log.metric(MetricEvents.FINISH, MetricGroups.WORKFLOW, workflow.message, businessKey, workflow.name, "", result, duration)
-
-        }else if(result instanceof Task){
-            def task = (Task)result
-            def name = task.name?: (task.description ?: task.id)
-            workflow.message = "Process ${workflow.processDefinitionKey} on workflow ${workflow.name} waiting on ${name}"
-            workflow.state = WorkflowState.WAITING
-            workflow.task = ProcessEngineFactory.taskToMap(task)
-        }
-
-        lock.writeLock().lock()
-        try{
-            Workflow.withTransaction{
+            Workflow.withNewSession{
                 workflow.save(validate: false, flush: true)
             }
-        }finally {
-            lock.writeLock().unlock()
-        }
-
     }
 
     def populateVariables(HashMap variables, workflow, organizations, GString businessKey) {
