@@ -40,6 +40,18 @@ class DownloadFileTaskTests extends BPMNTaskTestBase{
         files << variables.result.data.downloadedFile
     }
 
+    @Test
+    void shouldDownloadFileToDir(){
+        def task = [streamFile: {outputFile, remoteUrl, delegateExecution -> "You've been mocked"}] as DownloadFileTask
+
+        def variables = [downloadFileUrl:"https://server.com/path/file.zip", downloadFileOutputPath:'/tmp/']
+        def delegateExecution = mockDelegateExecutionWithVariables(variables, 5, 1)
+
+        task.execute(delegateExecution)
+
+        assert variables.result.data.downloadedFile == '/tmp/file.zip'
+        files << variables.result.data.downloadedFile
+    }
 
 	@Test(expected = NullPointerException)
     void shouldDetectMissingDownloadUrl(){

@@ -37,13 +37,13 @@ class FileParserTaskTests extends BPMNTaskTestBase {
         def task = new FileParserTask()
 
         def variables = [:]
-        variables.put(FileParserTask.OUTPUT_KEY, "putoutputhere")
+
         variables.put(FileParserTask.FILENAME, new ClassPathResource("resources/console.txt").file.path)
         variables.put(FileParserTask.PARSE_STRING, /POST\s(.*)/)
         task.execute(mockDelegateExecutionWithVariables(variables,5, 1))
 
         assert variables.result.wasSuccessful()
-        assert variables.result.data['putoutputhere'].first() == 'http://rizzo/nexus/content/repositories/gems/gems/mongo-2.0.0.omega.gem'
+        assert variables.result.data.fileParserMatches.first() == 'http://rizzo/nexus/content/repositories/gems/gems/mongo-2.0.0.omega.gem'
     }
 
     @Test
@@ -51,13 +51,13 @@ class FileParserTaskTests extends BPMNTaskTestBase {
         def task = new FileParserTask()
 
         def variables = [:]
-        variables.put(FileParserTask.OUTPUT_KEY, "putoutputhere")
+
         variables.put(FileParserTask.FILENAME, new ClassPathResource("resources/console.txt").file.path)
         variables.put(FileParserTask.PARSE_STRING, /bundler/)
         task.execute(mockDelegateExecutionWithVariables(variables,5, 1))
 
         assert variables.result.wasSuccessful()
-        assert variables.result.data['putoutputhere'].size() == 8
+        assert variables.result.data.fileParserMatches.size() == 8
     }
 
     @After
