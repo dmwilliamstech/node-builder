@@ -42,6 +42,7 @@ class SCPFileCopierTask extends MetricsTask{
         def username = execution.getVariable(SCP_USER_KEY)
         def keyPath = execution.getVariable(SCP_KEY_PATH_KEY)
         def destPath = execution.getVariable(SCP_DEST_FILE_PATH_KEY)
+        result.message = ''
         fileList.each {file ->
             try{
                 uploadFile(file, hostname, username, keyPath, destPath)
