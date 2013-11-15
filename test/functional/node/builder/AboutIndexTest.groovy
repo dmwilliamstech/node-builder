@@ -16,10 +16,9 @@
 
 package node.builder
 
-import geb.junit4.GebReportingTest
 import org.junit.Before
 
-class AboutIndexTest extends GebReportingTest {
+class AboutIndexTest extends NodeBuilderFunctionalTestBase {
     def version
     def reference
     def dependencies
@@ -44,12 +43,15 @@ class AboutIndexTest extends GebReportingTest {
         go('about')
 
         assert title == 'About'
-        assert $('#application-name').text() == Config.applicationName
-        assert $('#application-version').text().contains(version)
-        assert $('#application-reference').text().replaceAll(/Reference\s/, "") == reference
 
-        assert $('#list-dependency-build') != null
-        assert $('#list-dependency-provided') != null
+        waitFor(10,1) {
+            assert $('#application-name').text() == Config.applicationName
+            assert $('#application-version').text().contains(version)
+            assert $('#application-reference').text().replaceAll(/Reference\s/, "") == reference
+
+            assert $('#list-dependency-build') != null
+            assert $('#list-dependency-provided') != null
+        }
     }
 
     void login(){
