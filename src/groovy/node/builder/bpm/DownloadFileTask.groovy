@@ -17,6 +17,7 @@
 package node.builder.bpm
 
 import org.activiti.engine.delegate.DelegateExecution
+import org.apache.commons.io.FilenameUtils
 
 class DownloadFileTask extends MetricsTask{
     static final String FILE_URL_KEY = 'downloadFileUrl'
@@ -48,10 +49,10 @@ class DownloadFileTask extends MetricsTask{
         def outputPath = new File(delegateExecution.getVariable(FILE_OUTPUT_PATH))
 
         if(outputPath.directory){
-            outputPath = new File("${delegateExecution.getVariable(FILE_OUTPUT_PATH)}/${url.getURL().file}")
+            outputPath = new File("${delegateExecution.getVariable(FILE_OUTPUT_PATH)}/${FilenameUtils.getName(new URL(remoteUrl).file)}")
         }
 
-        streamFile(outputPath, remoteUrl, delegateExecution)
+        streamFile(outputPath, remoteUrl.toString(), delegateExecution)
 
         result.data.downloadedFile = outputPath.path
         delegateExecution.setVariable("result", result)
