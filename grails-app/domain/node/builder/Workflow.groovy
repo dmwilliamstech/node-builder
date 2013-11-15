@@ -19,6 +19,7 @@ package node.builder
 import node.builder.bpm.ProcessEngineFactory
 import org.activiti.engine.ProcessEngine
 import org.activiti.engine.RepositoryService
+import org.codehaus.groovy.runtime.StackTraceUtils
 
 /**
  * Workflow
@@ -67,12 +68,15 @@ class Workflow {
 
 
         processDefinitionKey validator: {value, object ->
+            if((new Utilities()).wasCalledFromMethodWithName('merge')){
+                return
+            }
             if(value.contains("Please provide BPMN workflow")){
                 return 'bpmn'
             }else{
                 try{
                     ProcessEngine processEngine = ProcessEngineFactory.defaultProcessEngine(object.name)
-                    RepositoryService repositoryService = processEngine.getRepositoryService();
+                    RepositoryService repositoryService = processEngine.getRepositoryService()
 
                     //TODO: JANKY
                     def file = File.createTempFile(value.replaceAll(/\W/, '_'),".bpmn20.xml")
@@ -92,6 +96,9 @@ class Workflow {
         }
 
         location validator: {value ,object ->
+            if((new Utilities()).wasCalledFromMethodWithName('merge')){
+                return
+            }
             if(value.empty){
                 return 'empty'
             }
@@ -100,6 +107,7 @@ class Workflow {
             }
         }
     }
+
 
     /*
      * Methods of the Domain Class
