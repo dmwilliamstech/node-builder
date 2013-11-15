@@ -30,9 +30,9 @@ class FileParserTask extends MetricsTask{
     void executeWithMetrics(DelegateExecution execution) {
         def regex = execution.getVariable(PARSE_STRING)
         def filename = execution.getVariable(FILENAME)
-        def outputKey = execution.getVariable(OUTPUT_KEY)
+
         ProcessResult result = execution.getVariable(ProcessResult.RESULT_KEY)?: new ProcessResult()
-        def matches = execution.getVariable(outputKey)?: []
+        def matches = []
 
         def textFile =  new File(filename)
 
@@ -44,7 +44,8 @@ class FileParserTask extends MetricsTask{
             }
         }
 
-        result.data[outputKey] = matches
+        log.info("Found ${matches} from string ${regex}")
+        result.data.fileParserMatches = matches
         execution.setVariable(ProcessResult.RESULT_KEY, result)
     }
 }
