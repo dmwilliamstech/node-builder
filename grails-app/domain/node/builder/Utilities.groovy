@@ -19,6 +19,7 @@ package node.builder
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.codehaus.groovy.runtime.StackTraceUtils
 
 class Utilities implements GrailsApplicationAware {
     def gApp
@@ -74,5 +75,21 @@ class Utilities implements GrailsApplicationAware {
 
     void setGrailsApplication(GrailsApplication grailsApplication) {
         this.gApp = grailsApplication
+    }
+
+    def wasCalledFromMethodWithName(methodName){
+        def marker = new Throwable()
+        def stackTrace = StackTraceUtils.sanitize(marker).stackTrace
+        return stackTrace.find() { e ->
+            e.methodName == methodName
+        }  != null
+    }
+
+    def wasCalledFromClassAndMethodWithName(className, methodName){
+        def marker = new Throwable()
+        def stackTrace = StackTraceUtils.sanitize(marker).stackTrace
+        return stackTrace.find() { e ->
+            e.methodName == methodName && e.className == className
+        } != null
     }
 }

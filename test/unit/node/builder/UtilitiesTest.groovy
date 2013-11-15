@@ -20,6 +20,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import org.codehaus.groovy.runtime.StackTraceUtils
 import org.junit.Before
 
 @TestFor(Manifest)
@@ -62,5 +63,13 @@ class UtilitiesTest {
 
         assert map.manifest.name == "test"
         assert map.instances.first().name == "instance"
+    }
+
+    void testStacktraceHack(){
+        assert (new Utilities()).wasCalledFromMethodWithName('testStacktraceHack')
+        assert (new Utilities()).wasCalledFromClassAndMethodWithName(this.class.name, 'testStacktraceHack')
+        assert !(new Utilities()).wasCalledFromMethodWithName('notAMethod')
+        assert !(new Utilities()).wasCalledFromClassAndMethodWithName('some.other.ClassName', 'testStacktraceHack')
+        assert !(new Utilities()).wasCalledFromClassAndMethodWithName(this.class.name, 'notAMethod')
     }
 }
