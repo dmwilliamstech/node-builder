@@ -199,6 +199,7 @@ class WorkflowService {
                         workflow.state = state
                         workflow.message = message
                         processRunResult(result, workflow, start, businessKey)
+                        log.info("Workflow ${workflow.name} has finished with status ${workflow.state} - ${workflow.message}")
                     }finally {
                         lock.writeLock().unlock()
                     }
