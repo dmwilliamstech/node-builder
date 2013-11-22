@@ -16,6 +16,7 @@
 
 package node.builder
 
+import grails.util.Environment
 import org.apache.commons.logging.LogFactory
 import org.springframework.core.io.ClassPathResource
 
@@ -27,6 +28,9 @@ class Config {
         if(config == null){
             LogFactory.getLog(this).info("Loading config file")
             def locations = ["${System.getenv("HOME")}/.opendx/node-builder.conf", "/etc/node-builder.conf"]
+            if(Environment.current == Environment.TEST){
+                locations = [new ClassPathResource('resources/node-builder.conf').file.path]
+            }
             def configFile
             locations.find{path ->
                 LogFactory.getLog(this).info("Looking for config file at $path")
