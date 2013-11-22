@@ -23,6 +23,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.springframework.context.ApplicationContext
+import java.awt.Color
 
 class WorkflowListTest extends NodeBuilderFunctionalTestBase{
 
@@ -41,6 +42,9 @@ class WorkflowListTest extends NodeBuilderFunctionalTestBase{
             assert $('[id^=workflowShow]').first().text() == ("Test")
             assert $('.icon-pencil') != null
             assert $('#footerCopyrightText').first().text() == ("Copyright © 2013 Some Company")
+			assert $('#classificationBanner').first().text() ==("Unclassified")
+			assert $('#classificationBannerHeader').color == Color.GREEN
+			assert $('#classificationBanner').text().color == Color.YELLOW
         }
     }
 

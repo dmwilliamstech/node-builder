@@ -1,10 +1,11 @@
-
 <div id="Content" class="container">
 	<!-- Show page's content -->
         <section class="row-fluid">
-            <div class="span12">
+            <div class="span12">  
+                      
                 <div class="navbar ${sec.loggedInUserInfo([field: 'authorities']).contains('NBADMINS')? 'navbar-inverse':'navbar-default'} navbar-fixed-top">
                     <div class="navbar-inner">
+                    	<g:render template="/layouts/banner"/>
                         <div class="container">
                             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" href="">
                                 <span class="icon-bar"></span>
